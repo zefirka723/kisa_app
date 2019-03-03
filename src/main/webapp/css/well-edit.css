@@ -1,0 +1,24 @@
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+}
+
+.row.content {
+    height: 450px
+}
+
+footer {
+    background-color: #555;
+    color: white;
+    padding: 15px;
+}
+
+@media screen and (max-width: 767px) {
+    .row.content {
+        height: auto;
+    }
+}
+
+select {
+    height: 35px;
+}
