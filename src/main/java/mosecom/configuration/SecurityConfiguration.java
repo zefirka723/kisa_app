@@ -14,9 +14,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity config) throws Exception {
         config
                 .authorizeRequests()
-                .antMatchers("/reccards").permitAll()
-                .antMatchers("/reccards/img").permitAll()
-                .antMatchers("/reccards/edit").hasRole("EDITOR")
+                .antMatchers("/reccards").hasRole("EDITOR")
+                .antMatchers("/reccards/edit-card/").hasRole("EDITOR")
                 .antMatchers("/reccards/create").hasRole("EDITOR")
                 .antMatchers("/reccards/edit/delete").hasRole("EDITOR")
                 .and()
@@ -28,6 +27,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
         builder.inMemoryAuthentication()
-                .withUser("user").password("password").roles("EDITOR");
+                .withUser("kisa_test").password("kisa_test").roles("EDITOR");
     }
 }

@@ -86,7 +86,8 @@ public class MainController {
     	headers.set(HttpHeaders.CONTENT_TYPE, doc.getFileContentType());
     	headers.set(HttpHeaders.CONTENT_LENGTH, Long.toString(doc.getFileSize()));
     	headers.set(HttpHeaders.CONTENT_ENCODING, "UTF-8");
-        String fileName = URLEncoder.encode(doc.getFileName(), "UTF8").replace("+", "%20");
+
+    	String fileName = URLEncoder.encode(doc.getFileName(), "UTF8").replace("+", "%20");
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + fileName);
         ResponseEntity<FileSystemResource> result = new ResponseEntity<>(file, headers, HttpStatus.OK);
         return result;

@@ -20,21 +20,21 @@ import lombok.Data;
 @SuppressWarnings("serial")
 @Data
 @Entity
-@Table(name = "wells")
+@Table(schema = "public", name = "\"Wells\"")
 public class Well implements Serializable {
 
-    @Column(name = "well_id")
+    @Column(name = "Well_ID")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "well_name")
+    @Column(name = "Well_name")
     private String wellName;
 
-    @Column(name = "well_collar")
+    @Column(name = "Well_collar")
     private String wellCollar;
 
-    @Column(name = "drilled_date")
+    @Column(name = "Drilled_date")
     private String drilledDate;
 
 

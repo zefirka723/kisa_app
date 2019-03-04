@@ -9,7 +9,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 @Data
 @Entity
-@Table(name = "docs_wells")
+@Table(name = "Files", schema = "public")
 public class WellsDocument implements Serializable{
 
     @Column(name = "id")
@@ -34,6 +34,6 @@ public class WellsDocument implements Serializable{
     private String fileContentType;
 
     @ManyToOne
-    @JoinColumn(name = "well_id", referencedColumnName = "well_id")
+    @JoinColumn(name = "well_id", referencedColumnName = "Well_ID")
     protected Well well;
 }

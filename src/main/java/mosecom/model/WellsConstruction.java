@@ -7,31 +7,31 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "wells_construction", schema = "public")
+@Table(name = "Wells_Construction", schema = "public")
 @Data
 public class WellsConstruction implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkey_id")
+    @Column(name = "Pkey_id")
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "construction_type_id")
+    @JoinColumn(name = "Conctruction_type")
     protected ConstructionType constructionType;
 
-    @Column(name = "diametr")
+    @Column(name = "Diametr")
     private int diameter;
 
     // TODO: Число?
-    @Column(name = "depth_from")
-    private String depthFrom;
+    @Column(name = "Depth_from")
+    private Double depthFrom;
 
     // TODO: Число?
-    @Column(name = "depth_to")
-    private String depthTo;
+    @Column(name = "Depth_till")
+    private Double depthTo;
 
     @ManyToOne
-    @JoinColumn(name = "well_id", referencedColumnName = "well_id")
+    @JoinColumn(name = "Well_ID", referencedColumnName = "Well_ID")
     protected Well well;
 }

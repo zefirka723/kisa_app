@@ -9,14 +9,14 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 @Data
 @Entity
-@Table(name = "constr_types")
+@Table(schema = "dictionaries", name = "Dictionary_WellConstruction_Type")
 public class ConstructionType implements Serializable {
 
-    @Column(name = "id")
+    @Column(name = "Code")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "type_name")
+    @Column(name = "Value")
     private String name;
 }
