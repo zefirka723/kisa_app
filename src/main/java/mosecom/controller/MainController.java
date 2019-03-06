@@ -54,8 +54,9 @@ public class MainController {
     	Well well = service.getWell(id);
 
     	// На самом деле лучше так не делать, а передавать во view полную DTO
-    	well.getConstructions();
+        well.getConstructions();
     	well.getDocuments();
+    	well.getGeologies();
 
     	return editCard(well);
     }
@@ -65,6 +66,7 @@ public class MainController {
     	result.addObject("well", well);
     	result.addObject("constructionTypes", service.getAllConstructionTypes());
     	result.addObject("diametrs", service.getAllDiametrs());
+    	result.addObject("horisonts", service.getAllHorisonts());
         return result;
     }
 

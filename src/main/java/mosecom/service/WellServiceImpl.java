@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import mosecom.dao.*;
+import mosecom.dto.WellsGeologyProjection;
 import mosecom.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +42,12 @@ public class WellServiceImpl implements WellService {
 	@Autowired
 	private DiametrRepository diametrRepository;
 
+	@Autowired
+	private WellsGeologyRepository geologyRepository;
+
+	@Autowired
+	private HorisontRepository horisontRepository;
+
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -62,6 +69,9 @@ public class WellServiceImpl implements WellService {
 
 	@Override
 	public List<Diametr> getAllDiametrs() { return diametrRepository.findAll(); }
+
+	@Override
+	public List<Horisont> getAllHorisonts() { return horisontRepository.findAll(); }
 
 	@Override
 	@Transactional
@@ -119,7 +129,16 @@ public class WellServiceImpl implements WellService {
 		// переносим все изменения конструкций
 		well.getConstructions().clear();
 		if (dto.getConstructions() != null) {
-			dto.getConstructions().stream().forEach(c -> well.getConstructions().add(convertWellConstruction(well, c)));
+			dto.getConstructions().stream().forEach(c -> {
+				well.getConstructions().add(convertWellConstruction(well, c));
+			});
+		}
+
+
+		// переносим все изменения конструкций
+		well.getGeologies().clear();
+		if (dto.getGeologies() != null) {
+			dto.getGeologies().stream().forEach(g -> well.getGeologies().add(convertWellGeology(well, g)));
 		}
 
 		wellRepository.save(well);
@@ -135,6 +154,16 @@ public class WellServiceImpl implements WellService {
 		construction.setDepthFrom(dto.getDepthFrom());
 		construction.setDepthTo(dto.getDepthTo());
 		return construction;
+	}
+
+
+	private WellsGeology convertWellGeology(Well well, WellsGeologyProjection dto) {
+		WellsGeology geology = new WellsGeology();
+		geology.setId(dto.getId());
+		geology.setWell(well);
+		geology.setHorisont(horisontRepository.findOne(dto.getHorisontId()));
+		geology.setBotElev(dto.getBotElev());
+		return geology;
 	}
 
 	@Override

@@ -3,14 +3,11 @@ package mosecom.service;
 import java.io.IOException;
 import java.util.List;
 
-import mosecom.model.Diametr;
+import mosecom.model.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import mosecom.dto.WellFullProjection;
 import mosecom.dto.WellProjection;
-import mosecom.model.ConstructionType;
-import mosecom.model.Well;
-import mosecom.model.WellsDocument;
 
 public interface WellService {
 
@@ -23,6 +20,8 @@ public interface WellService {
 	List<ConstructionType> getAllConstructionTypes();
 
 	List<Diametr> getAllDiametrs();
+
+	List<Horisont> getAllHorisonts();
 
 	WellsDocument getWellDocument(int id);
 }
