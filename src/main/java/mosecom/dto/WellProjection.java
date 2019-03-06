@@ -15,5 +15,5 @@ public class WellProjection {
 
     private String wellCollar;
 
-    private String drilledDate;
+   // private String drilledDate;
 }

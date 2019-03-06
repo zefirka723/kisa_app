@@ -17,11 +17,12 @@ public class WellsConstruction implements Serializable {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "Conctruction_type")
+    @JoinColumn(name = "Construction_type")
     protected ConstructionType constructionType;
 
-    @Column(name = "Diametr")
-    private int diameter;
+    @ManyToOne
+    @JoinColumn(name = "Diametr")
+    protected Diametr diametr;
 
     // TODO: Число?
     @Column(name = "Depth_from")

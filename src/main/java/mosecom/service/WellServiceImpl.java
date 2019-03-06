@@ -9,22 +9,16 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import mosecom.dao.*;
+import mosecom.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import mosecom.dao.ConstructionTypeRepository;
-import mosecom.dao.DocumentTypeRepository;
-import mosecom.dao.WellRepository;
-import mosecom.dao.WellsDocumentRepository;
 import mosecom.dto.WellFullProjection;
 import mosecom.dto.WellProjection;
 import mosecom.dto.WellsConstructionProjection;
-import mosecom.model.ConstructionType;
-import mosecom.model.Well;
-import mosecom.model.WellsConstruction;
-import mosecom.model.WellsDocument;
 
 
 @Service
@@ -43,6 +37,9 @@ public class WellServiceImpl implements WellService {
 
 	@Autowired
 	private DocumentTypeRepository documentTypeRepository;
+
+	@Autowired
+	private DiametrRepository diametrRepository;
 
 
     @Value("${upload.path}")
@@ -64,6 +61,9 @@ public class WellServiceImpl implements WellService {
 	}
 
 	@Override
+	public List<Diametr> getAllDiametrs() { return diametrRepository.findAll(); }
+
+	@Override
 	@Transactional
 	public Well save(WellFullProjection dto, MultipartFile[] files) throws IllegalStateException, IOException {
 		Well well;
@@ -76,7 +76,7 @@ public class WellServiceImpl implements WellService {
 		// переносим изменения в well
 		well.setWellName(dto.getWellName());
 		well.setWellCollar(dto.getWellCollar());
-		well.setDrilledDate(dto.getDrilledDate());
+//		well.setDrilledDate(dto.getDrilledDate());
 
 		// удаляем все удаленные из интерфейса документы
 		if (dto.getDocuments() == null) {
@@ -131,7 +131,7 @@ public class WellServiceImpl implements WellService {
 		construction.setId(dto.getId());
 		construction.setWell(well);
 		construction.setConstructionType(constructionTypeRepository.findOne(dto.getConstructionTypeId()));
-		construction.setDiameter(dto.getDiameter());
+		construction.setDiametr(diametrRepository.findOne(dto.getDiametrId()));
 		construction.setDepthFrom(dto.getDepthFrom());
 		construction.setDepthTo(dto.getDepthTo());
 		return construction;

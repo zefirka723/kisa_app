@@ -34,8 +34,8 @@ public class Well implements Serializable {
     @Column(name = "Well_collar")
     private String wellCollar;
 
-    @Column(name = "Drilled_date")
-    private String drilledDate;
+//    @Column(name = "Drilled_date")
+//    private String drilledDate;
 
 
     @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

@@ -64,6 +64,7 @@ public class MainController {
     	ModelAndView result = new ModelAndView("edit/edit-card");
     	result.addObject("well", well);
     	result.addObject("constructionTypes", service.getAllConstructionTypes());
+    	result.addObject("diametrs", service.getAllDiametrs());
         return result;
     }
 

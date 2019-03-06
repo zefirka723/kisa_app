@@ -3,6 +3,7 @@ package mosecom.service;
 import java.io.IOException;
 import java.util.List;
 
+import mosecom.model.Diametr;
 import org.springframework.web.multipart.MultipartFile;
 
 import mosecom.dto.WellFullProjection;
@@ -20,6 +21,8 @@ public interface WellService {
 	Well save(WellFullProjection well, MultipartFile[] file) throws IllegalStateException, IOException;
 
 	List<ConstructionType> getAllConstructionTypes();
+
+	List<Diametr> getAllDiametrs();
 
 	WellsDocument getWellDocument(int id);
 }

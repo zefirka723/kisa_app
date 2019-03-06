@@ -12,7 +12,7 @@ public class WellsConstructionProjection implements Serializable {
 
     protected int constructionTypeId;
 
-    private int diameter;
+    private int diametrId;
 
     // TODO: Число?
     private Double depthFrom;
