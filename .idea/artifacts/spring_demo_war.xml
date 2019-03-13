@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="kisa-spring-demo-1.0.war">
+    <root id="archive" name="dev.war">
       <element id="artifact" artifact-name="spring-demo:war exploded" />
     </root>
   </artifact>

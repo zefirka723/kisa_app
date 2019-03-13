@@ -29,7 +29,7 @@ import mosecom.service.WellService;
 @RequestMapping("/reccards")
 public class MainController {
 
-	@Value("${upload.path}")
+    @Value("${upload.path}")
     private String uploadPath;
 
     @Autowired
@@ -51,51 +51,58 @@ public class MainController {
     // редактирование
     @RequestMapping(value = "/edit-card/{id}")
     public ModelAndView editCard(@PathVariable("id") Integer id) {
-    	Well well = service.getWell(id);
+        Well well = service.getWell(id);
 
-    	// На самом деле лучше так не делать, а передавать во view полную DTO
+        // На самом деле лучше так не делать, а передавать во view полную DTO
         well.getConstructions();
-    	well.getDocuments();
-    	well.getGeologies();
+        well.getDocuments();
+        well.getGeologies();
+        well.getStressTests();
+       // well.getDepth();
+        //well.getWellsDocs();
 
-    	return editCard(well);
+        return editCard(well);
     }
 
     private ModelAndView editCard(Well well) {
-    	ModelAndView result = new ModelAndView("edit/edit-card");
-    	result.addObject("well", well);
-    	result.addObject("constructionTypes", service.getAllConstructionTypes());
-    	result.addObject("diametrs", service.getAllDiametrs());
-    	result.addObject("horisonts", service.getAllHorisonts());
+        ModelAndView result = new ModelAndView("edit/edit-card");
+        result.addObject("well", well);
+        result.addObject("constructionTypes", service.getAllConstructionTypes());
+        result.addObject("diametrs", service.getAllDiametrs());
+        result.addObject("horisonts", service.getAllHorisonts());
         return result;
     }
 
     @RequestMapping(value = "/edit-card/submit", method = RequestMethod.POST)
     public String submitCard(
-    		@RequestParam(value = "file", required = false) MultipartFile[] files,
-    		@ModelAttribute WellFullProjection well) throws IOException {
+            @RequestParam(value = "file", required = false) MultipartFile[] files,
+            @ModelAttribute WellFullProjection well) throws IOException {
         service.save(well, files);
         return "redirect:/reccards/";
     }
 
     @RequestMapping(value = "/file/{id}")
     public ResponseEntity<FileSystemResource> downloadFile(@PathVariable("id") int id) throws IOException {
-    	WellsDocument doc = service.getWellDocument(id);
-    	FileSystemResource file = new FileSystemResource(doc.getFilePath() + doc.getFileName());
-    	if (!file.exists()) {
-    		throw new ResourceNotFoundException("file", file);
-    	}
-    	HttpHeaders headers = new HttpHeaders();
-    	headers.set(HttpHeaders.CONTENT_TYPE, doc.getFileContentType());
-    	headers.set(HttpHeaders.CONTENT_LENGTH, Long.toString(doc.getFileSize()));
-    	headers.set(HttpHeaders.CONTENT_ENCODING, "UTF-8");
+        WellsDocument doc = service.getWellDocument(id);
+        FileSystemResource file = new FileSystemResource(doc.getFilePath() + doc.getFileName());
+        if (!file.exists()) {
+            throw new ResourceNotFoundException("file", file);
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_TYPE, doc.getFileContentType());
+        headers.set(HttpHeaders.CONTENT_LENGTH, Long.toString(doc.getFileSize()));
+        headers.set(HttpHeaders.CONTENT_ENCODING, "UTF-8");
 
-    	String fileName = URLEncoder.encode(doc.getFileName(), "UTF8").replace("+", "%20");
+        String fileName = URLEncoder.encode(doc.getFileName(), "UTF8").replace("+", "%20");
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + fileName);
         ResponseEntity<FileSystemResource> result = new ResponseEntity<>(file, headers, HttpStatus.OK);
         return result;
     }
 
+    @RequestMapping(value = "/login")
+    public String loginPage() {
+        return "login";
+    }
 }
 
 

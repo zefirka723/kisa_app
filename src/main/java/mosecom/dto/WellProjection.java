@@ -3,6 +3,10 @@ package mosecom.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +17,8 @@ public class WellProjection {
 
     private String wellName;
 
-    private String wellCollar;
+    private Float wellCollar;
 
-   // private String drilledDate;
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date drilledDate;
 }

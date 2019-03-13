@@ -6,27 +6,33 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-// Это для баловства
-
+/**
+ * @author <a href="mailto:izebit@gmail.com">Artem Konovalov</a> <br/>
+ *         Creation date: 6/25/17.
+ * @since 1.0
+ */
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity config) throws Exception {
         config
                 .authorizeRequests()
-                .antMatchers("/reccards").hasRole("EDITOR")
-                .antMatchers("/reccards/edit-card/").hasRole("EDITOR")
-                .antMatchers("/reccards/create").hasRole("EDITOR")
-                .antMatchers("/reccards/edit/delete").hasRole("EDITOR")
+//                .antMatchers("/reccards/").permitAll()
+//                .antMatchers("/reccards/img").permitAll()
+                .antMatchers("/test/reccards").permitAll()
+                //hasRole("EDITOR")
+                .antMatchers("/test/reccards/**").permitAll()
+                //hasRole("EDITOR")
+
                 .and()
-                .formLogin().loginPage("/reccards/login").defaultSuccessUrl("/reccards/edit").permitAll()
+                .formLogin().loginPage("/test/login").defaultSuccessUrl("/").permitAll()
                 .and()
-                .logout().logoutUrl("/reccards/logout").permitAll();
+                .logout().logoutUrl("/test/logout").permitAll();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
         builder.inMemoryAuthentication()
-                .withUser("kisa_test").password("kisa_test").roles("EDITOR");
+                .withUser("user").password("password").roles("EDITOR");
     }
 }

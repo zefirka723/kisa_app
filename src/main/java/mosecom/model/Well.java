@@ -1,21 +1,14 @@
 package mosecom.model;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Cascade;
-
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("serial")
 @Data
@@ -32,11 +25,12 @@ public class Well implements Serializable {
     private String wellName;
 
     @Column(name = "Well_collar")
-    private String wellCollar;
+    private Float wellCollar;
 
-//    @Column(name = "Drilled_date")
-//    private String drilledDate;
-
+    @Column(name = "Drilled_date")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    //@Temporal(TemporalType.DATE)
+    private Date drilledDate;
 
     @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
@@ -49,4 +43,16 @@ public class Well implements Serializable {
     @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<WellsGeology> geologies;
+
+    @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private List<WellssStressTest> stressTests;
+
+//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private WellsDepth depth;
+
+//    @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private List<WellsDoc> wellsDocs;
 }

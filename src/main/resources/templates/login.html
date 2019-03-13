@@ -43,12 +43,9 @@
             </button>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/reccards">Учётные карточки</a></li>
-                <li><a href="/reccards/edit">Добавить</a></li>
-            </ul>
+
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/reccards/login"><span class="glyphicon glyphicon-log-in"></span></a></li>
+                <li><a href="/test/login"><span class="glyphicon glyphicon-log-in"></span></a></li>
             </ul>
         </div>
     </div>
@@ -58,7 +55,7 @@
     <div class="row content">
         <div class="col-sm-4 text-left">
 
-            <form th:action="@{/reccards/login}" method="post">
+            <form th:action="@{/test/login}" method="post">
                 <fieldset>
                     <h2>Введите данные</h2>
                     <div th:if="${param.error}">

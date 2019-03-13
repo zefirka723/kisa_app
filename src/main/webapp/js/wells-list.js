@@ -26,7 +26,7 @@ var WellsList = {
 			return false;
 		}
 		
-		window.location = '/reccards/edit-card/' + $("#editWellId").val();
+		window.location = '/dev/reccards/edit-card/' + $("#editWellId").val();
 		return false;
 	}
 };

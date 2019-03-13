@@ -12,28 +12,29 @@ import java.io.Serializable;
 @Table(name = "Files", schema = "public")
 public class WellsDocument implements Serializable{
 
-    @Column(name = "id")
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "type") // TODO: переименовать в type_id
+    @JoinColumn(name = "Type") // TODO: переименовать в type_id
     protected DocumentType documentType;
 
-    @Column(name = "file_path")
+    @Column(name = "File_Path")
     private String filePath;
 
-    @Column(name = "file_size")
+    @Column(name = "File_Size")
     private Long fileSize;
 
-    @Column(name = "file_name")
+    @Column(name = "File_Name")
     private String fileName;
 
-    @Column(name = "file_content_type")
+    @Column(name = "File_Content_Type")
     private String fileContentType;
 
     @ManyToOne
-    @JoinColumn(name = "well_id", referencedColumnName = "Well_ID")
+    @JoinColumn(name = "Well_ID", referencedColumnName = "Well_ID")
     protected Well well;
 }

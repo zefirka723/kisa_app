@@ -9,7 +9,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 @Data
 @Entity
-@Table(schema = "dictionaries", name = "Dictionary_Hor_ID")
+@Table(schema = "model", name = "Hor_name_model")
 public class Horisont implements Serializable {
 
     @Column(name = "Code")
@@ -17,9 +17,9 @@ public class Horisont implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "Hor_name")
+    @Column(name = "Hor_name_model")
     private String name;
 
-    @Column(name = "Hor_index")
-    private String index;
+//    @Column(name = "Hor_index")
+//    private String index;
 }
