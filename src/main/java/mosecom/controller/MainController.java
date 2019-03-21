@@ -5,7 +5,7 @@ import java.net.URLEncoder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.config.ResourceNotFoundException;
+//import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,11 +58,14 @@ public class MainController {
         well.getDocuments();
         well.getGeologies();
         well.getStressTests();
-       // well.getDepth();
-        //well.getWellsDocs();
+        well.getWellsDoc();
+
+
+    //well.getDepth();
+    //well.getWellsDocs();
 
         return editCard(well);
-    }
+}
 
     private ModelAndView editCard(Well well) {
         ModelAndView result = new ModelAndView("edit/edit-card");
@@ -86,7 +89,9 @@ public class MainController {
         WellsDocument doc = service.getWellDocument(id);
         FileSystemResource file = new FileSystemResource(doc.getFilePath() + doc.getFileName());
         if (!file.exists()) {
-            throw new ResourceNotFoundException("file", file);
+            //throw new ResourceNotFoundException("file", file);
+            //added
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, doc.getFileContentType());

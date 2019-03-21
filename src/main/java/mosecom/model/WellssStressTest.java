@@ -28,7 +28,11 @@ public class WellssStressTest implements Serializable {
     @Column(name = "Flow_rate")
     private Float flowRate;
 
+    @Column(name="Water_Depth")
+    private Float waterDepth;
+
     @ManyToOne
     @JoinColumn(name = "Well_ID", referencedColumnName = "Well_ID")
     protected Well well;
+
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface WellsDepthRepository extends JpaRepository<WellsDepth, Integer> {
 
-//    WellsDepth findOneByWellId(int wellId);
-//
-//    List<WellsDepth> findAllByWellId(int wellId);
+    WellsDepth findOneByWellId(int wellId);
+
+    List<WellsDepth> findAllByWellId(int wellId);
 }

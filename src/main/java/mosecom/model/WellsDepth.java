@@ -28,7 +28,7 @@ public class WellsDepth implements Serializable {
     private Date date;
 
 
-//    @OneToOne
-//    @JoinColumn(name = "Well_ID" , referencedColumnName = "Well_ID")
-//    protected Well well;
+    @OneToOne
+    @JoinColumn(name = "Well_ID" , referencedColumnName = "Well_ID")
+    protected Well well;
 }

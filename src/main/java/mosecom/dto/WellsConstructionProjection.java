@@ -14,9 +14,7 @@ public class WellsConstructionProjection implements Serializable {
 
     private int diametrId;
 
-    // TODO: Число?
     private Double depthFrom;
 
-    // TODO: Число?
     private Double depthTo;
 }

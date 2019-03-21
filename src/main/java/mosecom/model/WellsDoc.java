@@ -1,6 +1,7 @@
 package mosecom.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,9 +22,10 @@ public class WellsDoc implements Serializable {
     private int docType;
 
     @Column(name = "Date")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date docDate;
 
-//    @ManyToOne
-//    @JoinColumn(name = "Well_ID")
-//    protected Well well;
+    @OneToOne
+    @JoinColumn(name = "Well_ID")
+    protected Well well;
 }

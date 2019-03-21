@@ -18,4 +18,6 @@ public class WellsStressTestProjection implements Serializable {
     private Float depression;
 
     private Float flowRate;
+
+    private Float waterDepth;
 }

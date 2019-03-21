@@ -32,6 +32,7 @@ public class Well implements Serializable {
     //@Temporal(TemporalType.DATE)
     private Date drilledDate;
 
+
     @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<WellsConstruction> constructions;
@@ -52,7 +53,7 @@ public class Well implements Serializable {
 //    @Cascade(org.hibernate.annotations.CascadeType.ALL)
 //    private WellsDepth depth;
 
-//    @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-//    private List<WellsDoc> wellsDocs;
+    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private WellsDoc wellsDoc;
 }

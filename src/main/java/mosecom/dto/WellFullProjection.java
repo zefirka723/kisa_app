@@ -21,7 +21,9 @@ public class WellFullProjection extends WellProjection {
 
 	private List<WellsStressTestProjection> stressTests;
 
-//	private WellsDepthProjection depth;
+	private WellsDocProjection wellDoc;
+
+	//private WellsDepthProjection depth;
 
 //	private List<WellsDocProjection> wellsDocs;
 }

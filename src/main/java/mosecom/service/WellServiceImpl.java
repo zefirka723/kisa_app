@@ -39,7 +39,7 @@ public class WellServiceImpl implements WellService {
     @Autowired
     private HorisontRepository horisontRepository;
 
-     @Value("${upload.path}")
+    @Value("${upload.path}")
     private String uploadPath;
 
     @Override
@@ -49,7 +49,7 @@ public class WellServiceImpl implements WellService {
 
     @Override
     public Well getWell(int id) {
-        return wellRepository.findOne(id);
+        return wellRepository.getOne(id);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class WellServiceImpl implements WellService {
     public Well save(WellFullProjection dto, MultipartFile[] files) throws IllegalStateException, IOException {
         Well well;
         if (dto.getId() != null && dto.getId() > 0) {
-            well = wellRepository.findOne(dto.getId());
+            well = wellRepository.getOne(dto.getId());
         } else {
             well = new Well();
         }
@@ -105,7 +105,7 @@ public class WellServiceImpl implements WellService {
 
                     WellsDocument doc = new WellsDocument();
                     doc.setWell(well);
-                    doc.setDocumentType(documentTypeRepository.findOne(DEFAULT_DOCUMENT_TYPE_ID));
+                    doc.setDocumentType(documentTypeRepository.getOne(DEFAULT_DOCUMENT_TYPE_ID));
                     doc.setFileContentType(file.getContentType());
 
                     // TODO: оптимизировать эти поля
@@ -140,7 +140,14 @@ public class WellServiceImpl implements WellService {
         }
 
 
-        // переносим все изменения глубин
+        WellsDoc wellsDoc = new WellsDoc();
+        wellsDoc.setDocDate(dto.getWellDoc().getDocDate());
+        wellsDoc.setDocType(3001);
+        wellsDoc.setId(dto.getWellDoc().getId());
+        wellsDoc.setWell(well);
+        well.setWellsDoc(wellsDoc);
+
+//        }// переносим все изменения глубин
 //        if (dto.getDepth() != null) {
 //            WellsDepth savingDepth = new WellsDepth();
 //            if (well.getDepth() != null) {
@@ -149,21 +156,57 @@ public class WellServiceImpl implements WellService {
 //            WellsDepthProjection depth = dto.getDepth();
 //            savingDepth.setWellDepth(depth.getWellDepth());
 //            savingDepth.setDate(depth.getDate());
-//              savingDepth.setWell(well);
+//            savingDepth.setWell(well);
 //            well.setDepth(savingDepth);
-//        }
-
-        // переносим все изменения wellDoc'а
-//        well.getWellsDocs().clear();
-//        if (dto.getWellsDocs() != null) {
-//            dto.getWellsDocs().stream().forEach(d -> well.getWellsDocs().add(convertWellDoc(well, d)));
-//        }
+//        }//
+//
 
 
 
         wellRepository.save(well);
         return well;
     }
+
+
+
+    private WellssStressTest convertStressTests(Well well, WellsStressTestProjection dto) {
+        WellssStressTest stressTest = new WellssStressTest();
+        stressTest.setId(dto.getId());
+        stressTest.setWell(well);
+        stressTest.setDepression(dto.getDepression());
+        stressTest.setFlowRate(dto.getFlowRate() * 86.4f);
+        stressTest.setStressDate(dto.getStressDate());
+        stressTest.setWaterDepth(dto.getWaterDepth());
+        return stressTest;
+    }
+
+    private WellsConstruction convertWellConstruction(Well well, WellsConstructionProjection dto) {
+        WellsConstruction construction = new WellsConstruction();
+        construction.setId(dto.getId());
+        construction.setWell(well);
+        construction.setConstructionType(constructionTypeRepository.getOne(dto.getConstructionTypeId()));
+        construction.setDiametr(diametrRepository.getOne(dto.getDiametrId()));
+        construction.setDepthFrom(dto.getDepthFrom());
+        construction.setDepthTo(dto.getDepthTo());
+        return construction;
+    }
+
+
+    private WellsGeology convertWellGeology(Well well, WellsGeologyProjection dto) {
+        WellsGeology geology = new WellsGeology();
+        geology.setId(dto.getId());
+        geology.setWell(well);
+        geology.setHorisont(horisontRepository.getOne(dto.getHorisontId()));
+        geology.setBotElev(dto.getBotElev());
+        return geology;
+    }
+
+
+    @Override
+    public WellsDocument getWellDocument(int id) {
+        return wellsDocumentRepository.getOne(id);
+    }
+}
 
 //    private WellsDepth convertWellDepths(Well well, WellsDepthProjection dto) {
 //        WellsDepth depth = new WellsDepth();
@@ -175,48 +218,4 @@ public class WellServiceImpl implements WellService {
 //    }
 
 
-    private WellssStressTest convertStressTests(Well well, WellsStressTestProjection dto) {
-        WellssStressTest stressTest = new WellssStressTest();
-        stressTest.setId(dto.getId());
-        stressTest.setWell(well);
-        stressTest.setDepression(dto.getDepression());
-        stressTest.setFlowRate(dto.getFlowRate());
-        stressTest.setStressDate(dto.getStressDate());
-        return stressTest;
-    }
 
-    private WellsConstruction convertWellConstruction(Well well, WellsConstructionProjection dto) {
-        WellsConstruction construction = new WellsConstruction();
-        construction.setId(dto.getId());
-        construction.setWell(well);
-        construction.setConstructionType(constructionTypeRepository.findOne(dto.getConstructionTypeId()));
-        construction.setDiametr(diametrRepository.findOne(dto.getDiametrId()));
-        construction.setDepthFrom(dto.getDepthFrom());
-        construction.setDepthTo(dto.getDepthTo());
-        return construction;
-    }
-
-
-    private WellsGeology convertWellGeology(Well well, WellsGeologyProjection dto) {
-        WellsGeology geology = new WellsGeology();
-        geology.setId(dto.getId());
-        geology.setWell(well);
-        geology.setHorisont(horisontRepository.findOne(dto.getHorisontId()));
-        geology.setBotElev(dto.getBotElev());
-        return geology;
-    }
-
-//    private WellsDoc convertWellDoc(Well well, WellsDocProjection dto) {
-//        WellsDoc doc = new WellsDoc();
-//        doc.setId(dto.getId());
-//        doc.setWell(well);
-//        doc.setDocType(3001);
-//        doc.setDocDate(dto.getDocDate());
-//        return doc;
-//    }
-
-    @Override
-    public WellsDocument getWellDocument(int id) {
-        return wellsDocumentRepository.findOne(id);
-    }
-}
