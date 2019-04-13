@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /*
-    Учётная карточка по скважине
+    Паспорт скважины
  */
 
 
@@ -16,7 +16,7 @@ import java.util.Date;
 @Entity
 @Table(name = "Docs_Wells", schema = "fgi")
 @Data
-public class WellsDoc implements Serializable {
+public class WellsDescription implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

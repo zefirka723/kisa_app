@@ -7,7 +7,7 @@
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	    <link rel="stylesheet" href="/css/wells-list.css"/>
-	    <script src="/js/wells-list.js"></script>
+	    <script src="/js/wells-description.js"></script>
 	</head>
 
 	<body>	
@@ -18,7 +18,7 @@
 					<a class="btn btn-default" href="/reccards/add-card" role="button">Добавить документ</a>
 					-->
 					<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editFormModal">
-						+ Учётная карточка
+						+ Геологическое описание
 					</button>
 
 
@@ -37,11 +37,11 @@
 		     </tr>
 		    </thead>
 		    <tbody>
-		    <tr th:attr="data-well-id=${well.id}" th:each="well : ${reccards}">
-		        <td th:text="${well.id}"/>
+		    <tr th:attr="data-well-id=${well.id}" th:each="well : ${descriptions}">
+		        <!--td th:text="${well.id}"/>
 		        <td th:text="${well.wellName}"/>
 		       <td th:date="${well.drilledDate}"/>
-		    </tr>
+		    </tr -->
 
 		    </tbody>
 		</table>

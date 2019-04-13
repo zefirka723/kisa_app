@@ -6,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +31,9 @@ public class Well implements Serializable {
     //@Temporal(TemporalType.DATE)
     private Date drilledDate;
 
+    @Column(name = "Moved")
+    private Integer moved;
+
 
     @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
@@ -49,11 +51,25 @@ public class Well implements Serializable {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<WellssStressTest> stressTests;
 
-//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-//    private WellsDepth depth;
-
     @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private WellsDoc wellsDoc;
+    private WellsDepth depth;
+
+
+    @OneToOne
+  //  @JoinColumn(name = "Well_ID")
+    protected Card card;
+
+//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private WellsDoc wellDoc;
+//
+//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private WellsPassport wellPassport;
+//
+//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private WellsDescription wellsDescription;
+
 }

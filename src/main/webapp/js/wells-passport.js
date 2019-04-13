@@ -27,7 +27,7 @@ var WellsList = {
 			return false;
 		}
 		
-		window.location = '/fgi/reccards/edit-card/' +  $("#editWellId").val();
+		window.location = '/fgi/passports/edit-card/' +  $("#editWellId").val();
 		return false;
 	}
 };

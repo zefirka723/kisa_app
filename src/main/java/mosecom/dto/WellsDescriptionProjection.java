@@ -4,16 +4,17 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @SuppressWarnings("serial")
 @Data
-public class WellsDepthProjection implements Serializable {
+public class WellsDescriptionProjection implements Serializable {
 
     private Integer id;
 
-    private Double wellDepth;
+    protected int docType;
 
     @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private java.util.Date Date;
+    private Date docDate;
 
 }

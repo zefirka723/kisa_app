@@ -5,8 +5,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mosecom.model.WellsDoc;
-import mosecom.model.WellsGeology;
+import mosecom.model.MovedType;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +22,14 @@ public class WellFullProjection extends WellProjection {
 
 	private WellsDocProjection wellDoc;
 
-	//private WellsDepthProjection depth;
+	private WellsDescriptionProjection wellDescription;
 
+	private WellsPassportProjection wellPassport;
+
+	private List<MovedType> movedTypes;
+
+	private WellsDepthProjection depth;
+
+	private int docType;
 //	private List<WellsDocProjection> wellsDocs;
 }

@@ -15,13 +15,15 @@ public interface WellService {
 
 	Well getWell(int id);
 
-	Well save(WellFullProjection well, MultipartFile[] file) throws IllegalStateException, IOException;
+	Well save(WellFullProjection well, MultipartFile[] file, int cardType) throws IllegalStateException, IOException;
 
 	List<ConstructionType> getAllConstructionTypes();
 
 	List<Diametr> getAllDiametrs();
 
 	List<Horisont> getAllHorisonts();
+
+	List<MovedType> getAllMovedTypes();
 
 	WellsDocument getWellDocument(int id);
 }

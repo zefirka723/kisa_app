@@ -107,7 +107,7 @@
             </plugin>
         </plugins>
 
-        <finalName>dev</finalName>
+        <finalName>kisa</finalName>
 
     </build>
 </project>

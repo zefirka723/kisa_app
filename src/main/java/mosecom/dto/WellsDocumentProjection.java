@@ -9,4 +9,6 @@ import lombok.Data;
 public class WellsDocumentProjection implements Serializable{
 
     private Integer id;
+
+    private int docsWellId;
 }

@@ -1,12 +1,14 @@
 package mosecom.dao;
 
+import mosecom.model.WellsDescription;
 import mosecom.model.WellsDoc;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WellsDocRepository extends JpaRepository<WellsDoc, Integer> {
-    //WellsDoc findByWell_IdAndDocType(int wellId, int cardType);
+public interface WellsDescriptionRepository extends JpaRepository<WellsDescription, Integer> {
+
+  //  WellsDoc findOneByWellIAndId(int wellId, int docId);
 
 
 }

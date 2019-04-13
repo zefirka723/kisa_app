@@ -22,3 +22,11 @@ footer {
 select {
     height: 35px;
 }
+
+select:disabled{
+    background-color: #80C8A0;
+}
+
+.disabled{
+    background-color: #80C8A0;
+}
