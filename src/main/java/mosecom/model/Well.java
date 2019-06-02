@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
 @Data
@@ -55,21 +56,63 @@ public class Well implements Serializable {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private WellsDepth depth;
 
+    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private Reccard reccard;
 
-    @OneToOne
-  //  @JoinColumn(name = "Well_ID")
-    protected Card card;
+    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private Passport passport;
+
+    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private Description description;
+
+
+
+//    public List<WellsDocument> getDocumentsByReccard() {
+//        boolean haveReccard = false;
+//        if(reccard.getId() != null) {
+//            for (WellsDocument d : documents) {
+//                if (d.getDocumentType() != null && d.getDocumentType().getId() == 3001) {
+//                    haveReccard = true;
+//                }
+//            }
+//            if (haveReccard) {
+//                return documents.stream()
+//                        .filter(documents -> documents.getDocumentType().getId() == 3001 && documents.getDocId() == reccard.getId())
+//                        .collect(Collectors.toList());
+//            }
+//        }
+//        return null;
+//    }
+
 
 //    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 //    @Cascade(org.hibernate.annotations.CascadeType.ALL)
 //    private WellsDoc wellDoc;
-//
-//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-//    private WellsPassport wellPassport;
-//
-//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-//    private WellsDescription wellsDescription;
 
-}
+
+//    @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private List<WellsDoc> wellsDocList;
+//
+//
+//    public WellsDoc getWellDoc() {
+//        return wellsDocList.stream()
+//                            .filter(wellsDoc -> wellsDoc.getDocType() == 3001)
+//                            .collect(Collectors.toList())
+//                            .get(0);
+//    }
+
+
+//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private Passport wellPassport;
+//
+//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private Description wellsDescription;
+
+
+    }

@@ -24,11 +24,9 @@ public class WellsConstruction implements Serializable {
     @JoinColumn(name = "Diametr")
     protected Diametr diametr;
 
-    // TODO: Число?
     @Column(name = "Depth_from")
     private Double depthFrom;
 
-    // TODO: Число?
     @Column(name = "Depth_till")
     private Double depthTo;
 

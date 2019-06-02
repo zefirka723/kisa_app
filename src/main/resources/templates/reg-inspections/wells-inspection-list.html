@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="well-edit.css"/>
+
+    <title>Инспекции скважин</title>
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<form action="/wells-inspection-list/" th:object="${documents}"
+      method="post" enctype="multipart/form-data">
+
+<div class="content">
+
+    <h4>Инспекции скважин</h4>
+
+    <div>
+
+    <button name="state" class="btn btn-outline-info btn-sm" aria-pressed="true" type="submit" value="-100">Все</button>
+    <button name="state" class="btn btn-outline-info btn-sm" aria-pressed="true" type="submit" value="0">Непросмотренные</button>
+    <button name="state" class="btn btn-outline-info btn-sm" aria-pressed="true" type="submit" value="-1">Нерегистрируемые</button>
+    <button name="state" class="btn btn-outline-info btn-sm" aria-pressed="true" type="submit" value="1">Зарегистрированные</button>
+
+    </div>
+
+<div>
+    <table id="inspTable" class="table table-hover">
+        <thead class="thead-dark">
+
+        <tr>
+            <th>ID документа</th>
+            <th>Статус документа</th>
+            <th>Дата регистрации</th>
+            <th>Регистрационный номер</th>
+            <th></th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:attr="data-document-id=${document.id}" th:each="document : ${documents}">
+            <td th:text="${document.id}"/>
+            <td th:text="${document.regStatusId}"/>
+            <td th:text="${document.date}"/>
+            <td th:text="${document.regNumber}"/>
+            <td><a th:href="@{'/registration/wells-inspection/' + ${document.id}}">Перейти</a></td>
+
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+</div>
+
+</form>
+</body>
+</html>

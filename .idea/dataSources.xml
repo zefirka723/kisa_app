@@ -13,11 +13,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://10.37.71.6:5432/DEV</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="DEV@10.37.71.6 [2]" uuid="5de49847-9e5a-4064-a93b-6c76f27c3124">
+    <data-source source="LOCAL" name="GEOL@10.37.71.6" uuid="5de49847-9e5a-4064-a93b-6c76f27c3124">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://10.37.71.6:5432/DEV</jdbc-url>
+      <jdbc-url>jdbc:postgresql://10.37.71.6:5432/GEOL</jdbc-url>
     </data-source>
   </component>
 </project>

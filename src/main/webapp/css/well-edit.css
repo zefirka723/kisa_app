@@ -24,9 +24,9 @@ select {
 }
 
 select:disabled{
-    background-color: #80C8A0;
+    background-color: lightgrey;
 }
 
 .disabled{
-    background-color: #80C8A0;
+    background-color: lightgrey;
 }

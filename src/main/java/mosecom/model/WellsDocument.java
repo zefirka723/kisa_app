@@ -33,8 +33,10 @@ public class WellsDocument implements Serializable{
     @Column(name = "File_Content_Type")
     private String fileContentType;
 
-//    @Column(name = "Docs_Well_ID")
-//    private int docsWellId;
+
+
+    @Column(name = "Doc_ID")
+    private int docId;
 
     @ManyToOne
     @JoinColumn(name = "Well_ID", referencedColumnName = "Well_ID")

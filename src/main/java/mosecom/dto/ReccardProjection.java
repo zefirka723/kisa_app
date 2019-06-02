@@ -1,6 +1,8 @@
 package mosecom.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -8,7 +10,9 @@ import java.util.Date;
 
 @SuppressWarnings("serial")
 @Data
-public class WellsPassportProjection implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ReccardProjection implements Serializable {
 
     private Integer id;
 

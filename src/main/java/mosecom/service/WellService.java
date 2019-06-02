@@ -15,7 +15,7 @@ public interface WellService {
 
 	Well getWell(int id);
 
-	Well save(WellFullProjection well, MultipartFile[] file, int cardType) throws IllegalStateException, IOException;
+	Well save(WellFullProjection well, MultipartFile[] file, int docType) throws IllegalStateException, IOException;
 
 	List<ConstructionType> getAllConstructionTypes();
 

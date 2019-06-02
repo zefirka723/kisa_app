@@ -8,15 +8,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 /*
-    Паспорт скважины
+    Геологическое описание скважины
  */
 
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "Docs_Wells", schema = "fgi")
+@Table(name = "WellsDoc_Passports", schema = "fgi")
 @Data
-public class WellsDescription implements Serializable {
+public class Passport implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

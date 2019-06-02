@@ -2,12 +2,16 @@ package mosecom;
 
 import javax.servlet.MultipartConfigElement;
 
+import mosecom.service.registration.WellsInspectionService;
+import mosecom.service.registration.WellsInspectionServiceImpl;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 //import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
@@ -23,8 +27,8 @@ public class ApplicationLauncher extends SpringBootServletInitializer {
         MultipartConfigFactory factory = new MultipartConfigFactory();
 //        factory.setMaxFileSize("10MB");
 //        factory.setMaxRequestSize("10MB");
-        factory.setMaxFileSize(DataSize.of(10, DataUnit.MEGABYTES));
-        factory.setMaxRequestSize(DataSize.of(10, DataUnit.MEGABYTES));
+        factory.setMaxFileSize(DataSize.of(100, DataUnit.MEGABYTES));
+        factory.setMaxRequestSize(DataSize.of(100, DataUnit.MEGABYTES));
 
         return factory.createMultipartConfig();
     }

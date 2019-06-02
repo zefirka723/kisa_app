@@ -8,15 +8,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 /*
-    Геологическое описание скважины
+    Паспорт скважины
  */
 
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "Docs_Wells", schema = "fgi")
+@Table(name = "WellsDoc_Descriptions", schema = "fgi")
 @Data
-public class WellsPassport implements Serializable {
+public class Description implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +26,9 @@ public class WellsPassport implements Serializable {
     @Column(name = "Doc_type")
     private int docType;
 
-    @Column(name = "Date")
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private Date docDate;
+//    @Column(name = "Date")
+//    @DateTimeFormat(pattern = "dd.MM.yyyy")
+//    private Date docDate;
 
     @OneToOne
     @JoinColumn(name = "Well_ID")

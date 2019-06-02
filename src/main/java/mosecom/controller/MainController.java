@@ -1,12 +1,14 @@
 package mosecom.controller;
 
 import mosecom.dto.WellFullProjection;
+import mosecom.dto.inspections.DocumentFullProjection;
+import mosecom.dto.inspections.DocumentProjection;
 import mosecom.model.Well;
-import mosecom.model.WellsDoc;
 import mosecom.model.WellsDocument;
-import mosecom.model.WellsPassport;
-import mosecom.service.DocService;
+import mosecom.model.inspections.Document;
 import mosecom.service.WellService;
+import mosecom.service.registration.DocumentService;
+import mosecom.service.registration.WellsInspectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -22,12 +24,14 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //import org.springframework.boot.context.config.ResourceNotFoundException;
 
 
 @Controller
-@RequestMapping("/fgi")
+//@RequestMapping("/fgi") //DEV
+@RequestMapping("/") //PROD
 public class MainController {
 
     @Value("${upload.path}")
@@ -37,8 +41,10 @@ public class MainController {
     private WellService service;
 
     @Autowired
-    private DocService docService;
+    private DocumentService documentService;
 
+    @Autowired
+    private WellsInspectionService wellsInspectionService;
 
     /*
         Учётные карточки
@@ -55,13 +61,16 @@ public class MainController {
     @RequestMapping(value = "/reccards/edit-card/{id}")
     public ModelAndView editCard(@PathVariable("id") Integer id) {
         Well well = service.getWell(id);
-        // На самом деле лучше так не делать, а передавать во view полную DTO
-        well.getConstructions();
-        well.getDocuments();
-        well.getGeologies();
-        well.getStressTests();
-        well.getWellDoc();
-        well.getDepth();
+
+//        well.getConstructions();
+//        well.getDocumentsByReccard();
+//        well.getGeologies();
+//        well.getStressTests();
+//        well.getReccard();
+////        well.getWellDoc();
+////        well.getWellsDocList().stream().filter(wellsDoc -> wellsDoc.getDocType() == 3001).collect(Collectors.toList());
+//
+//        well.getDepth();
         return editCard(well);
     }
 
@@ -81,40 +90,35 @@ public class MainController {
             @RequestParam(value = "file", required = false) MultipartFile[] files,
             @ModelAttribute WellFullProjection well) throws IOException {
         service.save(well, files, 3001);
-        return "redirect:/fgi/reccards/";
+
+//        return "redirect:/fgi/reccards/"; //DEV
+        return "redirect:/reccards/"; //PROD
     }
 
-    // создание (пока не нужно)
-//    @RequestMapping(value = "/add-card")
-//    public ModelAndView addCard() {
-//        return editCard(new Well());
-//    }
 
-
-
-    /*
-        Паспорт скважины
-     */
-
-    // Общий список паспортов
+    //
+//
+//    /*
+//        Паспорт скважины
+//     */
+//
+//    // Общий список паспортов
     @RequestMapping("/passports")
     public String passportsPage(Model model) {
         model.addAttribute("reccards", service.getWellsList());
         return "list/passport";
     }
 
-    // редактирование паспорта
+    //    // редактирование паспорта
     @RequestMapping(value = "/passports/edit-card/{id}")
     public ModelAndView editPassport(@PathVariable("id") Integer id) {
         Well well = service.getWell(id);
-
-        well.getConstructions();  //TODO: подумать о своей жизни..
-
-        well.getDocuments();
-        well.getGeologies();
-        well.getStressTests();
-        well.getWellPassport();
-        well.getDepth();
+//        well.getConstructions();
+//        well.getDocuments();
+//        well.getGeologies();
+//        well.getStressTests();
+//    //    well.getWellPassport();
+//        well.getDepth();
         return editPassport(well);
     }
 
@@ -128,38 +132,40 @@ public class MainController {
         return result;
     }
 
-    // сабмит формы паспорта
+    //
+//    // сабмит формы паспорта
     @RequestMapping(value = "/passports/edit-card/submit", method = RequestMethod.POST)
     public String submitPassport(
             @RequestParam(value = "file", required = false) MultipartFile[] files,
             @ModelAttribute WellFullProjection well) throws IOException {
         service.save(well, files, 3002);
-        return "redirect:/fgi/passports/";
+        //return "redirect:/fgi/passports/"; //DEV
+        return "redirect:/passports/"; //PROD
     }
 
 
-    /*
-        Геологическое описание
-     */
-
-    // Общий список геологических описаний
+    //    /*
+//        Геологическое описание
+//     */
+//
+//    // Общий список геологических описаний
     @RequestMapping("/descriptions")
     public String descriptionsPage(Model model) {
         model.addAttribute("descriptions", service.getWellsList());
         return "list/descriptions";
     }
 
-    // редактирование геолог. описания
+    //
+//    // редактирование геолог. описания
     @RequestMapping(value = "/descriptions/edit-card/{id}")
     public ModelAndView editDescription(@PathVariable("id") Integer id) {
         Well well = service.getWell(id);
-
-        well.getConstructions();
-        well.getDocuments();
-        well.getGeologies();
-        well.getStressTests();
-        well.getWellsDescription();
-        well.getDepth();
+//        well.getConstructions();
+//        well.getDocuments();
+//        well.getGeologies();
+//        well.getStressTests();
+//        well.getWellsDescription();
+//        well.getDepth();
         return editDescription(well);
     }
 
@@ -173,13 +179,14 @@ public class MainController {
         return result;
     }
 
-    // сабмит формы геологического описания
+    //    // сабмит формы геологического описания
     @RequestMapping(value = "/descriptions/edit-card/submit", method = RequestMethod.POST)
     public String submitDescription(
             @RequestParam(value = "file", required = false) MultipartFile[] files,
             @ModelAttribute WellFullProjection well) throws IOException {
         service.save(well, files, 3007);
-        return "redirect:/fgi/descriptions/";
+        //return "redirect:/fgi/descriptions/"; //DEV
+        return "redirect:/descriptions/"; //PROD
     }
 
 
@@ -214,6 +221,133 @@ public class MainController {
     public String loginPage() {
         return "login";
     }
+
+
+// создание (пока не нужно)
+//    @RequestMapping(value = "/add-card")
+//    public ModelAndView addCard() {
+//        return editCard(new Well());
+//    }
+
+
+    // Регистрация
+    @RequestMapping(value = "/registration/wells-inspection/{id}")
+    public ModelAndView editRegCard(@PathVariable("id") Integer id) {
+        Document document = documentService.getDocument(id);
+        return editRegCard(document);
+    }
+
+    private ModelAndView editRegCard(Document document) {
+        ModelAndView result = new ModelAndView("reg-inspections/wells-inspection");
+        result.addObject("document", document);
+        result.addObject("employees", documentService.getAllEmployees());
+        result.addObject("organizationSource", documentService.getAllOrganizationSource());
+        result.addObject("status", documentService.getAllRegStatus());
+        result.addObject("secrecy", documentService.getAllSecrecy());
+        return result;
+    }
+
+    @RequestMapping(value = "/registration/wells-inspecition/submit", method = RequestMethod.POST)
+    public String submitWellsInspection(
+            @RequestParam(value = "file", required = false) MultipartFile[] files,
+            @ModelAttribute DocumentFullProjection document) throws IOException {
+        documentService.save(document, files);
+        //return "redirect:/fgi/descriptions/"; //DEV
+        return "redirect:/wells-inspection-list/"; //PROD
+    }
+
+    @RequestMapping("/wells-inspection-list")
+    public String wellsInspectionList(Model model, @RequestParam(required = false) Integer state) {
+        //model.addAttribute("documents", documentService.getDocumentsList());
+        model.addAttribute("documents", (state != null ? getDocsByState(state, 1001)
+                                                            : documentService.getDocumentsList().stream()
+                .filter(documentProjection -> documentProjection.getDocType() == 1001)
+                .collect(Collectors.toList())));
+        return "reg-inspections/wells-inspection-list";
+    }
+
+
+    //Родники
+    @RequestMapping(value = "/registration/springs-inspection/{id}")
+    public ModelAndView editSpringRegCard(@PathVariable("id") Integer id) {
+        Document document = documentService.getDocument(id);
+        return editSpringRegCard(document);
+    }
+
+    private ModelAndView editSpringRegCard(Document document) {
+        ModelAndView result = new ModelAndView("reg-inspections/springs-inspection");
+        result.addObject("document", document);
+        result.addObject("employees", documentService.getAllEmployees());
+        result.addObject("organizationSource", documentService.getAllOrganizationSource());
+        result.addObject("status", documentService.getAllRegStatus());
+        result.addObject("secrecy", documentService.getAllSecrecy());
+        return result;
+    }
+
+    @RequestMapping(value = "/registration/springs-inspection/submit", method = RequestMethod.POST)
+    public String submitSpringsInspection(
+            @RequestParam(value = "file", required = false) MultipartFile[] files,
+            @ModelAttribute DocumentFullProjection document) throws IOException {
+        documentService.save(document, files);
+        //return "redirect:/fgi/descriptions/"; //DEV
+        return "redirect:/springs-inspection-list/"; //PROD
+    }
+
+    @RequestMapping("/springs-inspection-list")
+    public String springsInspectionList(Model model, @RequestParam(required = false) Integer state) {
+        //model.addAttribute("documents", documentService.getDocumentsList());
+        model.addAttribute("documents", (state != null ? getDocsByState(state, 1002)
+                                                            : documentService.getDocumentsList().stream()
+                .filter(documentProjection -> documentProjection.getDocType() == 1002)
+                .collect(Collectors.toList())));
+        return "reg-inspections/springs-inspection-list";
+    }
+
+    public List<DocumentProjection> getDocsByState(Integer state, int docType) {
+        List<DocumentProjection> docs = documentService.getDocumentsList().stream()
+                .filter(documentProjection -> documentProjection.getDocType() == docType)
+                .collect(Collectors.toList());
+        if (state == -100 || state == null) {
+            return docs;
+        }
+        return docs.stream().filter(documentProjection -> documentProjection.getRegStatusId() == state)
+                .collect(Collectors.toList());
+    }
+
+    //Дроувеллсы
+    @RequestMapping(value = "/registration/drawwells-inspection/{id}")
+    public ModelAndView editDrawWellsCard(@PathVariable("id") Integer id) {
+        Document document = documentService.getDocument(id);
+        return editDrawWellsCard(document);
+    }
+
+    private ModelAndView editDrawWellsCard(Document document) {
+        ModelAndView result = new ModelAndView("reg-inspections/drawwells-inspection");
+        result.addObject("document", document);
+        result.addObject("employees", documentService.getAllEmployees());
+        result.addObject("organizationSource", documentService.getAllOrganizationSource());
+        result.addObject("status", documentService.getAllRegStatus());
+        result.addObject("secrecy", documentService.getAllSecrecy());
+        return result;
+    }
+
+    @RequestMapping(value = "/registration/drawwells-inspecition/submit", method = RequestMethod.POST)
+    public String submitDrawWellsInspection(
+            @RequestParam(value = "file", required = false) MultipartFile[] files,
+            @ModelAttribute DocumentFullProjection document) throws IOException {
+        documentService.save(document, files);
+        //return "redirect:/fgi/descriptions/"; //DEV
+        return "redirect:/drawwells-inspection-list/"; //PROD
+    }
+
+    @RequestMapping("/drawwells-inspection-list")
+    public String drawWellsInspectionList(Model model, @RequestParam(required = false) Integer state) {
+        //model.addAttribute("documents", documentService.getDocumentsList());
+        model.addAttribute("documents", (state != null ? getDocsByState(state, 1003)
+                : documentService.getDocumentsList().stream()
+                .filter(documentProjection -> documentProjection.getDocType() == 1003)
+                .collect(Collectors.toList())));
+        return "reg-inspections/drawwells-inspection-list";
+    }
+
 }
-
-

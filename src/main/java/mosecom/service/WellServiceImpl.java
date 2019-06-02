@@ -5,6 +5,7 @@ import mosecom.dto.*;
 import mosecom.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -71,11 +72,13 @@ public class WellServiceImpl implements WellService {
     }
 
     @Override
-    public List<MovedType> getAllMovedTypes() { return movedTypeRepository.findAll(); }
+    public List<MovedType> getAllMovedTypes() {
+        return movedTypeRepository.findAll();
+    }
 
     @Override
     @Transactional
-    public Well save(WellFullProjection dto, MultipartFile[] files, int cardType) throws IllegalStateException, IOException {
+    public Well save(WellFullProjection dto, MultipartFile[] files, int docType) throws IllegalStateException, IOException {
         Well well;
         if (dto.getId() != null && dto.getId() > 0) {
             well = wellRepository.getOne(dto.getId());
@@ -83,57 +86,97 @@ public class WellServiceImpl implements WellService {
             well = new Well();
         }
 
-
-        // переносим изменения в well
+        // Переносим изменения в well
         well.setWellName(dto.getWellName());
         well.setWellCollar(dto.getWellCollar());
         well.setDrilledDate(dto.getDrilledDate());
 
         // Делаем документ
-        switch (cardType) {
-            case 3001: // Учётка
-                WellsDoc wellsDoc = new WellsDoc();
-                wellsDoc.setDocDate(dto.getWellDoc().getDocDate());
-                wellsDoc.setDocType(cardType);
-                wellsDoc.setId(well.getWellDoc() != null ?
-                        dto.getWellDoc().getId() :
-                        null);
-                wellsDoc.setWell(well);
-                well.setWellDoc(wellsDoc);
+        switch (docType) {
+            case 3001:
+                Reccard reccard = new Reccard();
+                reccard.setDocType(3001);
+                reccard.setDocDate(dto.getReccard().getDocDate());
+                if (well.getReccard() != null) {
+                    reccard.setId(//well.getReccard() != null ?
+                            dto.getReccard().getId());
+                    //: null);
+                }
+                reccard.setWell(well);
+                well.setReccard(reccard);
                 break;
 
-            case 3002: // Паспорт
-                WellsPassport wellsPassport = new WellsPassport();
-                wellsPassport.setDocDate(dto.getWellPassport().getDocDate());
-                wellsPassport.setDocType(cardType);
-                wellsPassport.setId(well.getWellPassport() != null ?
-                        dto.getWellPassport().getId() :
-                        null);
-                wellsPassport.setWell(well);
-                well.setWellPassport(wellsPassport);
+            case 3002:
+                Passport passport = new Passport();
+                passport.setDocType(3002);
+                passport.setDocDate(dto.getPassport().getDocDate());
+                if (well.getPassport() != null) {
+                    passport.setId(//well.getPassport() != null ?
+                            dto.getPassport().getId());
+                    //: null);
+                }
+                passport.setWell(well);
+                well.setPassport(passport);
                 break;
 
-            case 3007: // Геол. описание
-                WellsDescription wellsDescription = new WellsDescription();
-                wellsDescription.setDocDate(dto.getWellDescription().getDocDate());
-                wellsDescription.setDocType(cardType);
-                wellsDescription.setId(well.getWellsDescription() != null ?
-                        dto.getWellDescription().getId() :
+            case 3007:
+                Description description = new Description();
+                description.setDocType(3007);
+//                description.setDocDate(dto.getDescription().getDocDate());
+                description.setId(well.getDescription() != null ?
+                        well.getDescription().getId() :
                         null);
-                wellsDescription.setWell(well);
-                well.setWellsDescription(wellsDescription);
+//                if (well.getDescription() != null) {
+//                    description.setId(dto.getDescription().getId());
+//                }
+                description.setWell(well);
+                well.setDescription(description);
+                break;
         }
+
+//        switch (dto.getWellDoc().getDocType()) {
+//            case 3001: // Учётка
+//                WellsDoc wellsDoc = new WellsDoc();
+//                wellsDoc.setDocDate(dto.getWellDoc().getDocDate());
+//                wellsDoc.setDocType(3001);
+//                wellsDoc.setId(well.getWellDoc() != null ?
+//                        dto.getWellDoc().getId() :
+//                        null);
+//                wellsDoc.setWell(well);
+//                well.getWellsDocList().add(wellsDoc);
+//                break;
+
+//            case 3002: // Паспорт
+//                Passport wellsPassport = new Passport();
+//                wellsPassport.setDocDate(dto.getWellPassport().getDocDate());
+//                wellsPassport.setDocType(cardType);
+//                wellsPassport.setId(well.getWellPassport() != null ?
+//                        dto.getWellPassport().getId() :
+//                        null);
+//                wellsPassport.setWell(well);
+//                well.setWellPassport(wellsPassport);
+//                break;
+//
+//            case 3007: // Геол. описание
+//                Description wellsDescription = new Description();
+//                wellsDescription.setDocDate(dto.getWellDescription().getDocDate());
+//                wellsDescription.setDocType(cardType);
+//                wellsDescription.setId(well.getWellsDescription() != null ?
+//                        dto.getWellDescription().getId() :
+//                        null);
+//                wellsDescription.setWell(well);
+//                well.setWellsDescription(wellsDescription);
+        //       }
 
 
         // пишем глубину
-        if(dto.getDepth().getWellDepth() != null) {
+        if (dto.getDepth().getWellDepth() != null) {
             WellsDepth depth = new WellsDepth();
             depth.setId(dto.getDepth().getId());
             depth.setWellDepth(dto.getDepth().getWellDepth());
-            if(cardType == 3002) {
-                depth.setDate(dto.getWellPassport().getDocDate());
-            }
-            else {
+            if (docType == 3002) {
+                depth.setDate(dto.getPassport().getDocDate());
+            } else {
                 depth.setDate(dto.getDrilledDate());
             }
             depth.setWell(well);
@@ -142,7 +185,7 @@ public class WellServiceImpl implements WellService {
 
         // удаляем все удаленные из интерфейса документы
         if (dto.getDocuments() == null) {
-            if(well.getDocuments() != null) {
+            if (well.getDocuments() != null) {
                 well.getDocuments().clear();
             }
         } else {
@@ -155,7 +198,24 @@ public class WellServiceImpl implements WellService {
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
                     // Настройка пути под PROD
-                    File uploadDir = new File(uploadPath + "/" + dto.getId().toString()+"/RegistationCard");
+                    //TODO: переделать это и вообще все типы
+                    String folderByType;
+                    switch (docType) {
+                        case 3001:
+                            folderByType = "RECCARD";
+                            break;
+                        case 3002:
+                            folderByType = "PASSPORT";
+                            break;
+                        case 3007:
+                            folderByType = "DESCRIPTION";
+                            break;
+                        default:
+                            folderByType = "OTHER";
+                    }
+
+                    File uploadDir = new File(uploadPath + "/" + dto.getId().toString() + "/" + folderByType);
+
                     if (!uploadDir.exists()) {
                         uploadDir.mkdirs();
                     }
@@ -166,7 +226,7 @@ public class WellServiceImpl implements WellService {
 
                     WellsDocument doc = new WellsDocument();
                     doc.setWell(well);
-                    doc.setDocumentType(documentTypeRepository.getOne(DEFAULT_DOCUMENT_TYPE_ID));
+                    doc.setDocumentType(documentTypeRepository.getOne(docType)); //documentTypeRepository.getOne(DEFAULT_DOCUMENT_TYPE_ID));
                     doc.setFileContentType(file.getContentType());
 
                     // TODO: оптимизировать эти поля
@@ -174,12 +234,15 @@ public class WellServiceImpl implements WellService {
                     doc.setFilePath(uploadDir + "/");
                     //+ file.getOriginalFilename()); // было newFilePath
                     doc.setFileSize(file.getSize());
+                    //           doc.setDocumentType(3001);
+                    doc.setDocId(docType);
+
                     well.getDocuments().add(doc);
                 }
             }
         }
 
-        if(cardType == 3001 || cardType == 3002) {
+        if (docType == 3001 || docType == 3002) {
             // переносим все изменения конструкций
             if (well.getDrilledDate() != null) {
                 well.getConstructions().clear();
@@ -200,42 +263,17 @@ public class WellServiceImpl implements WellService {
         }
 
 
-
         // переносим все изменения геологии
-       if(well.getGeologies() != null) {
-           well.getGeologies().clear();
-       }
+        if (well.getGeologies() != null) {
+            well.getGeologies().clear();
+        }
         if (dto.getGeologies() != null) {
             dto.getGeologies().stream().forEach(g -> well.getGeologies().add(convertWellGeology(well, g)));
         }
 
 
-//        }// переносим все изменения глубин
-//        if (dto.getDepth() != null) {
-//            WellsDepth savingDepth = new WellsDepth();
-//            if (well.getDepth() != null) {
-//                savingDepth = well.getDepth();
-//            }
-//            WellsDepthProjection depth = dto.getDepth();
-//            savingDepth.setWellDepth(depth.getWellDepth());
-//            savingDepth.setDate(depth.getDate());
-//            savingDepth.setWell(well);
-//            well.setDepth(savingDepth);
-//        }//
-//
-
-
-
         wellRepository.save(well);
         return well;
-    }
-
-    private WellsDoc convertWellDoc(Well well, WellsDocProjection dto, int cardType) {
-        WellsDoc doc = new WellsDoc();
-        doc.setId(dto.getId());
-        doc.setDocType(cardType);
-        doc.setWell(well);
-        return doc;
     }
 
 
@@ -277,15 +315,5 @@ public class WellServiceImpl implements WellService {
         return wellsDocumentRepository.getOne(id);
     }
 }
-
-//    private WellsDepth convertWellDepths(Well well, WellsDepthProjection dto) {
-//        WellsDepth depth = new WellsDepth();
-//        depth.setId(dto.getId());
-//        depth.setWell(well);
-//        depth.setDate(dto.getDate());
-//        depth.setWellDepth(dto.getWellDepth());
-//        return depth;
-//    }
-
 
 

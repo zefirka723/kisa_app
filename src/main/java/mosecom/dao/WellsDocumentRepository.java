@@ -8,4 +8,6 @@ import mosecom.model.WellsDocument;
 @Repository
 public interface WellsDocumentRepository extends JpaRepository<WellsDocument, Integer> {
 
+
+
 }

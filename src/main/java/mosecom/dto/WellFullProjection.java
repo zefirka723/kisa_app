@@ -6,30 +6,36 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mosecom.model.MovedType;
+import sun.security.krb5.internal.crypto.Des;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class WellFullProjection extends WellProjection {
 
-	private List<WellsConstructionProjection> constructions;
+    private List<WellsConstructionProjection> constructions;
 
-	private List<WellsDocumentProjection> documents;
+    private List<WellsDocumentProjection> documents;
 
-	private List<WellsGeologyProjection> geologies;
+    private List<WellsGeologyProjection> geologies;
 
-	private List<WellsStressTestProjection> stressTests;
+    private List<WellsStressTestProjection> stressTests;
 
-	private WellsDocProjection wellDoc;
+    private DescriptionProjection wellDescription;
 
-	private WellsDescriptionProjection wellDescription;
+    private List<MovedType> movedTypes;
 
-	private WellsPassportProjection wellPassport;
+    private WellsDepthProjection depth;
 
-	private List<MovedType> movedTypes;
+    private ReccardProjection reccard;
 
-	private WellsDepthProjection depth;
+    private PassportProjection passport;
 
-	private int docType;
-//	private List<WellsDocProjection> wellsDocs;
+    private DescriptionProjection description;
+
+//	private int docType;
+    //	private WellsDocProjection wellDoc;
+//		private List<WellsDocProjection> wellsDocs;
+
+
 }

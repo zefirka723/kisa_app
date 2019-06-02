@@ -45,7 +45,7 @@
         <div class="collapse navbar-collapse" id="myNavbar">
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/test/login"><span class="glyphicon glyphicon-log-in"></span></a></li>
+                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span></a></li>
             </ul>
         </div>
     </div>
@@ -55,7 +55,11 @@
     <div class="row content">
         <div class="col-sm-4 text-left">
 
-            <form th:action="@{/test/login}" method="post">
+            <form action="/login" method="post">
+                <!--input
+                        type="hidden"
+                        th:name="${_csrf.parameterName}"
+                        th:value="${_csrf.token}"/-->
                 <fieldset>
                     <h2>Введите данные</h2>
                     <div th:if="${param.error}">

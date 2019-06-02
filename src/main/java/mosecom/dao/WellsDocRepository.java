@@ -1,31 +1,28 @@
-package mosecom.dao;
-
-import mosecom.model.WellsDoc;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-@Repository
-public interface WellsDocRepository extends JpaRepository<WellsDoc, Integer> {
-    //WellsDoc findByWell_IdAndDocType(int wellId, int cardType);
-
-
-}
+//package mosecom.dao;
 //
-////    WellsDoc findOneByWellId(int wellId);
-////
-////    List<WellsDoc> findAllByWellId(int wellId);
-////
-////    List<WellsDocProjection> findWellsDocList();
+//import mosecom.dto.WellsDocProjection;
+//import mosecom.model.WellsDoc;
+//import org.springframework.data.jpa.repository.JpaRepository;
+//import org.springframework.data.jpa.repository.Query;
+//import org.springframework.stereotype.Repository;
 //
-//    @Repository
-//    public interface WellsDocRepository extends JpaRepository<WellsDoc, Integer> {
+//import java.util.List;
 //
-//        @Query("select new mosecom.dto.WellsDocProjection"
-//                + "(d.id as id, d.docDate as docDate, d.docType as docType) "
-//                + "from Docs_Wells d order by d.id")
-//        List<WellsDoc> findWellsDocs();
+//@Repository
+//public interface WellsDocRepository extends JpaRepository<WellsDoc, Integer> {
 //
-//        List<WellsDocProjection> findWellsDocList();
-////
-
+//    @Query("select new mosecom.dto.WellsDocProjection"
+//            + "(d.id as id, d.docType as docType, d.docDate as docDate )"
+//            + "from WellsDoc d where d.docType = 3001 order by d.id")
+//    WellsDocProjection findWellDoc();
+//
+//
 //}
+////
+//////    WellsDoc findOneByWellId(int wellId);
+//////
+//////    List<WellsDoc> findAllByWellId(int wellId);
+//////
+//////    List<WellsDocProjection> findWellsDocList();
+////
+//
