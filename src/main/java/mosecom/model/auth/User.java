@@ -21,18 +21,6 @@ import java.util.Set;
 @Entity
 @Table(schema = "dictionaries", name = "Dictionary_Employees")
 public class User implements UserDetails {
-//    private String username;
-//    private String password;
-
-//
-//    // дефолтные свойства
-//    private boolean accountNonExpired;
-//    private boolean accountNonLocked;
-//    private boolean credentialsNonExpired;
-//    private boolean enabled;
-//
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Emploe_ID")
@@ -55,17 +43,22 @@ public class User implements UserDetails {
     @Transient
     private List<Role> authorities;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+
+    /*
+    Лёгкая наркомания
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<DbRole> dbRoles;
 
     @Override
     public List<Role> getAuthorities(){
-        authorities.clear();
         for (DbRole dbRole: dbRoles) {
-            authorities.add(Role.getRoleById(dbRole.getId()));
+            this.authorities.add(Role.getRoleById(dbRole.getId()));
         }
         return authorities;
     }
+
+    */
 
 }

@@ -17,9 +17,9 @@ public class DbRole {
     @Column(name = "Role_ID")
     private String roleId;
 
-    @ManyToOne
-    @JoinColumn(name = "Emploe_ID", referencedColumnName = "Emploe_ID")
-    protected User user;
+//    @ManyToOne
+//    @JoinColumn(name = "Emploe_ID", referencedColumnName = "Emploe_ID")
+//    protected User user;
 
 
 }

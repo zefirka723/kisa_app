@@ -39,19 +39,14 @@ public class UserService implements UserDetailsService {
 //        dbUserRepository.save(myUser);
 
 
-        User user = dbUserRepository.findUserByUsername(s); // ну такое
+        User user = dbUserRepository.findUserByUsername(s);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
         user.setEnabled(true);
+        user.setAuthorities(Arrays.asList(Role.UNIDENTIFIED));
         return user;
     }
-
-//    public void setNewPassword(String username, String password) {
-//        User user = dbUserRepository.findUserByUsername(username);
-//        user.setPassword(new BCryptPasswordEncoder().encode(password));
-//        dbUserRepository.save(user);
-//    }
 
     @Transactional
     public User save(DbUserProjection dto) throws IllegalStateException, IOException {
