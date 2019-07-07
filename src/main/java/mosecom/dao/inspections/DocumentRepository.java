@@ -16,8 +16,5 @@ public interface DocumentRepository extends JpaRepository<Document, Integer> {
             + "from Document d order by d.id")
     List<DocumentProjection> findDocumentsList();
 
-
-
-
 }
 

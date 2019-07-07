@@ -16,7 +16,7 @@
 <div class="container-fluid text-center">
     <div class="row content">
         <div class="col-sm-8 text-left">
-            <form action="/registration/springs-inspection/submit" th:object="${document}"
+            <form action="/fgi/registration/springs-inspection/submit" th:object="${document}"
                   method="post" enctype="multipart/form-data">
 
                 <!--input
@@ -28,7 +28,10 @@
 
                 <div id="card-info">
 
-                    <label><h4 th:text="'Регистрация обследования родника № ' + ${document.springsInspection.springId}"></h4>
+                    <label><h4 th:text="'Регистрация обследования родника № '
+                    + ${document.springsInspection.springId}
+                        + ' от '
+                        + ${#dates.format(document.springsInspection.date, 'dd.MM.yyyy')}"></h4>
                     </label>
 
                     <br>
@@ -120,7 +123,7 @@
                                     <option th:each="secr : ${secrecy}"
                                             th:value="${secr.id}"
                                             th:text="${secr.name}"
-                                            th:selected="${secr.id == document.secrecyId}"/>
+                                            th:selected="${document.secrecyId != null ? (secr.id == document.secrecyId) : secr.id == 0}"/>
                                 </select>
                             </td>
                         </tr>

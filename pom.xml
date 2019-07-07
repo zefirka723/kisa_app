@@ -28,6 +28,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
@@ -46,14 +47,14 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <!-- Работа с postgres-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.2.5</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -62,11 +63,15 @@
         </dependency>
 
 
-        <!--разграничение доступа -->
-        <!--dependency>
+        <!--Авторизация-->
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency-->
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -111,132 +116,3 @@
 
     </build>
 </project>
-
-
-        <!--<?xml version="1.0" encoding="UTF-8"?>-->
-<!--<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
-         <!--xmlns="http://maven.apache.org/POM/4.0.0"-->
-         <!--xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">-->
-<!--<modelVersion>4.0.0</modelVersion>-->
-
-<!--<groupId>mosecom</groupId>-->
-<!--<artifactId>kisa-spring-demo</artifactId>-->
-<!--<version>10-03</version>-->
-<!--<packaging>war</packaging>-->
-
-
-<!--<properties>-->
-    <!--<project.encoding>UTF-8</project.encoding>-->
-    <!--<project.java.version>1.8</project.java.version>-->
-    <!--<spring.version>1.5.4.RELEASE</spring.version>-->
-<!--</properties>-->
-
-
-<!--<dependencies>-->
-    <!--&lt;!&ndash;spring boot основная зависимость&ndash;&gt;-->
-    <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-web</artifactId>-->
-        <!--<version>${spring.version}</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash;подключение шаблонизатора&ndash;&gt;-->
-    <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-thymeleaf</artifactId>-->
-        <!--<version>${spring.version}</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash;работа с базой данных&ndash;&gt;-->
-    <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-data-jpa</artifactId>-->
-        <!--<version>${spring.version}</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/spring-orm &ndash;&gt;-->
-    <!--<dependency>-->
-        <!--<groupId>org.springframework</groupId>-->
-        <!--<artifactId>spring-orm</artifactId>-->
-        <!--<version>5.1.5.RELEASE</version>-->
-    <!--</dependency>-->
-
-
-    <!--<dependency>-->
-        <!--<groupId>com.h2database</groupId>-->
-        <!--<artifactId>h2</artifactId>-->
-        <!--<version>1.4.196</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.postgresql/postgresql &ndash;&gt;-->
-    <!--<dependency>-->
-        <!--<groupId>org.postgresql</groupId>-->
-        <!--<artifactId>postgresql</artifactId>-->
-        <!--<version>42.2.5</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.projectlombok/lombok &ndash;&gt;-->
-    <!--<dependency>-->
-        <!--<groupId>org.projectlombok</groupId>-->
-        <!--<artifactId>lombok</artifactId>-->
-        <!--<version>1.18.4</version>-->
-        <!--<scope>provided</scope>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/spring-context &ndash;&gt;-->
-    <!--<dependency>-->
-        <!--<groupId>org.springframework</groupId>-->
-        <!--<artifactId>spring-context</artifactId>-->
-        <!--<version>5.1.5.RELEASE</version>-->
-    <!--</dependency>-->
-
-
-    <!--<dependency>-->
-        <!--<groupId>org.hibernate</groupId>-->
-        <!--<artifactId>hibernate-entitymanager</artifactId>-->
-        <!--<version>5.2.3.Final</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash;разграничение доступа &ndash;&gt;-->
-    <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-security</artifactId>-->
-        <!--<version>${spring.version}</version>-->
-    <!--</dependency>-->
-
-
-
-
-    <!--<dependency>-->
-        <!--<groupId>org.hibernate</groupId>-->
-        <!--<artifactId>hibernate-core</artifactId>-->
-        <!--<version>5.3.7.Final</version>-->
-    <!--</dependency>-->
-
-<!--</dependencies>-->
-
-<!--<build>-->
-    <!--<plugins>-->
-        <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-compiler-plugin</artifactId>-->
-            <!--<configuration>-->
-                <!--<source>${project.java.version}</source>-->
-                <!--<target>${project.java.version}</target>-->
-                <!--<encoding>${project.encoding}</encoding>-->
-            <!--</configuration>-->
-        <!--</plugin>-->
-        <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-resources-plugin</artifactId>-->
-            <!--<version>2.6</version>-->
-            <!--<configuration>-->
-                <!--<encoding>${project.encoding}</encoding>-->
-            <!--</configuration>-->
-        <!--</plugin>-->
-    <!--</plugins>-->
-
-    <!--<finalName>dev</finalName>-->
-
-<!--</build>-->
-<!--</project>-->

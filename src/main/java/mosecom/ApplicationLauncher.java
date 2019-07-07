@@ -2,16 +2,12 @@ package mosecom;
 
 import javax.servlet.MultipartConfigElement;
 
-import mosecom.service.registration.WellsInspectionService;
-import mosecom.service.registration.WellsInspectionServiceImpl;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 //import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
@@ -34,8 +30,9 @@ public class ApplicationLauncher extends SpringBootServletInitializer {
     }
 
 
+
+
     public static void main(String[] args) {
         SpringApplication.run(ApplicationLauncher.class, args);
     }
-
-}
+    }

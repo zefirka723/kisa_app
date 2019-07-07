@@ -33,7 +33,7 @@
     </div>
 </nav>
 
-<form action="/springs-inspection-list/" th:object="${documents}"
+<form action="/fgi/springs-inspection-list/" th:object="${items}"
       method="post" enctype="multipart/form-data">
 
 <div class="content">
@@ -56,21 +56,25 @@
 
         <tr>
             <th>ID документа</th>
+            <th>ID родника</th>
+            <th>Дата документа</th>
             <th>Статус документа</th>
-            <th>Дата регистрации</th>
             <th>Регистрационный номер</th>
+            <th>Дата регистрации</th>
             <th></th>
 
         </tr>
         </thead>
 
         <tbody>
-        <tr th:attr="data-document-id=${document.id}" th:each="document : ${documents}">
-            <td th:text="${document.id}"/>
-            <td th:text="${document.regStatusId}"/>
-            <td th:text="${document.date}"/>
-            <td th:text="${document.regNumber}"/>
-            <td><a th:href="@{'/registration/springs-inspection/' + ${document.id}}">Перейти</a></td>
+        <tr th:attr="data-document-id=${item.id}" th:each="item : ${items}">
+            <td th:text="${item.id}"/>
+            <td th:text="${item.observationPointId}"/>
+            <td th:text="${item.date}"/>
+            <td th:text="${item.regStatusText}"/>
+            <td th:text="${item.regNumber}"/>
+            <td th:text="${item.dateProcessing}"/>
+            <td><a th:href="@{'/registration/springs-inspection/' + ${item.id}}">Перейти</a></td>
 
         </tr>
 

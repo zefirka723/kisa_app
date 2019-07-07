@@ -17,6 +17,7 @@ import java.util.Date;
 @SuppressWarnings("serial")
 @Data
 @Entity
+//@Table(schema = "fgi", name = "\"Documents\"")
 @Table(schema = "fgi", name = "\"Documents\"")
 public class Document implements Serializable {
 
