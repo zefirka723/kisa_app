@@ -16,5 +16,9 @@ public enum DocTypes {
     DocTypes(int id) {
         this.id = id;
     }
+
+    public int getId() {
+        return id;
+    }
 }
 

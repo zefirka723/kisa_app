@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700&display=swap');
+
+
+
+
+.sidebar {
+    background-color: #f1f1f1;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar-line {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.sidebar-item {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+}
+
+.sidebar-subline {
+    padding: 8px 35px !important;
+}
+
+.sidebar-line.active {
+    background-color: #3366ff;
+    color: white;
+}
+
+.sidebar-line:hover:not(.active) {
+    background-color: #e5e5e5;
+    color: #000;
+    text-decoration: none;
+}
+
+.sidebar-line.active:hover {
+    text-decoration: none;
+    background-color: #2d5be5;
+}
+
+.sidebar-subline {
+    display: block;
+    color: #000;
+    padding: 8px 35px;
+    text-decoration: none;
+}
+
+/*#sticky-footer {
+  flex-shrink: none;
+
+}*/
+
+
+/*.sidebar-line:hover {
+  background-color: #e5e5e5;
+  text-decoration: none;
+}*/

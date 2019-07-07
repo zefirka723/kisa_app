@@ -1,20 +1,21 @@
 package mosecom.controller;
 
-import mosecom.dto.inspections.DocumentFullProjection;
+import mosecom.dictionaries.DocTypes;
 import mosecom.dto.inspections.RegItemProjection;
-import mosecom.model.inspections.Document;
 import mosecom.service.registration.DocumentServiceImpl;
 import mosecom.service.registration.RegItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Controller
 public class RegistrationController {
     @Autowired
     DocumentServiceImpl documentService;
@@ -22,47 +23,30 @@ public class RegistrationController {
     @Autowired
     RegItemService regItemService;
 
-    //Родники
-//    @RequestMapping(value = "/registration/springs-inspection/{id}")
-//    public ModelAndView editSpringRegCard(@PathVariable("id") Integer id) {
-//        Document document = documentService.getDocument(id);
-//        return editInspectionCard(document, "reg-inspections/springs-inspection");
-//    }
-//
-//    @RequestMapping(value = "/list/submit", method = RequestMethod.POST)
-//    public String submitSpringsInspection(
-//            @RequestParam(value = "file", required = false) MultipartFile[] files,
-//            @ModelAttribute DocumentFullProjection document) throws IOException {
-//        documentService.save(document, files);
-//        return "redirect:/springs-inspection-list/"; //PROD
-//    }
-
     @RequestMapping("/pvmonitoring/springs")
     public String springsInspectionList(Model model, @RequestParam(required = false) Integer state) {
-        model.addAttribute("items", regItemService.getRegItemsList());
+        model.addAttribute("items", state == null ?
+                    regItemService.filterRegItemsByType(DocTypes.SPRING_INSPECTION)
+                :   regItemService.filterRegIremsByTypeAndState(DocTypes.SPRING_INSPECTION, state));
+        model.addAttribute("docType", DocTypes.SPRING_INSPECTION);
+        model.addAttribute("header", "Обследования родников"); // добавить в enum описания
         return "registration/list";
     }
 
+    @GetMapping("/filter")
+    public String filterList(Model model,
+                             @RequestParam DocTypes docType,
+                             //@RequestParam String header,
+                             @RequestParam (required = false) Integer state) {
 
-    // Получение документов нужного типа
-    public List<RegItemProjection> getItemsByType(int docType) {
-        return regItemService.getRegItemsList().stream()
-                .filter(regItemProjection -> regItemProjection.getDocType() == docType)
-                .collect(Collectors.toList());
+        model.addAttribute("items", state == null ?
+                regItemService.filterRegItemsByType(docType)
+                :   regItemService.filterRegIremsByTypeAndState(docType, state));
+        model.addAttribute("docType", docType);
+       // model.addAttribute("header", header);
+        return "registration/list";
     }
 
-
-    // Получение документов в нужном статусе (для фильтров)
-    private List<RegItemProjection> getItemsByState(Integer state, int docType) {
-        List<RegItemProjection> items = regItemService.getRegItemsList().stream()
-                .filter(itemProjection -> itemProjection.getDocType() == docType)
-                .collect(Collectors.toList());
-        if (state == -100 || state == null) {
-            return items;
-        }
-        return items.stream().filter(regItemProjection -> regItemProjection.getRegStatusId() == state)
-                .collect(Collectors.toList());
-    }
 
 
 }
