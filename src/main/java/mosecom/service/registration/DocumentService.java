@@ -1,6 +1,6 @@
 package mosecom.service.registration;
 
-import mosecom.dto.inspections.DocumentFullProjection;
+//import mosecom.dto.inspections.DocumentFullProjection;
 import mosecom.dto.inspections.DocumentProjection;
 import mosecom.model.ConstructionType;
 import mosecom.model.inspections.Document;
@@ -16,7 +16,7 @@ public interface DocumentService {
 
     Document getDocument(int id);
 
-    Document save(DocumentFullProjection well, MultipartFile[] file) throws IllegalStateException, IOException;
+    Document save(DocumentProjection well, MultipartFile[] file) throws IllegalStateException, IOException;
 
     List<RegStatus> getAllRegStatus();
 

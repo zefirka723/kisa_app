@@ -1,7 +1,7 @@
 package mosecom.service.registration;
 
 import mosecom.dao.inspections.*;
-import mosecom.dto.inspections.DocumentFullProjection;
+//import mosecom.dto.inspections.DocumentFullProjection;
 import mosecom.dto.inspections.DocumentProjection;
 import mosecom.model.inspections.Document;
 import mosecom.model.inspections.dictionaries.Employees;
@@ -48,7 +48,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     @Transactional
-    public Document save(DocumentFullProjection dto, MultipartFile[] file) throws IllegalStateException, IOException {
+    public Document save(DocumentProjection dto, MultipartFile[] file) throws IllegalStateException, IOException {
         Document document;
 
         if (dto.getId() != null && dto.getId() > 0) {

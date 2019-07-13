@@ -57,15 +57,15 @@ public class Document implements Serializable {
     @Column(name = "Doc_type")
     private Integer docType;
 
-    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private WellsInspection wellsInspection;
-
-    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private DrawWellsInspection drawWellsInspection;
-
-    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private SpringsInspection springsInspection;
+//    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private WellsInspection wellsInspection;
+//
+//    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private DrawWellsInspection drawWellsInspection;
+//
+//    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private SpringsInspection springsInspection;
 }

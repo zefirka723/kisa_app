@@ -1,7 +1,8 @@
 package mosecom.controller;
 
 import mosecom.dictionaries.DocTypes;
-import mosecom.dto.inspections.DocumentFullProjection;
+//import mosecom.dto.inspections.DocumentFullProjection;
+import mosecom.dto.inspections.DocumentProjection;
 import mosecom.dto.inspections.RegItemProjection;
 import mosecom.model.inspections.Document;
 import mosecom.model.inspections.RegItem;
@@ -77,7 +78,7 @@ public class RegistrationController {
     public String registrationSubmit(
             @RequestParam DocTypes globalDocType,
             @RequestParam(value = "file", required = false) MultipartFile[] files,
-            @ModelAttribute DocumentFullProjection document) throws IOException {
+            @ModelAttribute DocumentProjection document) throws IOException {
         documentService.save(document, files);
         //return "registration/reg-home";
         return "redirect:/registrations?docType=" + globalDocType +"&state=0";
