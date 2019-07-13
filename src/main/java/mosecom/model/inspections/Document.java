@@ -24,14 +24,10 @@ public class Document implements Serializable {
     @Id
     @Column(name = "Doc_ID")
     private Integer id;
-
- //   @ManyToOne
- //   @JoinColumn(name = "Reg_status")
+    
     @Column(name = "Reg_status")
     private Integer regStatusId;
-
-//    @ManyToOne
-//    @JoinColumn(name = "Processed_by")
+    
     @Column(name = "Processed_by")
     private Integer authorId;
 
@@ -42,17 +38,13 @@ public class Document implements Serializable {
 
     @Column(name = "Reg_number")
     private String regNumber;
-
-//    @ManyToOne
-//    @JoinColumn(name = "Organization_source")
+    
     @Column(name = "Organization_source")
     private Integer organizationId;
 
     @Column(name = "Pages")
     private Integer pages;
-
-//    @ManyToOne
-//    @JoinColumn (name = "Neck_secrecy")
+    
     @Column (name = "Neck_secrecy")
     private Integer secrecyId;
 

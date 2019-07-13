@@ -112,7 +112,7 @@
             </plugin>
         </plugins>
 
-        <finalName>fgi</finalName>
+        <finalName>ROOT</finalName>
 
     </build>
 </project>

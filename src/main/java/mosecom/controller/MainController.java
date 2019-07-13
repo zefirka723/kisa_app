@@ -221,167 +221,12 @@ public class MainController {
     }
 
 
-    /*
-        Форма логина
-     */
-//    @RequestMapping(value = "/login")
-//    public String loginPage() {
-//        return "login";
-//    }
-
 
 // создание (пока не нужно)
 //    @RequestMapping(value = "/add-card")
 //    public ModelAndView addCard() {
 //        return editCard(new Well());
 //    }
-
-
-    // Регистрация
-    @RequestMapping(value = "/registration/wells-inspection/{id}")
-    public ModelAndView editRegCard(@PathVariable("id") Integer id) {
-        Document document = documentService.getDocument(id);
-        return editInspectionCard(document, "reg-inspections/wells-inspection");
-    }
-
-//    private ModelAndView editRegCard(Document document) {
-//        ModelAndView result = new ModelAndView("reg-inspections/wells-inspection");
-//        result.addObject("document", document);
-//        result.addObject("employees", documentService.getAllEmployees());
-//        result.addObject("organizationSource", documentService.getAllOrganizationSource());
-//        result.addObject("status", documentService.getAllRegStatus());
-//        result.addObject("secrecy", documentService.getAllSecrecy());
-//        return result;
-    //   }
-
-    @RequestMapping(value = "/registration/wells-inspecition/submit", method = RequestMethod.POST)
-    public String submitWellsInspection(
-            @RequestParam(value = "file", required = false) MultipartFile[] files,
-            @ModelAttribute DocumentFullProjection document) throws IOException {
-        documentService.save(document, files);
-        //return "redirect:/fgi/descriptions/"; //DEV
-        return "redirect:/wells-inspection-list/"; //PROD
-    }
-//
-//    @RequestMapping("/wells-inspection-list")
-//    public String wellsInspectionList(Model model, @RequestParam(required = false) Integer state) {
-//        //model.addAttribute("documents", documentService.getDocumentsList());
-//        model.addAttribute("documents", (state != null ? getDocsByState(state, 1001)
-//                                                            : documentService.getDocumentsList().stream()
-//                .filter(documentProjection -> documentProjection.getDocType() == 1001)
-//                .collect(Collectors.toList())));
-//        return "reg-inspections/wells-inspection-list";
-
-
-    @RequestMapping("/wells-inspection-list")
-    public String wellsInspectionList(Model model, @RequestParam(required = false) Integer state) {
-        model.addAttribute("items", (state != null ? getItemsByState(state, 1001)
-                : getItemsByType(wellsInspectionDocType)));
-        return "reg-inspections/wells-inspection-list";
-    }
-
-
-    //Родники
-    @RequestMapping(value = "/registration/springs-inspection/{id}")
-    public ModelAndView editSpringRegCard(@PathVariable("id") Integer id) {
-        Document document = documentService.getDocument(id);
-        return editInspectionCard(document, "reg-inspections/springs-inspection");
-    }
-
-//    private ModelAndView editSpringRegCard(Document document) {
-//        ModelAndView result = new ModelAndView("reg-inspections/springs-inspection");
-//        result.addObject("document", document);
-//        result.addObject("employees", documentService.getAllEmployees());
-//        result.addObject("organizationSource", documentService.getAllOrganizationSource());
-//        result.addObject("status", documentService.getAllRegStatus());
-//        result.addObject("secrecy", documentService.getAllSecrecy());
-//        return result;
-//    }
-
-    @RequestMapping(value = "/registration/springs-inspection/submit", method = RequestMethod.POST)
-    public String submitSpringsInspection(
-            @RequestParam(value = "file", required = false) MultipartFile[] files,
-            @ModelAttribute DocumentFullProjection document) throws IOException {
-        documentService.save(document, files);
-        return "redirect:/springs-inspection-list/"; //PROD
-    }
-
-    @RequestMapping("/springs-inspection-list")
-    public String springsInspectionList(Model model, @RequestParam(required = false) Integer state) {
-        model.addAttribute("items", (state != null ? getItemsByState(state, 1002)
-                : getItemsByType(springsInspectionDocType)));
-        return "reg-inspections/springs-inspection-list";
-    }
-
-    //Дроувеллсы
-    @RequestMapping(value = "/registration/drawwells-inspection/{id}")
-    public ModelAndView editDrawWellsCard(@PathVariable("id") Integer id) {
-        Document document = documentService.getDocument(id);
-        return editInspectionCard(document, "reg-inspections/drawwells-inspection");
-    }
-
-//    private ModelAndView editDrawWellsCard(Document document) {
-//        ModelAndView result = new ModelAndView("reg-inspections/drawwells-inspection");
-//        result.addObject("document", document);
-//        result.addObject("employees", documentService.getAllEmployees());
-//        result.addObject("organizationSource", documentService.getAllOrganizationSource());
-//        result.addObject("status", documentService.getAllRegStatus());
-//        result.addObject("secrecy", documentService.getAllSecrecy());
-//        return result;
-//    }
-
-    @RequestMapping(value = "/registration/drawwells-inspecition/submit", method = RequestMethod.POST)
-    public String submitDrawWellsInspection(
-            @RequestParam(value = "file", required = false) MultipartFile[] files,
-            @ModelAttribute DocumentFullProjection document) throws IOException {
-        documentService.save(document, files);
-        return "redirect:/drawwells-inspection-list/";
-    }
-
-    @RequestMapping("/drawwells-inspection-list")
-    public String drawWellsInspectionList(Model model, @RequestParam(required = false) Integer state) {
-        model.addAttribute("items", (state != null ? getItemsByState(state, drawWellsInspectionDocType)
-                : getItemsByType(drawWellsInspectionDocType)));
-        return "reg-inspections/drawwells-inspection-list";
-    }
-
-
-    private ModelAndView editInspectionCard(Document document, String link) {
-        ModelAndView result = new ModelAndView(link);
-        result.addObject("document", document);
-        result.addObject("employees", documentService.getAllEmployees());
-        result.addObject("organizationSource", documentService.getAllOrganizationSource());
-        result.addObject("status", documentService.getAllRegStatus());
-        result.addObject("secrecy", documentService.getAllSecrecy());
-        return result;
-    }
-
-    public List<RegItemProjection> getItemsByType(int docType) {
-        return regItemService.getRegItemsList().stream()
-                .filter(regItemProjection -> regItemProjection.getDocType() == docType)
-                .collect(Collectors.toList());
-    }
-
-    private List<RegItemProjection> getItemsByState(Integer state, int docType) {
-        List<RegItemProjection> items = regItemService.getRegItemsList().stream()
-                .filter(itemProjection -> itemProjection.getDocType() == docType)
-                .collect(Collectors.toList());
-        if (state == -100 || state == null) {
-            return items;
-        }
-        return items.stream().filter(regItemProjection -> regItemProjection.getRegStatusId() == state)
-                .collect(Collectors.toList());
-    }
-
-
-    @RequestMapping("/menu")
-    public String showMenuList(Model model) {
-        List<Menu> menulist = new ArrayList<>();
-        menulist.add(new Menu("Фонд геологической информации", "http://yandex.ru"));
-        menulist.add(new Menu("Пыщ-пыщ", "http://google.com"));
-        model.addAttribute("menulist", menulist);
-        return "test/menu";
-    }
 
 
     // обработка параметров логина
@@ -393,8 +238,4 @@ public class MainController {
         model.addAttribute("logout", logout != null);
         return "login";
     }
-
-
-
-
 }

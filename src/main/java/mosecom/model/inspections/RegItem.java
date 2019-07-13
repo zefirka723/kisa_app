@@ -45,4 +45,7 @@ public class RegItem implements Serializable {
     @Column (name = "Name") // айдишник пункта наблюдения
     private Integer observationPointId;
 
+    @Column (name = "Link")
+    private String link;
+
 }

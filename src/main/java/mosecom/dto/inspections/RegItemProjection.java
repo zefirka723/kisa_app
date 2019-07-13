@@ -33,4 +33,6 @@ public class RegItemProjection {
 
         private Integer observationPointId;
 
+        private String link;
+
 }

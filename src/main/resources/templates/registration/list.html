@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<form action="/filter" th:object="${items}"
+<form action="/registrations" th:object="${items}"
       method="get" enctype="multipart/form-data">
 
     <div class="content">
@@ -21,7 +21,6 @@
 
         <div>
 
-            <button name="state" class="btn btn-outline-info btn-sm" aria-pressed="true" type="submit">Все</button>
             <button name="state" class="btn btn-outline-info btn-sm" aria-pressed="true" type="submit" value="0">Непросмотренные</button>
             <button name="state" class="btn btn-outline-info btn-sm" aria-pressed="true" type="submit" value="-1">Нерегистрируемые</button>
             <button name="state" class="btn btn-outline-info btn-sm" aria-pressed="true" type="submit" value="1">Зарегистрированные</button>
@@ -53,7 +52,7 @@
                     <td th:text="${item.regStatusText}"/>
                     <td th:text="${item.regNumber}"/>
                     <td th:text="${item.dateProcessing}"/>
-                    <td><a th:href="@{'/registration/drawwells-inspection/' + ${item.id}}">Перейти</a></td>
+                    <td><a th:href="@{'/registration/springs-inspection/' + ${item.id}}">Перейти</a></td>
 
                 </tr>
 

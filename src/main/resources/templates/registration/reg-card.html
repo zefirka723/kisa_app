@@ -8,7 +8,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="well-edit.css"/>
 
-    <title>Регистрация обследования колодца</title>
+    <title>Регистрация</title>
 </head>
 <body>
 
@@ -36,25 +36,24 @@
 <div class="container-fluid text-center">
     <div class="row content">
         <div class="col-sm-8 text-left">
-            <form action="/fgi/registration/drawwells-inspecition/submit" th:object="${document}"
+            <form th:action="'/registration'  + '/submit'" th:object="${document}"
                   method="post" enctype="multipart/form-data">
 
-                <!--input
-                        type="hidden"
-                        th:name="${_csrf.parameterName}"
-                        th:value="${_csrf.token}"/-->
-
-                <input type="hidden" name="id" th:value="${id}"/>
+                <input type="hidden" name="id" th:value="${document.id}"/>
+                <input type="hidden" name="globalDocType" th:value="${globalDocType}">
 
                 <div id="card-info">
 
+
                     <label><h4
-                            th:text="'Регистрация обследования колодца № '
-                            + ${document.drawWellsInspection.drawWellId != null ? (document.drawWellsInspection.drawWellId) : '<???>'}
-                            + ' от '
-                            + ${#dates.format(document.drawWellsInspection.date, 'dd.MM.yyyy')}">
-                            </h4>
+                            th:text="${globalDocType.getItemName()} + ' № '
+                                + ${item.observationPointId != null ? (item.observationPointId) : '<???>'}
+                                + ' от '
+                                + ${#dates.format(item.date, 'dd.MM.yyyy')}
+                            "></h4>
                     </label>
+
+                    <h1 th:text="${user}"></h1>
 
                     <br>
 
@@ -65,23 +64,23 @@
                                 <div class="form-group">
                                     <label for="file">Папка с файлами</label>
                                     <input type="text" placeholder="файлы отсутствуют" class="form-control" id="file"
-                                           th:field="*{drawWellsInspection.link}"/>
+                                           th:field="${item.link}"/>
                                 </div>
                             </td>
                         </tr>
 
                         <tr>
-                        <td>
+                            <td>
 
-                            <label>Решение о регистрации</label><br>
-                            <select  name = "regStatusId">
-                                <option th:each="regstatus : ${status}"
-                                        th:value="${regstatus.id}"
-                                        th:text="${regstatus.name}"
-                                        th:selected="${regstatus.id == document.regStatusId}"/>
-                            </select>
+                                <label>Решение о регистрации</label><br>
+                                <select  name = "regStatusId">
+                                    <option th:each="regstatus : ${status}"
+                                            th:value="${regstatus.id}"
+                                            th:text="${regstatus.name}"
+                                            th:selected="${regstatus.id == document.regStatusId}"/>
+                                </select>
 
-                        </td>
+                            </td>
                         </tr>
 
                         <tr>
