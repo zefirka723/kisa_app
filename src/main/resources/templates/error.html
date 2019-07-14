@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <title>Oopsy daisy</title>
+</head>
+<body style="margin: 20px">
+<h3>Ошибочка вышла...</h3>
+<table class="table">
+    <tr>
+        <th scope="row">Date</th>
+        <td th:text="${timestamp}"/>
+    </tr>
+    <tr>
+        <th scope="row">Path</th>
+        <td th:text="${path}"/>
+    </tr>
+    <tr>
+        <th scope="row">Error</th>
+        <td th:text="${error}"/>
+    </tr>
+    <tr>
+        <th scope="row">Status</th>
+        <td th:text="${status}"/>
+    </tr>
+    <tr>
+        <th scope="row">Message</th>
+        <td th:text="${message}"/>
+    </tr>
+    <tr>
+        <th scope="row">Exception</th>
+        <td th:text="${exception}"/>
+    </tr>
+    <tr>
+        <th scope="row">Trace</th>
+        <td>
+            <pre th:if="${trace} != null" th:text="${trace}"/>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
