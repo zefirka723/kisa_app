@@ -1,17 +1,12 @@
 package mosecom.controller;
 
-import mosecom.dao.auth.DbUserRepository;
-import mosecom.dto.auth.DbUserProjection;
 import mosecom.model.auth.User;
 import mosecom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.io.IOException;
-import java.util.Map;
 
 
 /*
@@ -36,19 +31,6 @@ public class UserInfoController {
     }
 
 
-    @PostMapping(value = "/pass")
-    public String submitCard(@ModelAttribute DbUserProjection user) throws IOException {
-        System.out.println("hello, world! or smthn' like that, u know..");
-        userService.save(user);
-        return "redirect:/reccards/"; //PROD
-    }
-//
-//    // Сабмит формы
-//    @RequestMapping(value = "pass/submit", method = RequestMethod.POST)
-//    public String submitUser(@ModelAttribute DbUserProjection user) throws IOException {
-//        userService.save(user);
-//        return "redirect:/reccards/";
-//    }
 
 
 

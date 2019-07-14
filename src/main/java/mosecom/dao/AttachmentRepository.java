@@ -1,13 +1,9 @@
 package mosecom.dao;
 
+import mosecom.model.Attachment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import mosecom.model.WellsDocument;
-
 @Repository
-public interface WellsDocumentRepository extends JpaRepository<WellsDocument, Integer> {
-
-
-
+public interface AttachmentRepository extends JpaRepository<Attachment, Integer> {
 }

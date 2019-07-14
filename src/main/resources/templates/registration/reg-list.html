@@ -28,6 +28,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
     <!-- Мои скрипты -->
     <script src="/js/main.js"></script>
+    <script src="/js/wells-check.js"></script>
 
     <!-- Мои материалы -->
     <link rel="stylesheet" type="text/css" href="/css/main.css">
@@ -92,7 +93,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">Фонд геологической информации</a>
+                            <a class="nav-link active" href="/fgi">Фонд геологической информации</a>
                         </li>
                     </ul>
                 </div>
@@ -100,7 +101,7 @@
         </nav>
 
         <h1 th:text="${header}" name="header" th:name="header"></h1>
-        <input type="hidden" name="docType" th:value="${docType}">
+        <input type="hidden" id="docType" name="docType" th:value="${docType}">
 
         <!-- Строка над таблицей с фильтром и кнопками -->
         <div class="d-flex py-2"> <!-- Строка над таблицей с фильтром и кнопками -->
@@ -123,7 +124,13 @@
                     </div>
                 </div>
 
+            <div class="d-flex px-0 ml-auto" th:if="${isWellDoc}">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editFormModal">
+                    <i class="far fa-edit"></i>
+                </button>
+            </div>
         </div>
+
         <!-- Таблица списка документов -->
         <div>
             <table id="inspTable" class="table table-hover">
@@ -142,9 +149,9 @@
                 <tr th:attr="data-document-id=${item.id}" th:each="item : ${items}">
                     <td th:text="${item.id}"/>
                     <td th:text="${item.observationPointId}"/>
-                    <td th:text="${item.date}"/>
+                    <td th:text=" ${#dates.format(item.date, 'dd.MM.yyyy')}"/>
                     <td th:text="${item.regNumber}"/>
-                    <td th:text="${item.dateProcessing}"/>
+                    <td th:text=" ${#dates.format(item.dateProcessing, 'dd.MM.yyyy')}"/>
                     <td><a th:href="@{'/registration/' + ${docType} + '/' + ${item.id}}">Перейти</a></td>
                 </tr>
                 </tbody>
@@ -155,6 +162,41 @@
 </div> <!-- закрыл wrapper -->
 
 
+
+<!-- Модалка -->
+<div class="modal fade" tabindex="-1" role="dialog" id="editFormModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form class="form-horizontal" onsubmit="return WellsList.startEdit()">
+                <div class="modal-header">
+                    <h4 class="modal-title">Введите номер скважины</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <input id="editWellId" class="form-control" type="text" size="10"
+                                   placeholder="ID (ГВК) скважины"
+                                   onchange="WellsList.validate()" onkeyup="WellsList.validate()"/>
+
+
+                            <input type="hidden" th:attr="data-well-id=${well.id}" th:each="well : ${wellsList}">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button id="editWellButton" type="button" class="btn btn-primary" disabled="disabled" onclick="return WellsList.startEdit()">
+                        Перейти к редактированию
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

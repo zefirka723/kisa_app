@@ -1,4 +1,4 @@
-package mosecom.service;
+package mosecom.service.welldoc;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,5 +25,5 @@ public interface WellService {
 
 	List<MovedType> getAllMovedTypes();
 
-	WellsDocument getWellDocument(int id);
+	Attachment getWellDocument(int id);
 }

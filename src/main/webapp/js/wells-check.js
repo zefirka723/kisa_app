@@ -2,7 +2,6 @@ var WellsList = {
 		
 	validate: function() {
 		var id = $("#editWellId").val();
-		var globalType = 3001;
 		var exists = !!(
 				$("[data-well-id]").map(function() {
 					return $(this).data("well-id");
@@ -27,7 +26,7 @@ var WellsList = {
 			return false;
 		}
 		
-		window.location = '/fgi/descriptions/edit-card/' +  $("#editWellId").val();
+		window.location = '/welldoc/' + $("#docType").val() + '/' +  $("#editWellId").val();
 		return false;
 	}
 };

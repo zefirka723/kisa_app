@@ -1,7 +1,6 @@
 package mosecom.service.registration;
 
 import mosecom.dictionaries.DocTypes;
-import mosecom.dto.inspections.DocumentFullProjection;
 import mosecom.dto.inspections.DocumentProjection;
 import mosecom.dto.inspections.RegItemProjection;
 import mosecom.model.inspections.Document;

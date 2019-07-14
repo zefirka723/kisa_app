@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "Files", schema = "public")
-public class WellsDocument implements Serializable{
+public class Attachment implements Serializable{
 
 
     @Id

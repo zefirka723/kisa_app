@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
 @Data
@@ -42,7 +41,7 @@ public class Well implements Serializable {
 
     @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private List<WellsDocument> documents;
+    private List<Attachment> attachments;
 
     @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
@@ -70,10 +69,10 @@ public class Well implements Serializable {
 
 
 
-//    public List<WellsDocument> getDocumentsByReccard() {
+//    public List<Attachment> getDocumentsByReccard() {
 //        boolean haveReccard = false;
 //        if(reccard.getId() != null) {
-//            for (WellsDocument d : documents) {
+//            for (Attachment d : documents) {
 //                if (d.getDocumentType() != null && d.getDocumentType().getId() == 3001) {
 //                    haveReccard = true;
 //                }
