@@ -67,8 +67,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
+                .defaultSuccessUrl("/fgi")
                 .and()
                 .logout()
+                .logoutSuccessUrl("/login?logout")
                 .permitAll();
     }
 
