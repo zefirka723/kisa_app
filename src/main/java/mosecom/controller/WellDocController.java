@@ -46,7 +46,6 @@ public class WellDocController {
         return result;
     }
 
-
 //    // Сабмит формы
     @RequestMapping(value = "/welldoc/submit", method = RequestMethod.POST)
     public String wellDocCardSubmit(
@@ -55,14 +54,6 @@ public class WellDocController {
             @ModelAttribute WellFullProjection well) throws IOException {
         wellService.save(well, files, docType);
         return "redirect:/registrations?docType=" + docType +"&state=0";
-    }
-
-    @RequestMapping("/test")
-    public String checkTest(Model model,
-                            @RequestParam (required = false) String error) {
-        model.addAttribute("docType", DocTypes.RECCARD);
-        model.addAttribute("error", error);
-        return "list/test";
     }
 
     // создание (пока не нужно)

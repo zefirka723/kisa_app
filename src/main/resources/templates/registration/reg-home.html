@@ -80,6 +80,15 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="#">Фонд геологической информации</a>
                             </li>
+                            <li class="nav-item" th:if="${currentUserId == 20 or currentUserId == 6 or currentUserId == 14 or currentUserId == 19}">
+                                <a class="nav-link active" href="/users">Управление</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" th:href="@{'/user/' + ${currentUserId}}"><i class="far fa-user"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" th:href="@{'/logout'}"><i class="fas fa-sign-out-alt"></i></a>
+                            </li>
                         </ul>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ import mosecom.dictionaries.DocTypes;
 import mosecom.dto.inspections.DocumentProjection;
 import mosecom.model.inspections.Document;
 import mosecom.model.inspections.RegItem;
+import mosecom.service.UserService;
 import mosecom.service.registration.DocumentServiceImpl;
 import mosecom.service.registration.RegItemService;
 import mosecom.service.welldoc.WellServiceImpl;
@@ -29,9 +30,13 @@ public class RegistrationController {
     @Autowired
     WellServiceImpl wellService;
 
+    @Autowired
+    UserService userService;
+
     // Главная страница модуля ФГИ
     @GetMapping("/fgi")
-    public String registrationMain() {
+    public String registrationMain(Model model) {
+        model.addAttribute("currentUserId", userService.getCurrentUserId()); // TODO переделать на роли
         return "registration/reg-home";
     }
 
@@ -52,6 +57,7 @@ public class RegistrationController {
             isWellDoc = true;
         }
         model.addAttribute("isWellDoc", isWellDoc);
+        model.addAttribute("currentUserId", userService.getCurrentUserId()); // TODO переделать на роли
         return "registration/reg-list";
     }
 
