@@ -32,6 +32,9 @@ public class User implements UserDetails {
     @Column(name = "Password")
     private String password;
 
+    @Column(name = "Name")
+    private String name;
+
     @Transient
     private boolean accountNonExpired;
     @Transient

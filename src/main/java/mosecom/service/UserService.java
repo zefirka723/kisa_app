@@ -7,6 +7,9 @@ import mosecom.model.auth.Role;
 import mosecom.model.auth.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,6 +25,7 @@ import java.util.List;
 public class UserService implements UserDetailsService {
     @Autowired
     DbUserRepository dbUserRepository;
+
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -50,9 +54,20 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User save(DbUserProjection dto) throws IllegalStateException, IOException {
-        User user = dbUserRepository.findUserByUsername(dto.getUsername());
-        user.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
+    public User save(DbUserProjection dto, String oldpass, String newpass) throws IllegalStateException, IOException {
+        User user = dbUserRepository.findUserById(dto.getId());
+        if (newpass != null) {
+            user.setPassword(new BCryptPasswordEncoder().encode(newpass));
+        }
+        user.setName(dto.getName());
+        user.setUsername(dto.getUsername());
+        dbUserRepository.save(user);
+        return user;
+    }
+
+    public User dropPassword(DbUserProjection dto) {
+        User user = dbUserRepository.findUserById(dto.getId());
+        user.setPassword(new BCryptPasswordEncoder().encode("Q1w2e3r4"));
         dbUserRepository.save(user);
         return user;
     }
@@ -65,5 +80,14 @@ public class UserService implements UserDetailsService {
         return dbUserRepository.getOne(id);
     }
 
+    public List<DbUserProjection> getUsersList() {
+        return dbUserRepository.findUsersList();
+    }
 
+    public int getCurrentUserId() throws NullPointerException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return dbUserRepository.findUserByUsername(authentication.getName()).getId();
+    }
 }
+
+
