@@ -39,6 +39,8 @@ public class UserService implements UserDetailsService {
 //                .authorities(Arrays.asList(Role.USER))
 //                .build();
 
+//        System.out.println(new BCryptPasswordEncoder().encode("test"));
+//
 //        User myUser = dbUserRepository.findUserByUsername("user");
 //        myUser.setPassword(new BCryptPasswordEncoder().encode("test"));
 //        dbUserRepository.save(myUser);

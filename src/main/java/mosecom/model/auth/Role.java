@@ -14,15 +14,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public enum Role  implements GrantedAuthority {
-    ADMIN (6,"Администратор"),
-    ANALYST(4,	"Аналитик"),
-    EGP(3,	"Сотрудник отдела ЭГП"),
-    EGP_CONTROL(7,	"Нормоконтролёр отдела ЭГП"),
-    FGI(2,	"Сотрудник ФГИ"),
-    PV_CONTROL(5,"	Нормоконтролёр отдела ПВ"),
+    UNIDENTIFIED(0,"Роль не определена"),
     PV_FIELD(1,	"Полевой сотрудник отдела подземных вод"),
-    UNIDENTIFIED(-1,"Роль не определена");
-
+    FGI(2,	"Сотрудник ФГИ"),
+    EGP(3,	"Сотрудник отдела ЭГП"),
+    ANALYST(4,	"Аналитик"),
+    PV_CONTROL(5,"	Нормоконтролёр отдела ПВ"),
+    ADMIN (6,"Администратор"),
+    EGP_CONTROL(7,	"Нормоконтролёр отдела ЭГП");
 
     private int id;
     private String description;

@@ -46,6 +46,10 @@ public class User implements UserDetails {
     @Transient
     private List<Role> authorities;
 
+//    @Enumerated
+//    private List<Role> authorities;
+
+
 
     /*
     Лёгкая наркомания

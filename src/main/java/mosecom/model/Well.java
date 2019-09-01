@@ -1,6 +1,7 @@
 package mosecom.model;
 
 import lombok.Data;
+import mosecom.model.licencereport.LicenseToWells;
 import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("serial")
 @Data
@@ -67,6 +69,8 @@ public class Well implements Serializable {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Description description;
 
+//    @OneToMany(mappedBy = "well")
+//    private Set<LicenseToWells> licenseToWellsSet;
 
 
 //    public List<Attachment> getDocumentsByReccard() {
