@@ -23,6 +23,8 @@ public class LicenseReportProjection implements Serializable {
 
     private Double tp;
 
-//    private License license;
+    private int fileSetId;
+
+    private License license;
 
 }

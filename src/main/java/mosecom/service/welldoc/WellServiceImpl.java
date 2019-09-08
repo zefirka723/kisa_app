@@ -133,41 +133,6 @@ public class WellServiceImpl implements WellService {
                 break;
         }
 
-//        switch (dto.getWellDoc().getDocType()) {
-//            case 3001: // Учётка
-//                WellsDoc wellsDoc = new WellsDoc();
-//                wellsDoc.setDocDate(dto.getWellDoc().getDocDate());
-//                wellsDoc.setDocType(3001);
-//                wellsDoc.setId(well.getWellDoc() != null ?
-//                        dto.getWellDoc().getId() :
-//                        null);
-//                wellsDoc.setWell(well);
-//                well.getWellsDocList().add(wellsDoc);
-//                break;
-
-//            case 3002: // Паспорт
-//                Passport wellsPassport = new Passport();
-//                wellsPassport.setDocDate(dto.getWellPassport().getDocDate());
-//                wellsPassport.setDocType(cardType);
-//                wellsPassport.setId(well.getWellPassport() != null ?
-//                        dto.getWellPassport().getId() :
-//                        null);
-//                wellsPassport.setWell(well);
-//                well.setWellPassport(wellsPassport);
-//                break;
-//
-//            case 3007: // Геол. описание
-//                Description wellsDescription = new Description();
-//                wellsDescription.setDocDate(dto.getWellDescription().getDocDate());
-//                wellsDescription.setDocType(cardType);
-//                wellsDescription.setId(well.getWellsDescription() != null ?
-//                        dto.getWellDescription().getId() :
-//                        null);
-//                wellsDescription.setWell(well);
-//                well.setWellsDescription(wellsDescription);
-        //       }
-
-
         // пишем глубину
         if (dto.getDepth().getWellDepth() != null) {
             WellsDepth depth = new WellsDepth();
@@ -219,9 +184,7 @@ public class WellServiceImpl implements WellService {
                         uploadDir.mkdirs();
                     }
 
-                    //String newFilePath = UUID.randomUUID().toString();
                     file.transferTo(new java.io.File(uploadDir + "/" + file.getOriginalFilename()));
-                    //newFilePath));
 
                     Attachment attachment = new Attachment();
                     attachment.setWell(well);
@@ -229,14 +192,11 @@ public class WellServiceImpl implements WellService {
                     attachment.setFileContentType(file.getContentType());
                     attachment.setFileContentType(file.getContentType());
 
-                    // TODO: оптимизировать эти поля
                     attachment.setFileName(file.getOriginalFilename());
                     attachment.setFilePath(uploadDir + "/");
                     //+ file.getOriginalFilename()); // было newFilePath
                     attachment.setFileSize(file.getSize());
-                    //           attachment.setDocumentType(3001);
                     attachment.setDocId(docType);
-
                     well.getAttachments().add(attachment);
                 }
             }

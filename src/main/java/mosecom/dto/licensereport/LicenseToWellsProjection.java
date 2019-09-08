@@ -19,6 +19,6 @@ public class LicenseToWellsProjection implements Serializable {
 
     public Integer wellId;
 
-    public License license;
+ //   public License license;
 
 }

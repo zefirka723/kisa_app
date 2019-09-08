@@ -1,14 +1,11 @@
 package mosecom.model.licencereport;
 
 import lombok.Data;
-import mosecom.model.*;
-import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @SuppressWarnings("serial")
 @Data
@@ -23,6 +20,8 @@ public class LicenseReport implements Serializable {
 
     @Column(name = "Date")
     @DateTimeFormat(pattern = "dd.MM.yyyy")
+//    @DateTimeFormat(iso= DateTimeFormat.ISO.DATE)
+    //@DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
     @Column(name = "4LS")
@@ -31,10 +30,15 @@ public class LicenseReport implements Serializable {
     @Column(name = "2TP")
     private Double tp;
 
-    // ещё тут должен быть File_Set_ID
-
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "License_Doc_ID")
     private License license;
+//    @Column(name = "License_Doc_ID")
+//    private int licenseId;
 
-    }
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "File_set_ID_seq")
+    //@SequenceGenerator(name = "File_set_ID_seq", sequenceName = "File_set_ID_seq")
+    @Column(name = "File_Set_ID")
+    private Integer fileSetId;
+
+}

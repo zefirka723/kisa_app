@@ -21,10 +21,10 @@ public class License implements Serializable {
     @Column(name = "License_number")
     private String licenseNumber;
 
-    @OneToOne(mappedBy = "license")
-    private LicenseReport report;
+//    @OneToOne(mappedBy = "license")
+//    private LicenseReport report;
 
-    @OneToMany(mappedBy = "license")
-    private Set<LicenseToWells> licenseToWellsSet;
+//    @OneToMany(mappedBy = "license")
+//    private Set<LicenseToWells> licenseToWellsSet;
 
     }
