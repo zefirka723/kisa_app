@@ -125,8 +125,8 @@
             <!-- Строка над таблицей с фильтром и кнопками -->
             <div>
                 <form action="/report-add" method="get">
-                    <input th:name="licenseNumber" type="text"/>
-                    <input th:name="reportDate" type="date"/>
+                    <input th:name="licenseNumber" type="text" required/>
+                    <input th:name="reportDate" type="date" required/>
                     <button type="submit" class="btn btn-success">Создать отчёт</button>
                 </form>
             </div>

@@ -20,6 +20,7 @@ public class WellProjection {
 
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date drilledDate;
+//    private String drilledDate;
 
     private Integer moved;
 

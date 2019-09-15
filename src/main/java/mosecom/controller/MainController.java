@@ -32,9 +32,6 @@ import java.net.URLEncoder;
 @RequestMapping("/") //PROD
 public class MainController {
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
     @Autowired
     private WellService service;
 

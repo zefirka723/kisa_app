@@ -12,8 +12,8 @@ public class AttachmentServiceImpl {
     @Autowired
     AttachmentRepository attachmentRepository;
 
-    public List<Attachment> findAllAttachesByFileSetId(int fileSetId) {
-        return attachmentRepository.findAllByFileSetId(fileSetId);
-    }
+    //public List<Attachment> findAllAttachesByFileSetId(int fileSetId) {
+        //return attachmentRepository.findAllByFileSetId(fileSetId);
+    //}
 
 }

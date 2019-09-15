@@ -1,6 +1,7 @@
 package mosecom.service.welldoc;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import mosecom.model.*;
@@ -15,7 +16,7 @@ public interface WellService {
 
 	Well getWell(int id);
 
-	Well save(WellFullProjection well, MultipartFile[] file, int docType) throws IllegalStateException, IOException;
+//	Well save(WellFullProjection well, MultipartFile[] file, int docType) throws IllegalStateException, IOException, ParseException;
 
 	List<ConstructionType> getAllConstructionTypes();
 

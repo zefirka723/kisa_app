@@ -32,6 +32,7 @@ public class Well implements Serializable {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     //@Temporal(TemporalType.DATE)
     private Date drilledDate;
+    //private String drilledDate;
 
     @Column(name = "Moved")
     private Integer moved;

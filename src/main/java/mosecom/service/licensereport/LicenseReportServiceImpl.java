@@ -1,5 +1,6 @@
 package mosecom.service.licensereport;
 
+import mosecom.dao.AttachmentRepository;
 import mosecom.dao.licensereport.LicenseReportRepository;
 import mosecom.model.licencereport.LicenseReport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,17 @@ public class LicenseReportServiceImpl {
     @Autowired
     private LicenseReportRepository licenseReportRepository;
 
+    @Autowired
+    private AttachmentRepository attachmentRepository;
+
     public List<LicenseReport> findLicenseReportsList() {
         return licenseReportRepository.findAll();
     }
 
     public LicenseReport findReportById(int id) {
-        return licenseReportRepository.getOne(id);
+        LicenseReport report = licenseReportRepository.getOne(id);
+        report.setAttachments(attachmentRepository.findAllByFileSetId(report.getFileSetId()));
+        return report;
     }
 
 }

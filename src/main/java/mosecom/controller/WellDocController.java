@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 @Controller
 public class WellDocController {
@@ -51,7 +52,7 @@ public class WellDocController {
     public String wellDocCardSubmit(
             @RequestParam(value = "file", required = false) MultipartFile[] files,
             @RequestParam DocTypes docType,
-            @ModelAttribute WellFullProjection well) throws IOException {
+            @ModelAttribute WellFullProjection well) throws IOException, ParseException {
         wellService.save(well, files, docType);
         return "redirect:/registrations?docType=" + docType +"&state=0";
     }

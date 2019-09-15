@@ -1,6 +1,7 @@
 package mosecom.model;
 
 import lombok.Data;
+import mosecom.model.licencereport.LicenseReport;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -44,4 +45,9 @@ public class Attachment implements Serializable{
 
     @Column(name="File_Set_ID")
     private int fileSetId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "File_Set_ID", referencedColumnName = "File_Set_ID")
+//    protected LicenseReport report;
+
 }

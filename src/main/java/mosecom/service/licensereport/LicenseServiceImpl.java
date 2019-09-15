@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 @Service
 public class LicenseServiceImpl {
 
-    @Value("${upload.path}")
+    @Value("${upload.path}" + "LICENSE_REPORTS/")
     private String uploadPath;
 
     @Autowired
@@ -80,29 +81,44 @@ public class LicenseServiceImpl {
                      String licenseNumber,
                      MultipartFile[] files) throws IllegalStateException, IOException {
 
-        if (report.getId()!=null) { // TODO: сделать по-человечески
-            report.setLicense(licenseReportRepository.getOne(report.getId()).getLicense());
-        }
+//        LicenseReport savingReport = report.getId() != null ?
+//                licenseReportRepository.getOne(report.getId())
+//                : new LicenseReport();
 
-        if (report.getId() == null) {
-            report.setLicense(licenseRepository.findByLicenseNumber(licenseNumber));
+        report.setLicense(licenseRepository.findByLicenseNumber(licenseNumber));
+
+        if (report.getFileSetId() == null) {
             report.setFileSetId(licenseReportRepository.getNextFileSetId());
         }
 
 
+        // Файлы
+        // удаляем все удаленные из интерфейса файлы
+        if(report.getAttachments() != null) {
 
-        if (files == null) {
-            List<Attachment> filesForDel = attachmentRepository.findAllByFileSetId(report.getFileSetId()); // для новых делается, хотя не нужно
-            filesForDel.stream().forEach(a -> attachmentRepository.delete(a));
-        } else {
+            Set<Integer> keepDocumentsIds = report.getAttachments().stream().map(d -> d.getId()).collect(Collectors.toSet());
+            List<Attachment> attachmentsFromDB = attachmentRepository.findAllByFileSetId(report.getFileSetId());
+
+            attachmentsFromDB.removeIf(d -> keepDocumentsIds.contains(d.getId()));
+            attachmentsFromDB.stream().forEach(a -> attachmentRepository.delete(a));
+        }
+
+        // новые файлы
+
+        licenseReportRepository.save(report);
+        if (files != null) {
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
-                    String folderByType = "LICENSE_REPORTS";
-                    java.io.File uploadDir = new java.io.File(uploadPath + "/" + folderByType + "/" + report.getId());
+                    String folderByType = "REPORTS";
+
+                    java.io.File uploadDir = new java.io.File(uploadPath + "/" + report.getId().toString() + "/" + folderByType);
+
                     if (!uploadDir.exists()) {
                         uploadDir.mkdirs();
                     }
+
                     file.transferTo(new java.io.File(uploadDir + "/" + file.getOriginalFilename()));
+
                     Attachment attachment = new Attachment();
                     attachment.setFileSetId(report.getFileSetId());
                     attachment.setFileContentType(file.getContentType());
@@ -111,23 +127,15 @@ public class LicenseServiceImpl {
                     attachment.setFileName(file.getOriginalFilename());
                     attachment.setFilePath(uploadDir + "/");
                     attachment.setFileSize(file.getSize());
-//                    attachment.setDocId(docType.getId());
                     attachmentRepository.save(attachment);
                 }
             }
         }
-
-        licenseReportRepository.save(report);
     }
 
     public int getReportFileSetId(int reportId) {
         return licenseReportRepository.getOne(reportId).getFileSetId();
     }
-
-//    public LicenseProjection findLicenseByNumber(String licenseNumber) {
-//        return licenseRepository.findByLicenseNumber(licenseNumber);
-//    }
-
 
     public License findLicenseByNumber(String licenseNumber) {
         return licenseRepository.findByLicenseNumber(licenseNumber);
