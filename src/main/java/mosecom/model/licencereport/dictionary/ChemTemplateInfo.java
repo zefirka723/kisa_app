@@ -1,11 +1,8 @@
 package mosecom.model.licencereport.dictionary;
 
 import lombok.Data;
-import mosecom.dao.licensereport.dictionaries.ChemTemplateItemRepository;
-import mosecom.model.WellsGeology;
 import mosecom.model.licencereport.ChemTemplateItem;
 import org.hibernate.annotations.Cascade;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
