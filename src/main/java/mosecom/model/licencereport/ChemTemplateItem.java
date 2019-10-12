@@ -16,14 +16,16 @@ public class ChemTemplateItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Template_ID", referencedColumnName = "Code")
     protected ChemTemplateInfo templateInfo;
+
+//    @Column(name = "Template_ID")
+//    protected ChemTemplateInfo templateInfo;
 
     @Column(name = "Parametr")
     private int parametrId;
 
     @Column (name = "Display_order")
     private double displayOrder;
-
 }

@@ -132,7 +132,8 @@
                     <td th:text="${link.wellId}"/>
                     <td><a th:href="@{'/report-edit/flowrate/' + ${report.id} + '/' + ${link.wellId}}">Перейти</a></td>
                     <td><a th:href="@{'/report-edit/waterdepth/' + ${report.id} + '/' + ${link.wellId}}">Перейти</a></td>
-                    <td>Under construction</td>
+                    <td><a th:href="@{'/report-edit/chem/' + ${report.id} + '/' + ${link.wellId}}">Перейти</a></td>
+
                 </tr>
                 </tbody>
             </table>

@@ -9,4 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ChemTemplateItemRepository extends JpaRepository<ChemTemplateItem, Integer> {
+    //public List<ChemTemplateItem> findAllByTemplateInfoOrderByDisplayOrder(ChemTemplateInfo templateInfo);
 }

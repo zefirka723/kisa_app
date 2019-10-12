@@ -1,6 +1,7 @@
 package mosecom.model;
 
 import lombok.Data;
+import lombok.NonNull;
 import mosecom.model.licencereport.LicenseReport;
 
 import javax.persistence.*;

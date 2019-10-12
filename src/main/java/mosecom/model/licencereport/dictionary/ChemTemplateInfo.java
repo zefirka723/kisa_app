@@ -15,7 +15,6 @@ import java.util.List;
 @Table(schema = "dictionaries", name = "Dictionary_ChemProt_Template")
 public class ChemTemplateInfo implements Serializable {
 
-
     @Column(name = "Code")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
