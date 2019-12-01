@@ -37,50 +37,11 @@
 </head>
 <body>
 <div class="wrapper">
-    <!-- Sidebar  -->
-    <form action="/registrations" th:object="${users}" method="get" enctype="multipart/form-data">
-    <nav id="sidebar">
-        <div class="sidebar-header">
-            <h3>ГеоКИСА</h3>
-        </div>
-        <ul class="list-unstyled components">
-            <li> <!-- <li class="active"> -->
-                <a href="#GWSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Подземные воды</a>
-                <ul class="collapse list-unstyled" id="GWSubmenu">
-                    <li>
-                        <a href="/registrations?docType=WELL_INSPECTION&state=0">Акты инспекции скважин</a>
-                    </li>
-                    <li>
-                        <a href="/registrations?docType=SPRING_INSPECTION&state=0">Акты обследования родников</a>
-                    </li>
-                    <li>
-                        <a href="/registrations?docType=DRAWWELL_INSPECTION&state=0">Акты обследования колодцев</a>
-                    </li>
-                    <li>
-                        <a href="/registrations?docType=INTAKE_INSPECTION&state=0">Акты обследования ВЗУ</a>
-                    </li>
-                </ul>
-            </li>
 
-            <li>
-                <a href="#WellDocsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Документация по</br>скважинам</a>
-                <ul class="collapse list-unstyled" id="WellDocsSubmenu">
-                    <li>
-                        <a href="/registrations?docType=RECCARD&state=0">Учетные карточки</a>
-                    </li>
-                    <li>
-                        <a href="/registrations?docType=PASSPORT&state=0">Паспорта</a>
-                    </li>
-                    <li>
-                        <a href="/registrations?docType=DESCRIPTION&state=0">Геологические описания</a>
-                    </li>
-                    <li>
-                        <a href="/chem-templates">Шаблоны хим. анализа</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
+    <form action="/registrations" th:object="${users}" method="get" enctype="multipart/form-data">
+
+    <!-- Sidebar  -->
+    <div th:insert="sidebar :: sidebar"></div>
 
     <!-- Page Content  -->
     <div id="content">
