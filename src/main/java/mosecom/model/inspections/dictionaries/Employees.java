@@ -9,7 +9,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 @Data
 @Entity
-@Table(schema = "dictionaries", name = "Dictionary_Employees")
+@Table(schema = "work", name = "Employees")
 public class Employees implements Serializable {
 
     @Column(name = "Emploe_ID")

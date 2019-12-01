@@ -19,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(schema = "dictionaries", name = "Dictionary_Employees")
+@Table(schema = "work", name = "Employees")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
