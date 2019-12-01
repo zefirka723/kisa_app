@@ -45,7 +45,7 @@ public class Attachment implements Serializable{
     protected Well well;
 
     @Column(name="File_Set_ID")
-    private int fileSetId;
+    private Integer fileSetId;
 
 //    @ManyToOne
 //    @JoinColumn(name = "File_Set_ID", referencedColumnName = "File_Set_ID")
