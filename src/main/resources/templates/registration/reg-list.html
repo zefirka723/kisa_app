@@ -29,6 +29,7 @@
     <!-- Мои скрипты -->
     <script src="/js/main.js"></script>
     <script src="/js/wells-check.js"></script>
+    <script src="/js/search.js"></script>
 
     <!-- Мои материалы -->
     <link rel="stylesheet" type="text/css" href="/css/main.css">
@@ -80,7 +81,8 @@
         <input type="hidden" id="docType" name="docType" th:value="${docType}">
 
         <!-- Строка над таблицей с фильтром и кнопками -->
-        <div class="d-flex py-2"> <!-- Строка над таблицей с фильтром и кнопками -->
+        <div class="d-flex py-2">
+        <!-- Строка над таблицей с фильтром и кнопками -->
 
                 <div class="d-none d-lg-flex btn-group " role="group" aria-label="filters">
                     <div class="d-none d-lg-flex btn-group " role="group" aria-label="filters">
@@ -109,7 +111,7 @@
 
         <!-- Таблица списка документов -->
         <div>
-            <table id="inspTable" class="table table-hover">
+            <table class="table table-hover" id="regtable">
                 <thead class="thead-dark">
 
                 <tr>
@@ -118,7 +120,8 @@
                     <th>Дата документа</th>
                     <th>Рег. номер</th>
                     <th>Дата регистрации</th>
-                    <th></th>
+                    <th><input type="text" class="form-control pull-right" id="searchfield"
+                                                placeholder="Поиск по таблице" onkeyup="tableSearch()"></th>
                 </tr>
                 </thead>
                 <tbody>
