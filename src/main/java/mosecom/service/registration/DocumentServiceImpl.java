@@ -20,6 +20,8 @@ import java.util.List;
 @Service
 public class DocumentServiceImpl implements DocumentService {
 
+    //TODO: убрать отсюда репозитории, сделать через сервисы
+
     @Autowired
     private DocumentRepository documentRepository;
 
@@ -78,7 +80,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public List<Employees> getAllEmployees() {
-        return employeesRepository.findAll();
+        return employeesRepository.findAllByOrderByNameAsc();
     }
 
     @Override
