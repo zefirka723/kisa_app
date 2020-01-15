@@ -2,6 +2,8 @@ package mosecom.model;
 
 import lombok.Data;
 import mosecom.model.licencereport.LicenseToWells;
+import mosecom.model.licencereport.WaterDepth;
+import mosecom.model.licencereport.WaterDepthByWell;
 import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -37,6 +39,9 @@ public class Well implements Serializable {
     @Column(name = "Moved")
     private Integer moved;
 
+    @Column(name="Hor_ID")
+    private Integer horId;
+
 
     @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
@@ -71,53 +76,7 @@ public class Well implements Serializable {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Description description;
 
-//    @OneToMany(mappedBy = "well")
-//    private Set<LicenseToWells> licenseToWellsSet;
-
-
-//    public List<Attachment> getDocumentsByReccard() {
-//        boolean haveReccard = false;
-//        if(reccard.getId() != null) {
-//            for (Attachment d : documents) {
-//                if (d.getDocumentType() != null && d.getDocumentType().getId() == 3001) {
-//                    haveReccard = true;
-//                }
-//            }
-//            if (haveReccard) {
-//                return documents.stream()
-//                        .filter(documents -> documents.getDocumentType().getId() == 3001 && documents.getDocId() == reccard.getId())
-//                        .collect(Collectors.toList());
-//            }
-//        }
-//        return null;
-//    }
-
-
-//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-//    private WellsDoc wellDoc;
-
-
-//    @OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-//    private List<WellsDoc> wellsDocList;
-//
-//
-//    public WellsDoc getWellDoc() {
-//        return wellsDocList.stream()
-//                            .filter(wellsDoc -> wellsDoc.getDocType() == 3001)
-//                            .collect(Collectors.toList())
-//                            .get(0);
-//    }
-
-
-//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-//    private Passport wellPassport;
-//
-//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-//    private Description wellsDescription;
-
+    @Transient
+    List<WaterDepth> depthsList;
 
     }

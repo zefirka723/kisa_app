@@ -15,4 +15,11 @@ public class WaterDepthByWell implements Serializable {
 
     private List<WaterDepth> depths;
 
+    public WaterDepthByWell(int wellId, List<WaterDepth> depths) {
+        this.wellId = wellId;
+        this.depths = depths;
+    }
+
+    public WaterDepthByWell() {};
+
 }

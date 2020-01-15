@@ -20,4 +20,6 @@ public class Horisont implements Serializable {
     @Column(name = "Hor_name_model")
     private String name;
 
+    @Column(name = "Order")
+    private int order;
 }

@@ -8,6 +8,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/css/well-edit.css"/>
     <script src="/js/well-edit.js"></script>
+    <script src="/js/waterhorizonvalidation.js"></script>
 
     <title>Документ</title>
 </head>
@@ -71,7 +72,7 @@
                                            th:field="*{depth.id}"/>
 
                                     <label for="usr39">Глубина скважины</label>
-                                    <input type="text" placeholder="" class="form-control" id="usr39"
+                                    <input type="number" placeholder="" class="form-control" id="usr39"
                                            th:field="*{depth.wellDepth}"
                                            th:name="depth.wellDepth"/>
                                 </div>
@@ -399,6 +400,12 @@
                                onclick="return WellEdit.addRow('stressTestRowTemplate')" class="btn btn-default"/>
                     </div>
                 </div>
+
+                <div th:if="${docType.name()} == 'DESCRIPTION'">
+                    <div th:insert="welldoc/waterhorizon :: waterhorizon"></div>
+
+                </div>
+
                 <br>
                 <button type="submit" class="btn btn-success">Сохранить</button>
                 <div><br></div>

@@ -24,4 +24,6 @@ public class WellProjection {
 
     private Integer moved;
 
+    private Integer horId;
+
 }
