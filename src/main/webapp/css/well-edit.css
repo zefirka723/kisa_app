@@ -30,3 +30,7 @@ select:disabled{
 .disabled{
     background-color: lightgrey;
 }
+
+.hint{
+    color: red;
+}

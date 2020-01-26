@@ -10,7 +10,7 @@
 <div id="depthsblock">
 
     <div>
-        <select id = "horIdField" name="horId">
+        <select id = "horIdField" name="horId" onchange="checkValid()">
          <option value="" th:selected="${well.horId} == null ? true : false">-- Значение отсутствует --</option>
          <option style="!important; max-width: 300px" th:each="horisont : ${horisonts}"
           th:value="${horisont.id}"
@@ -18,6 +18,7 @@
           th:selected= "${horisont.id == well.horId}"/>
         </select>
     </div>
+    <div id="horisonHint" class="hint" hidden="true">Выберите водоносный горизонт!</div>
 
     <br>
 
@@ -33,7 +34,8 @@
                           step="any"
                           th:attr="data-name=${namePrefix + '.date'}"
                           placeholder="ДД.ММ.ГГГГ"
-                          pattern="\d{2}\.\d{2}\.\d{4}"/>
+                          pattern="\d{2}\.\d{2}\.\d{4}"
+                    />
                </td>
 
                <td>
@@ -41,7 +43,8 @@
                        style="!important; width: 120px !important; min-width: 120px;" type="number"
                        step="any"
                        th:attr="data-name=${namePrefix + '.depth'}"
-                       placeholder="Глубина"/>
+                       placeholder="Глубина"
+                    />
                </td>
 
                <td>
@@ -64,7 +67,8 @@
                           title="ДД.ММ.ГГГГ" pattern="\d{2}\.\d{2}\.\d{4}"
                           th:name="${namePrefix + '.date'}"
                           th:value="${#dates.format(oneDepth.date, 'dd.MM.yyyy')}"
-                          placeholder="Дата"/>
+                          placeholder="Дата"
+                          required/>
                </td>
 
                <td>
@@ -72,7 +76,8 @@
                         style="!important; width: 80px !important; min-width: 120px;" type="number"
                         step="any" title="Глубина"
                         th:name="${namePrefix + '.depth'}"
-                        th:value="${oneDepth.depth}" placeholder="Глубина"/>
+                        th:value="${oneDepth.depth}" placeholder="Глубина"
+                        required/>
 
                </td>
 
@@ -83,8 +88,8 @@
                </td>
            </tr>
        </table>
-       <input id="addingButton" type="button" value="Добавить замер"
-              onclick="return WellEdit.addRow('depthRowTemplate')" class="btn btn-default"/>
+       <input id="addingButton" type="button" value="Добавить замер" onclick="addHorisonRow()" class="btn btn-default"/>
+
 
 </div>
 

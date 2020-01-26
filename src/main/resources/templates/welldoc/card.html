@@ -12,7 +12,7 @@
 
     <title>Документ</title>
 </head>
-<body>
+<body onload="checkValid()">
 
 
 <nav class="navbar navbar-inverse">
@@ -51,7 +51,7 @@
                 <div id="card-info">
 
                     <h4 th:text="${docType.getItemName()} + '. Скв. № ' + ${well.id != null ? (well.id) : '<????>'}"></h4>
-                    <input type="hidden" th:value="${docType}" name="docType">
+                    <input type="hidden" th:value="${docType}" name="docType" id="docTypeForChecks">
                     <table id="commonTable" class="table table-striped table-bordered table-hover">
                         <tr>
 
@@ -71,10 +71,11 @@
                                     <input type="hidden" placeholder="" class="form-control"
                                            th:field="*{depth.id}"/>
 
-                                    <label for="usr39">Глубина скважины</label>
-                                    <input type="number" placeholder="" class="form-control" id="usr39"
+                                    <label for="wellDepthField">Глубина скважины</label>
+                                    <input type="number" step="any" placeholder="" class="form-control" id="wellDepthField"
                                            th:field="*{depth.wellDepth}"
-                                           th:name="depth.wellDepth"/>
+                                           th:name="depth.wellDepth"
+                                           onkeyup="checkValid()"/>
                                 </div>
                             </td>
 
@@ -98,10 +99,12 @@
                         </td>
                         <td>
                             <div class="form-group">
-                                <label for="usr2">Абс отметка устья</label>
-                                <input type="number" step="any" class="form-control" id="usr2"
-                                       th:field="*{wellCollar}"/>
+                                <label for="wellCollar">Абс отметка устья</label>
+                                <input type="number" step="any" class="form-control" id="wellCollar"
+                                       th:field="*{wellCollar}"
+                                       onkeyup="checkValid()"/>
                             </div>
+                            <div id="collarHint" class="hint" hidden><br>Введите значение</div>
                         </td>
 
 
@@ -406,8 +409,9 @@
 
                 </div>
 
-                <br>
-                <button type="submit" class="btn btn-success">Сохранить</button>
+                <div><br></div>
+                <div id="errorBlock" class="alert alert-danger" hidden>Заполните все обязательные поля формы!</div>
+                <button type="submit" class="btn btn-success" id="saveButton">Сохранить</button>
                 <div><br></div>
 
             </form>
