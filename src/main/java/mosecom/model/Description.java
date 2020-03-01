@@ -23,12 +23,8 @@ public class Description implements Serializable {
     @Column(name = "Pkey_id")
     private Integer id;
 
-    @Column(name = "Doc_type")
-    private int docType;
-
-//    @Column(name = "Date")
-//    @DateTimeFormat(pattern = "dd.MM.yyyy")
-//    private Date docDate;
+//    @Column(name = "Doc_type")
+//    private int docType;
 
     @OneToOne
     @JoinColumn(name = "Well_ID")

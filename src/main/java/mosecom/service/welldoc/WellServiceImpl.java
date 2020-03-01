@@ -101,7 +101,6 @@ public class WellServiceImpl implements WellService {
 
     @Transactional
     public Well save(WellFullProjection dto, MultipartFile[] files, DocTypes docType
-                     //        , WaterDepthByWell depthsByWell
     ) throws IllegalStateException, IOException, ParseException {
         Well well;
         if (dto.getId() != null && dto.getId() > 0) {
@@ -114,18 +113,15 @@ public class WellServiceImpl implements WellService {
         well.setWellName(dto.getWellName());
         well.setWellCollar(dto.getWellCollar());
         well.setDrilledDate(dto.getDrilledDate());
-        // well.setDrilledDate(DateFormatter.getDateFromString(dto.getDrilledDate().toString()));
 
         // Делаем документ
         switch (docType) {
             case RECCARD:
                 Reccard reccard = new Reccard();
-                reccard.setDocType(3001);
+                //reccard.setDocType(3001);
                 reccard.setDocDate(dto.getReccard().getDocDate());
                 if (well.getReccard() != null) {
-                    reccard.setId(//well.getReccard() != null ?
-                            dto.getReccard().getId());
-                    //: null);
+                    reccard.setId(dto.getReccard().getId());
                 }
                 reccard.setWell(well);
                 well.setReccard(reccard);
@@ -133,12 +129,10 @@ public class WellServiceImpl implements WellService {
 
             case PASSPORT:
                 Passport passport = new Passport();
-                passport.setDocType(3002);
+                //passport.setDocType(3002);
                 passport.setDocDate(dto.getPassport().getDocDate());
                 if (well.getPassport() != null) {
-                    passport.setId(//well.getPassport() != null ?
-                            dto.getPassport().getId());
-                    //: null);
+                    passport.setId(dto.getPassport().getId());
                 }
                 passport.setWell(well);
                 well.setPassport(passport);
@@ -158,14 +152,10 @@ public class WellServiceImpl implements WellService {
                 }
 
                 Description description = new Description();
-                description.setDocType(3007);
-//                description.setDocDate(dto.getDescription().getDocDate());
+                //description.setDocType(3007);
                 description.setId(well.getDescription() != null ?
                         well.getDescription().getId() :
                         null);
-//                if (well.getDescription() != null) {
-//                    description.setId(dto.getDescription().getId());
-//                }
                 description.setWell(well);
                 well.setDescription(description);
                 break;
@@ -253,7 +243,6 @@ public class WellServiceImpl implements WellService {
                     attachment.setFilePath(uploadDir + "/");
                     //+ file.getOriginalFilename()); // было newFilePath
                     attachment.setFileSize(file.getSize());
-                    //           attachment.setDocumentType(3001);
                     attachment.setDocId(docType.getId());
 
                     well.getAttachments().add(attachment);

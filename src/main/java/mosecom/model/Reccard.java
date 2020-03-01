@@ -23,8 +23,8 @@ public class Reccard implements Serializable {
     @Column(name = "Pkey_id")
     private Integer id;
 
-    @Column(name = "Doc_type")
-    private int docType;
+//    @Column(name = "Doc_type")
+//    private int docType;
 
     @Column(name = "Date")
     @DateTimeFormat(pattern = "dd.MM.yyyy")
