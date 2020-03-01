@@ -39,10 +39,12 @@ public class WellDocController {
     public ModelAndView wellDocCard(@PathVariable("id") Integer id,
                                  @PathVariable("docType") DocTypes docType) {
         ModelAndView result = new ModelAndView("welldoc/card");
-        Well well = wellService.getWell(id);
+        /* пока не определена бизнес-логика по добыванию глубины, изящное извлечение по id
+         * будет заменено на кое-что поядрёнее */
+        //Well well = wellService.getWell(id);
+        Well well = wellService.prepareWellForWellDoc(id);
 
         List<WaterDepth> depthsList = waterDepthService.findWaterDepthsByWellId(id);
-//        WaterDepthByWell depthsByWell = new WaterDepthByWell(id, depthsList);
         well.setDepthsList(depthsList);
 
         result.addObject("well", well);

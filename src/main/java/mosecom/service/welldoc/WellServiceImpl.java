@@ -50,6 +50,9 @@ public class WellServiceImpl implements WellService {
     @Autowired
     private WaterDepthServiceImpl waterDepthService;
 
+    @Autowired
+    private WellsDepthRepository wellsDepthRepository;
+
     @Value("${upload.path}" + "PRIMARYDOCS/GW/Wells/")
     private String uploadPath;
 
@@ -85,6 +88,14 @@ public class WellServiceImpl implements WellService {
     @Override
     public List<MovedType> getAllMovedTypes() {
         return movedTypeRepository.findAll();
+    }
+
+    public Well prepareWellForWellDoc(int id) {
+        Well well = wellRepository.getOne(id);
+        if (well.getDrilledDate() != null) {
+            well.setDepth(wellsDepthRepository.findOneByWellIdAndDate(well.getId(), well.getDrilledDate()));
+        }
+        return well;
     }
 
 
@@ -162,6 +173,9 @@ public class WellServiceImpl implements WellService {
 
 
         // пишем глубину
+
+        /* Версия ДО решения искать глубину по дате:
+
         if (dto.getDepth().getWellDepth() != null) {
             WellsDepth depth = new WellsDepth();
             depth.setId(dto.getDepth().getId());
@@ -170,11 +184,22 @@ public class WellServiceImpl implements WellService {
                 depth.setDate(dto.getPassport().getDocDate());
             } else {
                 depth.setDate(dto.getDrilledDate());
-//                depth.setDate(DateFormatter.getDateFromString(dto.getDrilledDate().toString()));
             }
             depth.setWell(well);
             well.setDepth(depth);
         }
+        */
+
+        /* Новая версия */
+        if (dto.getDepth().getWellDepth() != null) {
+            WellsDepth depth = new WellsDepth();
+            depth.setId(dto.getDepth().getId());
+            depth.setWellDepth(dto.getDepth().getWellDepth());
+            depth.setDate(dto.getDrilledDate());
+            depth.setWellId(well.getId());
+            wellsDepthRepository.save(depth);
+        }
+
 
         // удаляем все удаленные из интерфейса файлы
         if (dto.getDocuments() == null) {

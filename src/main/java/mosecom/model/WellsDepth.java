@@ -26,8 +26,13 @@ public class WellsDepth implements Serializable {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date date;
 
-
+    /*
+        Здесь костыль, пока непонятно, как с т.зр. бизнес-логики правильно искать глубину для доков по скв
     @OneToOne
     @JoinColumn(name = "Well_ID" , referencedColumnName = "Well_ID")
     protected Well well;
+    */
+
+    @Column(name = "Well_ID")
+    private Integer wellId;
 }

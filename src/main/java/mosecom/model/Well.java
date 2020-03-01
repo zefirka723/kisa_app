@@ -32,9 +32,7 @@ public class Well implements Serializable {
 
     @Column(name = "Drilled_date")
     @DateTimeFormat(pattern = "dd.MM.yyyy")
-    //@Temporal(TemporalType.DATE)
     private Date drilledDate;
-    //private String drilledDate;
 
     @Column(name = "Moved")
     private Integer moved;
@@ -60,9 +58,6 @@ public class Well implements Serializable {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<WellssStressTest> stressTests;
 
-    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private WellsDepth depth;
 
     @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
@@ -76,7 +71,27 @@ public class Well implements Serializable {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Description description;
 
+
     @Transient
     List<WaterDepth> depthsList;
+
+    /*
+        Здесь начинается костыль. Т.к. глубин к одной скв может быть несколько, предложено искать по скв и дате бурения.
+        НО. Для большого кол-ва скв нет такого соответствия (хотя глубины вообще есть) + непонятно, корректно ли это:
+        документы разные, даты у них свои, возможно, правильно было бы искать по дате документа или какой-то ещё связи
+        с документом.
+        Поскольку логика до конца не определена, полноценно переделывать, а потом переделывать ещё раз не хочется.
+     */
+
+//    @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+//    private WellsDepth depth;
+
+    @Transient
+    WellsDepth depth;
+
+    /*
+        Здесь заканчивается костыль по глубинам.
+    */
 
     }
