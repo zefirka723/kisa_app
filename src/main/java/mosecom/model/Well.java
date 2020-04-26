@@ -1,9 +1,7 @@
 package mosecom.model;
 
 import lombok.Data;
-import mosecom.model.licencereport.LicenseToWells;
 import mosecom.model.licencereport.WaterDepth;
-import mosecom.model.licencereport.WaterDepthByWell;
 import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,7 +9,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings("serial")
 @Data
