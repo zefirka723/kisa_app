@@ -4,10 +4,7 @@ import mosecom.dao.*;
 import mosecom.dictionaries.DocTypes;
 import mosecom.dto.*;
 import mosecom.model.*;
-import mosecom.model.licencereport.WaterDepth;
-import mosecom.model.licencereport.WaterDepthByWell;
 import mosecom.service.licensereport.WaterDepthServiceImpl;
-import mosecom.utils.DateFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,8 +20,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class WellServiceImpl implements WellService {
-
-    private static final int DEFAULT_DOCUMENT_TYPE_ID = 3001;
 
     @Autowired
     private WellRepository wellRepository;
@@ -286,35 +281,50 @@ public class WellServiceImpl implements WellService {
 
 
     private WellssStressTest convertStressTests(Well well, WellsStressTestProjection dto) {
-        WellssStressTest stressTest = new WellssStressTest();
-        stressTest.setId(dto.getId());
-        stressTest.setWell(well);
-        stressTest.setDepression(dto.getDepression());
-        stressTest.setFlowRate(dto.getFlowRate() * 86.4f);
-        stressTest.setStressDate(dto.getStressDate());
-        stressTest.setWaterDepth(dto.getWaterDepth());
-        return stressTest;
+        if (dto.getId() == null && dto.getDepression() == null) {
+            return null;
+        }
+        else {
+            WellssStressTest stressTest = new WellssStressTest();
+            stressTest.setId(dto.getId());
+            stressTest.setWell(well);
+            stressTest.setDepression(dto.getDepression());
+            stressTest.setFlowRate(dto.getFlowRate() * 86.4f);
+            stressTest.setStressDate(dto.getStressDate());
+            stressTest.setWaterDepth(dto.getWaterDepth());
+            return stressTest;
+        }
     }
 
     private WellsConstruction convertWellConstruction(Well well, WellsConstructionProjection dto) {
-        WellsConstruction construction = new WellsConstruction();
-        construction.setId(dto.getId());
-        construction.setWell(well);
-        construction.setConstructionType(constructionTypeRepository.getOne(dto.getConstructionTypeId()));
-        construction.setDiametr(diametrRepository.getOne(dto.getDiametrId()));
-        construction.setDepthFrom(dto.getDepthFrom());
-        construction.setDepthTo(dto.getDepthTo());
-        return construction;
+        if(dto.getId() == null && dto.getDepthFrom() == null) {
+            return null;
+        }
+        else {
+            WellsConstruction construction = new WellsConstruction();
+            construction.setId(dto.getId());
+            construction.setWell(well);
+            construction.setConstructionType(constructionTypeRepository.getOne(dto.getConstructionTypeId()));
+            construction.setDiametr(diametrRepository.getOne(dto.getDiametrId()));
+            construction.setDepthFrom(dto.getDepthFrom());
+            construction.setDepthTo(dto.getDepthTo());
+            return construction;
+        }
     }
 
 
     private WellsGeology convertWellGeology(Well well, WellsGeologyProjection dto) {
-        WellsGeology geology = new WellsGeology();
-        geology.setId(dto.getId());
-        geology.setWell(well);
-        geology.setHorisont(horisontRepository.getOne(dto.getHorisontId()));
-        geology.setBotElev(dto.getBotElev());
-        return geology;
+        if (dto.getId() == null && dto.getHorisontId() == null) {
+            return null;
+        }
+        else {
+            WellsGeology geology = new WellsGeology();
+            geology.setId(dto.getId());
+            geology.setWell(well);
+            geology.setHorisont(horisontRepository.getOne(dto.getHorisontId()));
+            geology.setBotElev(dto.getBotElev());
+            return geology;
+        }
     }
 
 
