@@ -50,7 +50,7 @@
 
                     <label><h4
                             th:text="${globalDocType.getItemName()} + ' № '
-                                + ${item.observationPointId != null ? (item.observationPointId) : '<???>'}
+                                + ${item.observationPointId}
                                 + ' от '
                                 + ${#dates.format(item.date, 'dd.MM.yyyy')}
                             "></h4>

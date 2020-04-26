@@ -25,9 +25,9 @@ public class WaterDepth implements Serializable {
     private Date date;
 
     @Column(name = "Water_depth")
-    private double depth;
+    private Double depth;
 
     @Column(name = "Data_source")
-    private double dataSource;
+    private Integer dataSource;
 
 }
