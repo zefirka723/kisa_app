@@ -28,6 +28,14 @@ public class LicenseReportServiceImpl {
         return report;
     }
 
+    public LicenseReport findOneById(int id) {
+        return licenseReportRepository.getOne(id);
+    }
+
+    public LicenseReport save (LicenseReport licenseReport) {
+        return licenseReportRepository.save(licenseReport);
+    }
+
 }
 
 

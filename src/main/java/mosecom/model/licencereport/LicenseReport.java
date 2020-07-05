@@ -2,6 +2,7 @@ package mosecom.model.licencereport;
 
 import lombok.Data;
 import mosecom.model.Attachment;
+import mosecom.model.licencereport.dictionary.ReportName;
 import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Table(schema = "fgi", name = "\"License_Reports\"")
 public class LicenseReport implements Serializable {
 
-    @Column(name = "Pkey_id")
+    @Column(name = "Doc_ID")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,17 +28,14 @@ public class LicenseReport implements Serializable {
     //@DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
-    @Column(name = "4LS")
-    private Double ls;
-
-    @Column(name = "2TP")
-    private Double tp;
-
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "License_Doc_ID")
     private License license;
 
-//
+    @OneToOne
+    @JoinColumn(name = "Report_name")
+    private ReportName reportName;
+
     @Column(name = "File_Set_ID")
     private Integer fileSetId;
 

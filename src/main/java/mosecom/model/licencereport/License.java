@@ -21,6 +21,9 @@ public class License implements Serializable {
     @Column(name = "License_number")
     private String licenseNumber;
 
+    @Column (name = "Subject")
+    private String licenseUser;
+
 //    @OneToOne(mappedBy = "license")
 //    private LicenseReport report;
 

@@ -52,7 +52,7 @@
                         <td>
                             <div class="form-group">
                                 <label for="date">Дата</label>
-                                <input type="text" class="form-control"
+                                <input disabled type="text" class="form-control"
                                        id="date" th:field="*{date}"
                                        pattern="\d{2}\.\d{2}\.\d{4}"
                                        required
@@ -62,16 +62,16 @@
 
                         <td>
                             <div class="form-group">
-                                <label for="ls">Водоотбор по форме 4-ЛС</label>
-                                <input type="text" class="form-control" id="ls" th:field="*{ls}"/>
+                                <label for="reportName">Название отчёта</label>
+                                <input type="text" disabled class="form-control" id="reportName" th:field="${reportName.name}"/>
                             </div>
                         </td>
 
                         <td>
                             <div class="form-group">
-                                <label for="tp">Водоотбор по форме 2-ТП</label>
-                                <input type="number" step="any" class="form-control" id="tp"
-                                       th:field="*{tp}"/>
+                                <label for="licenseUser">Недропользователь</label>
+                                <input type="text" disabled class="form-control" id="licenseUser"
+                                       th:field="${license.licenseUser}"/>
                             </div>
                         </td>
                     </tr>

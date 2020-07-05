@@ -94,12 +94,25 @@
 
         <div class="d-flex py-2">
             <div class="d-flex px-0 ml-auto">
-                <form action="/report-add" method="get">
+                <form action="/reports/create" method="post">
+                    <input
+                      type="hidden"
+                      th:name="${_csrf.parameterName}"
+                      th:value="${_csrf.token}" />
+
                     <table>
                         <tr>
-                            <td><input th:name="licenseNumber" type="text" class="form-control" placeholder="Номер лицензии" required/></td>
+                            <td>
+                            <select th:name="reportName" class="form-control">
+                                <option th:each="reportName : ${reportNames}"
+                                        th:value="${reportName.id}"
+                                        th:text="${reportName.shortName}"/>
+                                 <option selected="selected" disabled>Название отчёта</option>
+                            </select>
+                            </td>
                             <td><input th:name="reportDate" type="date" class="form-control" required/></td>
-                            <td><button type="submit" class="btn btn-success">+ Добавить</button></td>
+                            <td><input th:name="licenseNumber" type="text" class="form-control" placeholder="Номер лицензии" required/></td>
+                            <td><button type="submit" class="btn btn-success">Создать</button></td>
                         </tr>
                     </table>
                 </form>
@@ -124,7 +137,7 @@
                     <td th:text="${report.id}"/>
                     <td th:text=" ${#dates.format(report.date, 'dd.MM.yyyy')}"/>
                     <td th:text="${report.license.licenseNumber}"/>
-                    <td><a th:href="@{'/report-card/' + ${report.id}}"><i class="far fa-edit"></i></a></td>
+                    <td><a th:href="@{'/reports/' + ${report.id}}"><i class="far fa-edit"></i></a></td>
                 </tr>
                 </tbody>
             </table>

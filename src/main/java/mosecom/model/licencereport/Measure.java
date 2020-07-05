@@ -12,5 +12,5 @@ import java.util.Map;
 @SuppressWarnings("serial")
 @Data
 public class Measure implements Serializable {
-    List<String> values = Arrays.asList("м3/сут", "м3/час", "л/сек");
+    List<String> values = Arrays.asList("м3/сут", "м3/час", "л/сек", "м3/мес", "м3/год");
 }

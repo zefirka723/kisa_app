@@ -6,6 +6,7 @@ import mosecom.model.licencereport.LicenseReport;
 import mosecom.service.UserService;
 import mosecom.service.licensereport.LicenseReportServiceImpl;
 import mosecom.service.licensereport.LicenseServiceImpl;
+import mosecom.service.licensereport.ReportNameServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,30 +35,38 @@ public class LicenseReportController {
     @Autowired
     AttachmentRepository attachmentRepository;
 
+    @Autowired
+    ReportNameServiceImpl reportNameService;
 
 
-    @RequestMapping(value = "/licence-reports")
-    public ModelAndView licenseReportsList() {
-        ModelAndView result = new ModelAndView("licence_report/reports-list");
-        result.addObject("reports", licenseReportService.findLicenseReportsList());
-        result.addObject("currentUserId", userService.getCurrentUserId());
-        return result;
-    }
+// new 25.06
+//    @RequestMapping(value = "/licence-reports")
+//    public ModelAndView licenseReportsList() {
+//        ModelAndView result = new ModelAndView("licence_report/reports-list");
+//        result.addObject("reports", licenseReportService.findLicenseReportsList());
+//        result.addObject("currentUserId", userService.getCurrentUserId());
+//        result.addObject("reportNames", reportNameService.findAllReportNames());
+//        return result;
+//    }
 
 
-    @RequestMapping(value = "/report-add")
-    public ModelAndView addReport(@RequestParam (name="licenseNumber") String licenseNumber,
-                                  @RequestParam (name="reportDate") String reportDate) throws ParseException {
-        ModelAndView result = new ModelAndView("licence_report/report-edit");
-        LicenseReport report = new LicenseReport();
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        Date formattedDate = format.parse(reportDate);
-        report.setDate(formattedDate);
-        result.addObject("report", report);
-        result.addObject("licenseNumber", licenseNumber);
-        result.addObject("currentUserId", userService.getCurrentUserId());
-        return result;
-    }
+    // new 25.06
+//    @RequestMapping(value = "/report-add")
+//    public ModelAndView addReport(@RequestParam (name="licenseNumber") String licenseNumber,
+//                                  @RequestParam (name="reportName") int reportName,
+//                                  @RequestParam (name="reportDate") String reportDate) throws ParseException {
+//        ModelAndView result = new ModelAndView("licence_report/report-edit");
+//        LicenseReport report = new LicenseReport();
+//        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+//        Date formattedDate = format.parse(reportDate);
+//        report.setDate(formattedDate);
+//        result.addObject("reportName", reportNameService.findOneById(reportName));
+//        result.addObject("report", report);
+//        result.addObject("license", licenseService.findLicenseByNumber(licenseNumber));
+//        result.addObject("licenseNumber", licenseNumber);
+//        result.addObject("currentUserId", userService.getCurrentUserId());
+//        return result;
+//    }
 
 
     @RequestMapping(value = "/report-edit/{id}")
