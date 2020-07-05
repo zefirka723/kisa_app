@@ -107,6 +107,28 @@
                     <i class="far fa-edit"></i> Новый документ
                 </button>
             </div>
+
+            <div class="d-flex px-0 ml-auto" th:if="${docType.getId() == 4004}">
+                <form action="/reports/create" method="post">
+                    <table>
+                        <tr>
+                            <td>
+                            <select th:name="reportName" class="form-control">
+                                <option th:each="reportName : ${reportNames}"
+                                        th:value="${reportName.id}"
+                                        th:text="${reportName.shortName}"/>
+                                 <option selected="selected" disabled>Название отчёта</option>
+                            </select>
+                            </td>
+                            <td><input th:name="reportDate" type="date" class="form-control" required/></td>
+                            <td><input th:name="licenseNumber" type="text" class="form-control" placeholder="Номер лицензии" required/></td>
+                            <td><button type="submit" class="btn btn-success">Создать</button></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+
+
         </div>
 
         <!-- Таблица списка документов -->
@@ -116,12 +138,16 @@
 
                 <tr>
                     <th>ID документа</th>
-                    <th>ID ПН</th>
+                    <!--th>ID ПН</th-->
+                    <th>
+                        <div th:text="${docType.getId() != 4004 ? 'ID ПН' : 'Номер лицензии'}"/>
+                    </th>
                     <th>Дата документа</th>
                     <th>Рег. номер</th>
                     <th>Дата регистрации</th>
                     <th><input type="text" class="form-control pull-right" id="searchfield"
                                                 placeholder="Поиск по таблице" onkeyup="tableSearch()"></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -131,7 +157,12 @@
                     <td th:text=" ${#dates.format(item.date, 'dd.MM.yyyy')}"/>
                     <td th:text="${item.regNumber}"/>
                     <td th:text=" ${#dates.format(item.dateProcessing, 'dd.MM.yyyy')}"/>
-                    <td><a th:href="@{'/registration/' + ${docType} + '/' + ${item.id}}">Перейти</a></td>
+                    <td><a th:href="@{'/registration/' + ${docType} + '/' + ${item.id}}" title="Перейти к регистрации">Перейти</a></td>
+                    <td th:if="${docType.getId() == 4004}">
+                        <a th:href="@{'/reports/' + ${item.id}}" title="Редактировать отчёт">
+                            <i class="far fa-edit"></i>
+                        </a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

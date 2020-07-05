@@ -5,6 +5,7 @@ import mosecom.dto.inspections.DocumentProjection;
 import mosecom.model.inspections.Document;
 import mosecom.model.inspections.RegItem;
 import mosecom.service.UserService;
+import mosecom.service.licensereport.ReportNameServiceImpl;
 import mosecom.service.registration.DocumentServiceImpl;
 import mosecom.service.registration.RegItemService;
 import mosecom.service.welldoc.WellServiceImpl;
@@ -32,11 +33,19 @@ public class RegistrationController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ReportNameServiceImpl reportNameService;
+
     // Главная страница модуля ФГИ
     @GetMapping("/fgi")
     public String registrationMain(Model model) {
         model.addAttribute("currentUserId", userService.getCurrentUserId()); // TODO переделать на роли
         return "registration/reg-home";
+    }
+
+    @GetMapping("/")
+    public String mainPage() {
+        return "redirect:/fgi";
     }
 
     // Список документов для регистрации
@@ -55,6 +64,11 @@ public class RegistrationController {
             model.addAttribute("wellsList", wellService.getWellsList());
             isWellDoc = true;
         }
+
+        if (docType == DocTypes.LICENSE_REPORT) {
+            model.addAttribute("reportNames", reportNameService.findAllReportNames());
+        }
+
         model.addAttribute("isWellDoc", isWellDoc);
         model.addAttribute("currentUserId", userService.getCurrentUserId()); // TODO переделать на роли
         return "registration/reg-list";
