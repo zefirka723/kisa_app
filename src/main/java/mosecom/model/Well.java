@@ -65,7 +65,7 @@ public class Well implements Serializable {
     private Passport passport;
 
     @OneToOne(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  //  @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Description description;
 
 

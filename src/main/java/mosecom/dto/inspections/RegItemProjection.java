@@ -13,26 +13,33 @@ import java.util.Date;
 @AllArgsConstructor
 public class RegItemProjection {
 
-        private Integer id;
+    private Integer id;
 
-        private Integer regStatusId;
+    private Integer regStatusId;
 
-        private String regStatusText;
+    private String regStatusText;
 
-        private Integer authorId;
+    private Integer authorId;
 
-        private Integer docType;
+    private Integer docType;
 
-        @DateTimeFormat(pattern = "dd.MM.yyyy")
-        private Date dateProcessing;
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date dateProcessing;
 
-        @DateTimeFormat(pattern = "dd.MM.yyyy")
-        private Date date;
+//    @DateTimeFormat(pattern = "dd.MM.yyyy")
+//    private Date date;
 
-        private String regNumber;
+    private String date;
 
-        private Integer observationPointId;
+    private String regNumber;
 
-        private String link;
+    //private Integer observationPointId;
+    private String observationPointId;
+
+    private String link;
+
+    private String comments;
+
+    private String windowName;
 
 }

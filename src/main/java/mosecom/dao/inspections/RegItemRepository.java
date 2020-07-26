@@ -12,7 +12,7 @@ import java.util.List;
 public interface RegItemRepository extends JpaRepository<RegItem, Integer> {
 
     @Query("select new mosecom.dto.inspections.RegItemProjection"
-            + "(r.id as id, r.regStatusId as regStatusId, r.regStatusText as regStatusText, r.authorId as authorId, r.docType as docType, r.dateProcessing as dateProcessing, r.date as date, r.regNumber as regNumber, r.observationPointId as observationPointId, r.link as link) "
+            + "(r.id as id, r.regStatusId as regStatusId, r.regStatusText as regStatusText, r.authorId as authorId, r.docType as docType, r.dateProcessing as dateProcessing, r.date as date, r.regNumber as regNumber, r.observationPointId as observationPointId, r.link as link, r.comments as comments, r.windowName as windowName) "
             + "from RegItem r order by r.id")
     List<RegItemProjection> findRegItemsList();
 
