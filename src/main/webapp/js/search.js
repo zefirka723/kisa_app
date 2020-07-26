@@ -17,3 +17,8 @@ function tableSearch() {
 
     }
 }
+
+function createWellDoc() {
+    var url = '/welldoc/' + $("#docType").val() + '/' +  $("#wellId").val();
+    window.open(url, '_top');
+}

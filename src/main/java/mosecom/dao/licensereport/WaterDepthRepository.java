@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface WaterDepthRepository extends JpaRepository<WaterDepth, Integer> {
     List<WaterDepth> findAllByWellId(int wellId);
+
+    List<WaterDepth> findAllByWellIdOrderByDateDesc(int wellId);
 }

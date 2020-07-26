@@ -86,9 +86,9 @@
 
                 <div class="d-none d-lg-flex btn-group " role="group" aria-label="filters">
                     <div class="d-none d-lg-flex btn-group " role="group" aria-label="filters">
-                        <button name="state" class="btn btn-secondary" aria-pressed="true" type="submit" value="0">Непросмотренные</button>
-                        <button name="state" class="btn btn-secondary" aria-pressed="true" type="submit" value="-1">Нерегистрируемые</button>
-                        <button name="state" class="btn btn-secondary" aria-pressed="true" type="submit" value="1">Зарегистрированные</button>
+                        <button name="state" class="btn btn-secondary" aria-pressed="true" type="submit" value="0" title="Непросмотренные"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                        <button name="state" class="btn btn-secondary" aria-pressed="true" type="submit" value="-1" title="Нерегистрируемые"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                        <button name="state" class="btn btn-secondary" aria-pressed="true" type="submit" value="1" title="Зарегистрированные"><i class="fa fa-folder" aria-hidden="true"></i></button>
                     </div>
                 </div>
                 <div class="btn-group d-lg-none"> <!-- <i class="fas fa-filter"></i> -->
@@ -101,15 +101,37 @@
                         <button name="state" class="dropdown-item" aria-pressed="true" type="submit" value="1">Зарегистрированные</button>
                     </div>
                 </div>
+</form>
 
-            <div class="d-flex px-0 ml-auto" th:if="${isWellDoc}">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editFormModal">
-                    <i class="far fa-edit"></i> Новый документ
-                </button>
+
+            <div class="d-flex px-0 ml-auto" th:if="${isWellDoc == true}">
+                <form>
+                <table>
+                    <td>
+                        <input list="wellNums" name="wellIdForDoc" id="wellIdForDoc" class="form-control" placeholder="ID скважины" required>
+                        <datalist id="wellNums">
+                            <option th:each="wellNum : ${wellsList}"
+                                    th:value="${wellNum}"
+                                    th:text="${wellNum}"/>
+                             <option selected="selected" disabled>ID скважины</option>
+                        </datalist>
+                        <input type="hidden" name="docType" th:value="${docType}">
+                    </td>
+                    <td>
+                        <input class="btn btn-primary" type="button" value="Создать"
+                        onclick="location.href='/welldoc/'+ document.getElementById('docType').value + '/' + document.getElementById('wellIdForDoc').value;">
+                    </td>
+                    </table>
+                    </form>
             </div>
 
             <div class="d-flex px-0 ml-auto" th:if="${docType.getId() == 4004}">
                 <form action="/reports/create" method="post">
+                <input
+                  type="hidden"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}" />
+
                     <table>
                         <tr>
                             <td>
@@ -121,12 +143,42 @@
                             </select>
                             </td>
                             <td><input th:name="reportDate" type="date" class="form-control" required/></td>
-                            <td><input th:name="licenseNumber" type="text" class="form-control" placeholder="Номер лицензии" required/></td>
+                            <td>
+                                <input list="licnums" th:name="licenseNumber" class="form-control" placeholder="Номер лицензии" required>
+                                <datalist id="licnums">
+                                    <option th:each="license : ${licenses}"
+                                            th:value="${license.licenseNumber}"
+                                            th:text="${license.licenseNumber}"/>
+                                     <option selected="selected" disabled>Номер лицензии</option>
+                                </datalist>
+                            </td>
                             <td><button type="submit" class="btn btn-success">Создать</button></td>
                         </tr>
                     </table>
                 </form>
             </div>
+
+            <div class="d-flex px-0 ml-auto" th:if="${docType.getId() == 3006}">
+                            <form>
+                                <table>
+                                    <tr>
+                                        <td>
+                                        <input list="wellNums" name="wellId" id="wellId" class="form-control" placeholder="ID скважины" required>
+                                        <datalist id="wellNums">
+                                            <option th:each="wellNum : ${wellsList}"
+                                                    th:value="${wellNum}"
+                                                    th:text="${wellNum}"/>
+                                             <option selected="selected" disabled>ID скважины</option>
+                                        </datalist>
+                                        <input type="hidden" name="docType" th:value="${docType}">
+                                        </td>
+                                        <td>
+                                        <input class="btn btn-primary" type="button" value="Создать"
+                                                                onclick="location.href='/plugging/'+ document.getElementById('wellId').value + '/0';">
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
 
 
         </div>
@@ -142,19 +194,25 @@
                     <th>
                         <div th:text="${docType.getId() != 4004 ? 'ID ПН' : 'Номер лицензии'}"/>
                     </th>
+                    <th th:if="${docType.getId() == 4004}">
+                        Тип отчёта
+                    </th>
                     <th>Дата документа</th>
                     <th>Рег. номер</th>
                     <th>Дата регистрации</th>
-                    <th><input type="text" class="form-control pull-right" id="searchfield"
+                    <th colspan="2"><input type="text" class="form-control pull-right" id="searchfield" title="Поиск по таблице"
                                                 placeholder="Поиск по таблице" onkeyup="tableSearch()"></th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:attr="data-document-id=${item.id}" th:each="item : ${items}">
                     <td th:text="${item.id}"/>
                     <td th:text="${item.observationPointId}"/>
-                    <td th:text=" ${#dates.format(item.date, 'dd.MM.yyyy')}"/>
+                    <td th:if="${docType.getId() == 4004}">
+                        <div th:text="${item.comments}"/>
+                    </td>
+                    <!--td th:text=" ${#dates.format(item.date, 'dd.MM.yyyy')}"/-->
+                    <td th:text="${item.date}"/>
                     <td th:text="${item.regNumber}"/>
                     <td th:text=" ${#dates.format(item.dateProcessing, 'dd.MM.yyyy')}"/>
                     <td><a th:href="@{'/registration/' + ${docType} + '/' + ${item.id}}" title="Перейти к регистрации">Перейти</a></td>
@@ -163,50 +221,21 @@
                             <i class="far fa-edit"></i>
                         </a>
                     </td>
+                    <td th:if="${docType.getId() == 3006}">
+                        <a th:href="@{'/plugging/' + ${item.observationPointId} + '/0'}" title="Перейти к акту">
+                            <i class="far fa-edit"></i>
+                        </a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    </form>
+
 </div> <!-- закрыл wrapper -->
 
 
 
-<!-- Модалка -->
-<div class="modal fade" tabindex="-1" role="dialog" id="editFormModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form class="form-horizontal" onsubmit="return WellsList.startEdit()">
-                <div class="modal-header">
-                    <h4 class="modal-title">Введите номер скважины</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="col-sm-8">
-                            <input id="editWellId" class="form-control" type="text" size="10"
-                                   placeholder="ID (ГВК) скважины"
-                                   onchange="WellsList.validate()" onkeyup="WellsList.validate()"/>
-
-
-                            <input type="hidden" th:attr="data-well-id=${well.id}" th:each="well : ${wellsList}">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                    <button id="editWellButton" type="button" class="btn btn-primary" disabled="disabled" onclick="return WellsList.startEdit()">
-                        Перейти к редактированию
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 </body>
 </html>

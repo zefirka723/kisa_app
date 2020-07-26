@@ -3,19 +3,11 @@ package mosecom.controller;
 import mosecom.dictionaries.DocTypes;
 import mosecom.dto.WellFullProjection;
 import mosecom.model.Well;
-import mosecom.model.inspections.Document;
-import mosecom.model.inspections.RegItem;
 import mosecom.model.licencereport.WaterDepth;
-import mosecom.model.licencereport.WaterDepthByWell;
 import mosecom.service.licensereport.WaterDepthServiceImpl;
-import mosecom.service.registration.DocumentServiceImpl;
-import mosecom.service.registration.RegItemService;
 import mosecom.service.welldoc.WellServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -65,7 +57,6 @@ public class WellDocController {
             @RequestParam(value = "file", required = false) MultipartFile[] files,
             @RequestParam DocTypes docType,
             @ModelAttribute WellFullProjection well
-    //        @ModelAttribute WaterDepthByWell depthsByWell
             ) throws IOException, ParseException {
         wellService.save(well, files, docType);
         //, depthsByWell);

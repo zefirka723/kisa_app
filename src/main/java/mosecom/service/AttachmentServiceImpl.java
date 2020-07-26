@@ -16,4 +16,8 @@ public class AttachmentServiceImpl {
         //return attachmentRepository.findAllByFileSetId(fileSetId);
     //}
 
+    public Attachment findOneByFileSetId (int fileSetId) {
+        return attachmentRepository.findByFileSetId(fileSetId);
+    }
+
 }

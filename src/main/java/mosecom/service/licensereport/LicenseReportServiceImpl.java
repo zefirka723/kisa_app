@@ -1,12 +1,27 @@
 package mosecom.service.licensereport;
 
 import mosecom.dao.AttachmentRepository;
+import mosecom.dao.DocumentTypeRepository;
+import mosecom.dao.inspections.DocumentRepository;
 import mosecom.dao.licensereport.LicenseReportRepository;
+import mosecom.dictionaries.DocTypes;
+import mosecom.model.Attachment;
 import mosecom.model.licencereport.LicenseReport;
+import mosecom.utils.DateFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -17,6 +32,15 @@ public class LicenseReportServiceImpl {
 
     @Autowired
     private AttachmentRepository attachmentRepository;
+
+    @Autowired
+    private DocumentTypeRepository documentTypeRepository;
+
+    @Autowired
+    private LicenseServiceImpl licenseService;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     public List<LicenseReport> findLicenseReportsList() {
         return licenseReportRepository.findAll();
@@ -32,8 +56,75 @@ public class LicenseReportServiceImpl {
         return licenseReportRepository.getOne(id);
     }
 
-    public LicenseReport save (LicenseReport licenseReport) {
+    public LicenseReport save(LicenseReport licenseReport) {
+        licenseReport.setFileSetId(attachmentRepository.getNextFileSetId());
         return licenseReportRepository.save(licenseReport);
+    }
+
+    @Transactional
+    public void update(LicenseReport licenseReport, MultipartFile [] files) throws IOException, ParseException {
+        LicenseReport reportForSave = licenseReportRepository.getOne(licenseReport.getId());
+        reportForSave.setComments(licenseReport.getComments());
+
+        if (licenseReport.getAttachments() == null) {
+            if (attachmentRepository.findAllByFileSetId(reportForSave.getFileSetId()) != null) {
+                for (Attachment a: attachmentRepository.findAllByFileSetId(reportForSave.getFileSetId())) {
+                    attachmentRepository.delete(a);
+                }
+            }
+        }
+        else {
+            Set<Integer> keepDocumentsIds = licenseReport.getAttachments().stream().map(d -> d.getId()).collect(Collectors.toSet());
+            for (Attachment a : attachmentRepository.findAllByFileSetId(reportForSave.getFileSetId())) {
+                if (!keepDocumentsIds.contains(a.getId())) {
+                    attachmentRepository.delete(a);
+                }
+            }
+        }
+
+
+        // все прикрепленные файлы добавляем в документы
+        if (files != null) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    // Настройка пути под PROD
+                    //TODO: переделать это и вообще все типы
+                    String folderByType = "LICENSE";
+
+                    java.io.File uploadDir = new java.io.File(uploadPath + "/"
+                            + "/" + folderByType
+                            + "/" + licenseService.findLicenceByLicenseId(reportForSave.getLicenseDocId()).getLicenseNumber()
+                            + "/LicenseReports/" + reportForSave.getDate().toString().split(" ", 2)[0]);
+
+
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+
+                    //String newFilePath = UUID.randomUUID().toString();
+                    file.transferTo(new java.io.File(uploadDir + "/" + file.getOriginalFilename()));
+                    //newFilePath));
+
+                    Attachment attachment = new Attachment();
+                    //attachment.setWell(well);
+                    attachment.setDocumentType(documentTypeRepository.getOne(DocTypes.LICENSE_REPORT.getId()));
+                    attachment.setFileContentType(file.getContentType());
+                    attachment.setFileContentType(file.getContentType());
+
+                    // TODO: оптимизировать эти поля
+                    attachment.setFileName(file.getOriginalFilename());
+                    attachment.setFilePath(uploadDir + "/");
+                    //+ file.getOriginalFilename()); // было newFilePath
+                    attachment.setFileSize(file.getSize());
+                    //attachment.setDocId(docType.getId());
+                    attachment.setFileSetId(reportForSave.getFileSetId());
+                    attachmentRepository.save(attachment);
+                    //well.getAttachments().add(attachment);
+                }
+            }
+        }
+
+        licenseReportRepository.save(reportForSave);
     }
 
 }

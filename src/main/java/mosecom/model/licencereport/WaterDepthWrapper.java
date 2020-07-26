@@ -2,18 +2,21 @@ package mosecom.model.licencereport;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.List;
 
 @SuppressWarnings("serial")
 @Data
-public class FlowrateByWell implements Serializable {
+public class WaterDepthWrapper implements Serializable {
 
     @Id
     private int wellId;
 
-    private List<Flowrate> rates;
+    private int reportDocId;
+
+    private List<WaterDepth> waterDepths;
+
+    private List<WaterDepth> oldWaterDepths;
 
 }

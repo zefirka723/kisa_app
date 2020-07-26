@@ -1,5 +1,6 @@
 package mosecom.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,7 @@ public interface WellRepository extends JpaRepository<Well, Integer> {
             + "(w.id as id, w.wellName as wellName, w.wellCollar as wellCollar, w.drilledDate as drilledDate, w.moved as moved, w.horId as horId)"
             + "from Well w order by w.id")
     List<WellProjection> findWellsList();
+
+    @Query(value = "SELECT \"Well_ID\" FROM \"Wells\"", nativeQuery = true)
+    List<BigInteger> findWellIds ();
 }

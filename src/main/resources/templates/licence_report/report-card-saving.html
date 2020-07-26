@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--html-- xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -44,49 +44,43 @@
 <div class="container-fluid text-center">
     <div class="row content">
         <div class="col-sm-8 text-left">
-            <input type="hidden" th:name="reportId" th:value="${report.id}"/>
+            <form th:action="'/reports/save'" th:object="${report}" method="post">
+            <input type="hidden" th:name="id" th:value="${report.id}"/>
+                        <input type="hidden" th:field="${report.date}"/>
+                        <input type="hidden" th:field="${report.licenseDocId}"/>
+                        <input type="hidden" th:field="${report.reportName}"/>
 
             <div id="card-info">
 
-                <div><a th:href="@{'/licence-reports/'}"><- Назад к списку</a></div>
-                <h4 th:text="'Отчёт по лицензии ' + ${report.license.licenseNumber}
+                <div><a th:href="@{'/registrations?docType=LICENSE_REPORT&state=0'}"><- Назад к списку</a></div>
+                <h4 th:text="'Отчёт по лицензии ' + ${license.licenseNumber}
                 + ' от ' + ${#dates.format(report.date, 'dd.MM.yyyy')}"></h4>
 
                 <table id="commonTable" class="table table-striped table-bordered table-hover">
                     <tr>
                         <td>
                             <div class="form-group">
-                                <label for="date">Дата отчёта</label>
-                                <input type="text" class="form-control" id="date" th:field="*{report.date}"
-                                       disabled/>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                <label for="usr">Водоотбор по форме 4-ЛС</label>
-                                <input type="text" class="form-control" id="usr" th:field="*{report.ls}"
+                                <label for="usr">Название отчёта</label>
+                                <input type="text" class="form-control" id="usr" th:field="${report.reportName.shortName}"
                                        disabled/>
                             </div>
                         </td>
 
                         <td>
                             <div class="form-group">
-                                <label for="usr2">Водоотбор по форме 2-ТП</label>
-                                <input type="number" step="any" class="form-control" id="usr2"
-                                       th:field="*{report.tp}" disabled/>
+                                <label for="licenseUser">Недропользователь</label>
+                                <input type="text" disabled class="form-control" id="licenseUser"
+                                       th:field="${license.licenseUser}"/>
                             </div>
                         </td>
-
-                        <td>
-                            <a th:href="@{'/report-edit/' + ${report.id}}"><i class="far fa-edit fa-2x"></i></a>
-                        </td>
-
                     </tr>
                 </table>
             </div>
 
-            <h4>Отчёт</h4>
+            <h4>Файл отчёта</h4>
+
             <table id="docTable" class="table table-striped table-bordered table-hover">
+
 
                 <tr th:each="document, stat : ${report.attachments}"
                     th:with="namePrefix=${'attachments[' + stat.index + ']'}"
@@ -97,46 +91,19 @@
                         <a th:href="${'/file/' + document.id}" th:text="${document.fileName}"></a>
                     </td>
                 </tr>
-            </table>
-
-            <!--<table>-->
-                <!--<tr th:each="document, stat : ${files}"-->
-                    <!--th:with="namePrefix=${'attachments[' + stat.index + ']'}"-->
-                    <!--th:attr="data-index=${stat.index}">-->
-
-                    <!--<td>-->
-                        <!--<input type="hidden" th:name="${namePrefix + '.id'}" th:value="${document.id}"/>-->
-                        <!--<a th:href="${'/file/' + document.id}" th:text="${document.fileName}"></a>-->
-                    <!--</td>-->
-                <!--</tr>-->
-            <!--</table>-->
-
-
-            <div><br></div>
-
-
-            <h4>Скважины</h4>
-            <table id="inspTable" class="table table-hover">
-                <thead class="thead-dark">
 
                 <tr>
-                    <th>ID скважины</th>
-                    <th>Водоотбор</th>
-                    <th>Уровни ГВ</th>
-                    <th>Химия</th>
-                    <th></th>
+                    <label for="reportComment">Примечания к отчёту</label>
+                    <textarea class="form-control" id="reportComment" rows="3" th:field="${report.comments}"></textarea>
                 </tr>
-                </thead>
-                <tbody>
-                <tr th:attr="data-document-id=${link.id}" th:each="link : ${links}">
-                    <td th:text="${link.wellId}"/>
-                    <td><a th:href="@{'/report-edit/flowrate/' + ${report.id} + '/' + ${link.wellId}}">Перейти</a></td>
-                    <td><a th:href="@{'/report-edit/waterdepth/' + ${report.id} + '/' + ${link.wellId}}">Перейти</a></td>
-                    <td><a th:href="@{'/report-edit/chem/' + ${report.id} + '/' + ${link.wellId}}">Перейти</a></td>
+                <br>
+                <button type="submit" class="btn btn-success">Сохранить</button>
 
-                </tr>
-                </tbody>
             </table>
+            </form>
+
+
+            </div>
 
             <div><br></div>
 
@@ -144,4 +111,4 @@
     </div>
 </div>
 </body>
-</html-->
+</html>

@@ -1,22 +1,24 @@
 package mosecom.model.licencereport;
 
 import lombok.Data;
-import mosecom.model.licencereport.dictionary.Measurement;
-import mosecom.model.licencereport.dictionary.Period;
+import lombok.Getter;
+import lombok.Setter;
+import mosecom.dictionaries.DocTypes;
+import mosecom.model.Attachment;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @SuppressWarnings("serial")
-@Data
+@Getter
+@Setter
 @Entity
-@Table(name = "\"Wells_FlowRate\"")
-public class Flowrate implements Serializable {
-    @Column(name = "Pkey_id")
+@Table(schema = "fgi", name = "WellsDoc_Liquidation")
+public class PluggingAct implements Serializable {
+    @Column(name = "Doc_ID")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,16 +30,19 @@ public class Flowrate implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
-    @Column(name = "Flow_rate")
-    private Double flowrate;
+    @Column(name = "File_Set_ID")
+    private Integer fileSetId;
 
-    @Column(name = "Period")
-    private Integer periodId;
-
-    @Column(name = "Doc_ID")
+    @Column(name = "Report_Doc_ID")
     private Integer reportDocId;
 
     @Transient
-    private Measurement measurement;
+    private Attachment attachment;
+
+    @Transient
+    private DocTypes docType;
+
+    @Transient
+    private String link;
 
 }

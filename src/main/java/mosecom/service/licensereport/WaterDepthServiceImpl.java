@@ -2,11 +2,10 @@ package mosecom.service.licensereport;
 
 import mosecom.dao.licensereport.WaterDepthRepository;
 import mosecom.model.licencereport.WaterDepth;
-import mosecom.model.licencereport.WaterDepthByWell;
+import mosecom.model.licencereport.WaterDepthWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,12 +19,28 @@ public class WaterDepthServiceImpl {
         return waterDepthRepository.findAllByWellId(wellId);
     }
 
-    public void save(WaterDepthByWell waterDepths) {
-        if (waterDepths.getDepths() != null) {
-            for (WaterDepth d : waterDepths.getDepths()) {
-                d.setWellId(waterDepths.getWellId());
-                d.setDataSource(1);
-                waterDepthRepository.save(d);
+    public List<WaterDepth> findWaterDepthsByWellIdOrderByDate(int wellId) {
+        return waterDepthRepository.findAllByWellIdOrderByDateDesc(wellId);
+    }
+
+//    public void save(WaterDepthWrapper waterDepths) {
+//        if (waterDepths.getDepths() != null) {
+//            for (WaterDepth d : waterDepths.getDepths()) {
+//                d.setWellId(waterDepths.getWellId());
+//                d.setDataSource(1);
+//                waterDepthRepository.save(d);
+//            }
+//        }
+//    }
+
+    public void saveWrapper (WaterDepthWrapper waterDepthWrapper) {
+        if (!waterDepthWrapper.getWaterDepths().isEmpty()) {
+            for (WaterDepth w: waterDepthWrapper.getWaterDepths()) {
+                if (w.getDate() != null && w.getDepth() != null) {
+                    w.setWellId(waterDepthWrapper.getWellId());
+                    w.setReportDocId(waterDepthWrapper.getReportDocId());
+                    save(w);
+                }
             }
         }
     }

@@ -47,6 +47,7 @@
      <form th:action="'/report3ls/submit'" th:object="${report3LsWrapper}" method="post">
 
         <div class="col-sm-8 text-left">
+        <div><a th:href="@{'/reports/' + ${report3LsWrapper.reportDocId}}"><- Назад к отчёту</a></div>
 
         <input type="hidden" name="reportDocId" th:value="${report3LsWrapper.reportDocId}"/>
 

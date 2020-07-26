@@ -111,7 +111,17 @@
                             </select>
                             </td>
                             <td><input th:name="reportDate" type="date" class="form-control" required/></td>
-                            <td><input th:name="licenseNumber" type="text" class="form-control" placeholder="Номер лицензии" required/></td>
+
+                            <td>
+                              <input list="licnums" th:name="licenseNumber" class="form-control" placeholder="Номер лицензии">
+                                <datalist id="licnums">
+                                    <option th:each="license : ${licenses}"
+                                            th:value="${license.licenseNumber}"
+                                            th:text="${license.licenseNumber}"/>
+                                     <option selected="selected" disabled>Номер лицензии</option>
+                                </datalist>
+                            </td>
+
                             <td><button type="submit" class="btn btn-success">Создать</button></td>
                         </tr>
                     </table>

@@ -48,12 +48,19 @@
                 <div id="card-info">
 
 
-                    <label><h4
+                    <label><!--h4
                             th:text="${globalDocType.getItemName()} + ' № '
                                 + ${item.observationPointId}
                                 + ' от '
                                 + ${#dates.format(item.date, 'dd.MM.yyyy')}
-                            "></h4>
+                            "></h4-->
+                            <!--h4
+                            th:text="${globalDocType.getItemName()} + ' № '
+                                + ${item.observationPointId}
+                                + ' от '
+                                + ${item.date}
+                            "></h4-->
+                            <h4 th:text="${item.windowName}"/>
                     </label>
 
                     <br>

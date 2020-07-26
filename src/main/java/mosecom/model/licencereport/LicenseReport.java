@@ -23,14 +23,15 @@ public class LicenseReport implements Serializable {
     private Integer id;
 
     @Column(name = "Date")
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-//    @DateTimeFormat(iso= DateTimeFormat.ISO.DATE)
-    //@DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "License_Doc_ID")
-    private License license;
+//    @OneToOne(optional = false, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "License_Doc_ID")
+//    private License license;
+
+    @Column(name = "License_Doc_ID")
+    private Integer licenseDocId;
 
     @OneToOne
     @JoinColumn(name = "Report_name")
@@ -38,6 +39,9 @@ public class LicenseReport implements Serializable {
 
     @Column(name = "File_Set_ID")
     private Integer fileSetId;
+
+    @Column(name = "Comments")
+    private String comments;
 
 //    @OneToMany(mappedBy = "report")
 //    private List<Attachment> attachments;

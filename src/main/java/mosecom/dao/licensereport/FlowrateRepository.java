@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface FlowrateRepository extends JpaRepository<Flowrate, Integer> {
-    List<Flowrate> findAllByWellId(int wellId);
+    List<Flowrate> findAllByWellIdOrderByDateDesc(int wellId);
 }

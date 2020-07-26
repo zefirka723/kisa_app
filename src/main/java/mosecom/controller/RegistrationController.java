@@ -1,10 +1,12 @@
 package mosecom.controller;
 
+import mosecom.dao.WellRepository;
 import mosecom.dictionaries.DocTypes;
 import mosecom.dto.inspections.DocumentProjection;
 import mosecom.model.inspections.Document;
 import mosecom.model.inspections.RegItem;
 import mosecom.service.UserService;
+import mosecom.service.licensereport.LicenseServiceImpl;
 import mosecom.service.licensereport.ReportNameServiceImpl;
 import mosecom.service.registration.DocumentServiceImpl;
 import mosecom.service.registration.RegItemService;
@@ -36,6 +38,12 @@ public class RegistrationController {
     @Autowired
     ReportNameServiceImpl reportNameService;
 
+    @Autowired
+    WellRepository wellRepository;
+
+    @Autowired
+    LicenseServiceImpl licenseService;
+
     // Главная страница модуля ФГИ
     @GetMapping("/fgi")
     public String registrationMain(Model model) {
@@ -61,12 +69,17 @@ public class RegistrationController {
         model.addAttribute("header", docType.getListName());
         boolean isWellDoc = false;
         if (docType == DocTypes.RECCARD || docType == DocTypes.PASSPORT || docType == DocTypes.DESCRIPTION) {
-            model.addAttribute("wellsList", wellService.getWellsList());
+            //model.addAttribute("wellsList", wellService.getWellsList());
+            model.addAttribute("wellsList", wellRepository.findWellIds());
             isWellDoc = true;
+        }
+        if (docType == DocTypes.PLUGGING_ACT) {
+            model.addAttribute("wellsList", wellRepository.findWellIds());
         }
 
         if (docType == DocTypes.LICENSE_REPORT) {
             model.addAttribute("reportNames", reportNameService.findAllReportNames());
+            model.addAttribute("licenses", licenseService.findAll());
         }
 
         model.addAttribute("isWellDoc", isWellDoc);

@@ -32,9 +32,12 @@ public class RegItem implements Serializable {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date dateProcessing;
 
+//    @Column(name = "Date")
+//    @DateTimeFormat(pattern = "dd.MM.yyyy")
+//    private Date date;
+
     @Column(name = "Date")
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private Date date;
+    private String date;
 
     @Column(name = "Reg_number")
     private String regNumber;
@@ -42,10 +45,16 @@ public class RegItem implements Serializable {
     @Column (name = "Doc_type")
     private Integer docType;
 
-    @Column (name = "Name") // айдишник пункта наблюдения
-    private Integer observationPointId;
+    @Column (name = "Name") // айдишник пункта наблюдения или номер лицензии
+    private String observationPointId;
 
     @Column (name = "Link")
     private String link;
+
+    @Column (name = "Comments")
+    private String comments;
+
+    @Column (name = "Window_name")
+    private String windowName;
 
 }
