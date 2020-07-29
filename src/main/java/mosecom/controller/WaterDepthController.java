@@ -1,13 +1,7 @@
 package mosecom.controller;
 
-import mosecom.dao.licensereport.dictionaries.PeriodRepository;
-import mosecom.model.licencereport.Flowrate;
-import mosecom.model.licencereport.FlowrateWrapper;
 import mosecom.model.licencereport.WaterDepth;
 import mosecom.model.licencereport.WaterDepthWrapper;
-import mosecom.model.licencereport.dictionary.Measurement;
-import mosecom.service.licensereport.FlowrateServiceImpl;
-import mosecom.service.licensereport.LicenseReportServiceImpl;
 import mosecom.service.licensereport.WaterDepthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

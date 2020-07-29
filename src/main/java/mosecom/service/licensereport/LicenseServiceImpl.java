@@ -34,7 +34,7 @@ public class LicenseServiceImpl {
 
     @Autowired
     private LicenseToWellsRepository licenseToWellsRepository;
-    
+
     public List<License> findAll() {
         return licenseRepository.findAll();
     }

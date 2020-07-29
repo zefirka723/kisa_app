@@ -29,13 +29,14 @@
                <td>
                    <input type="hidden" th:attr="data-name=${namePrefix + '.id'}"/>
 
-                   <input class="form-control"
+                   <!--input class="form-control"
                           style="!important; width: 120px !important; min-width: 120px;" type="text"
                           step="any"
                           th:attr="data-name=${namePrefix + '.date'}"
                           placeholder="ДД.ММ.ГГГГ"
                           pattern="\d{2}\.\d{2}\.\d{4}"
-                    />
+                    /-->
+                    <input class="form-control" style="width: 151px;" type="date" th:attr="data-name=${namePrefix + '.date'}">
                </td>
 
                <td>
@@ -62,13 +63,20 @@
                <td>
                    <input type="hidden" th:name="${namePrefix + '.id'}" th:value="${oneDepth.id}"/>
 
-                   <input class="form-control"
+                   <!--input class="form-control"
                           style="!important; width: 80px !important; min-width: 120px;" type="text"
                           title="ДД.ММ.ГГГГ" pattern="\d{2}\.\d{2}\.\d{4}"
                           th:name="${namePrefix + '.date'}"
                           th:value="${#dates.format(oneDepth.date, 'dd.MM.yyyy')}"
                           placeholder="Дата"
-                          required/>
+                          required/-->
+
+                      <input class="form-control" style="width: 151px;"
+                        type="date"
+                        th:name="${namePrefix + '.date'}"
+                        th:value="${#dates.format(oneDepth.date, 'yyyy-MM-dd')}"
+                        required/>
+
                </td>
 
                <td>
