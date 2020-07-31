@@ -83,6 +83,10 @@ public class DocumentServiceImpl implements DocumentService {
         return employeesRepository.findAllByOrderByNameAsc();
     }
 
+    public List<Employees> getRegistrators() {
+        return employeesRepository.findAllByIsRegistratorTrueOrderByNameAsc();
+    }
+
     @Override
     public List<OrganizationSource> getAllOrganizationSource() {
         return organizationSourceRepository.findAll();
