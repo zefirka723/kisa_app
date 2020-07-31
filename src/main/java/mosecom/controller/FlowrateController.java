@@ -45,7 +45,7 @@ public class FlowrateController {
         flowrate.setMeasurement(Measurement.M3DAY);
         flowrateWrapper.setFlowrates(new ArrayList<>());
         flowrateWrapper.getFlowrates().add(flowrate);
-        result.addObject("measurements", new Measurement[]{Measurement.TM3DAY, Measurement.M3HOUR, Measurement.LSEK, Measurement.M3MONTH});
+        result.addObject("measurements", new Measurement[]{Measurement.M3MONTH, Measurement.TM3DAY, Measurement.M3HOUR, Measurement.LSEK});
         result.addObject("flowrateWrapper", flowrateWrapper);
         result.addObject("periods", periodRepository.findAll());
         return result;

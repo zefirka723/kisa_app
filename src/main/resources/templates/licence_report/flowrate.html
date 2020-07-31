@@ -47,12 +47,13 @@
      <form th:action="'/flowrate/submit'" th:object="${flowrateWrapper}" method="post">
 
         <div class="col-sm-8 text-left">
+        <div><a th:href="@{'/reports/' + ${flowrateWrapper.reportDocId}}"><- Назад к отчёту</a></div>
 
         <input type="hidden" name="reportDocId" th:value="${flowrateWrapper.reportDocId}"/>
         <input type="hidden" name="wellId" th:value="${flowrateWrapper.wellId}"/>
 
             <div id="card-info">
-            <h3>Водоотбор</h3>
+            <h3 th:text="${'Водоотбор по скважине ' + flowrateWrapper.wellId}"></h3>
 
             <div id="measurementFields">
                                 <table id="measurementflowratetable" class="table table-striped table-bordered table-hover">
@@ -90,7 +91,8 @@
                                                     th:attr="data-name=${namePrefix + '.periodId'}">
                                                 <option style="!important; max-width: 300px" th:each="period : ${periods}"
                                                         th:value="${period.id}"
-                                                        th:text="${period.name}"/>
+                                                        th:text="${period.name}"
+                                                        th:selected="${period.name == 'среднемес.'}"/>
                                             </select>
                                         </td>
 
@@ -135,7 +137,8 @@
                                             <select style="!important; max-width: 300px" th:name="${namePrefix + '.periodId'}">
                                                 <option style="!important; max-width: 300px" th:each="period : ${periods}"
                                                         th:value="${period.id}"
-                                                        th:text="${period.name}"/>
+                                                        th:text="${period.name}"
+                                                        th:selected="${period.name == 'среднемес.'}"/>
                                             </select>
                                         </td>
 
