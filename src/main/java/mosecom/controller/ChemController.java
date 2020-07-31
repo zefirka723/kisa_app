@@ -41,7 +41,7 @@ public class ChemController {
 
     // создание новой химии по шаблону
     @RequestMapping(value = "/report-edit/chem/{reportId}", method = RequestMethod.GET)
-    public ModelAndView createChem(@PathVariable String reportId,
+    public ModelAndView createChem(@PathVariable Integer reportId,
                                    @RequestParam(name = "wellId") int wellId,
                                    @RequestParam(name = "templateId") int templateId,
                                    @RequestParam(name = "date") String date) throws ParseException {
@@ -56,7 +56,8 @@ public class ChemController {
 
     @RequestMapping(value = "/chem-submit", method = RequestMethod.POST)
     public String submitTemplate(@ModelAttribute ChemWrapper wrapper,
-                                 @RequestParam String reportId) {
+                                 @RequestParam Integer reportId) {
+        wrapper.setReportDocId(reportId);
         chemService.save(wrapper);
         return "redirect:report-edit/chem/" + reportId + "/" + wrapper.getWellId();
 
