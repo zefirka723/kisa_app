@@ -33,7 +33,7 @@ public class TemplateServiceImpl {
         return laboratoryRepository.findAll();
     }
 
-    public List<ChemComponent> findComponentList() { return componentRepository.findAll(); }
+    public List<ChemComponent> findComponentList() { return componentRepository.findAllByOrderByNameAsc(); }
 
     public List<ChemTemplateInfo> findTemplateInfoList() {
         return templateInfoRepository.findAll();
