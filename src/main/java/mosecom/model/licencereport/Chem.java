@@ -34,6 +34,9 @@ public class Chem implements Serializable {
     @Column(name = "Template_ID")
     private int templateId;
 
+    @Column(name = "Doc_ID")
+    private int reportDocId;
+
     @Transient
     private boolean tooLow;
 
