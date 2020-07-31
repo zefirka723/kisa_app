@@ -53,7 +53,7 @@
         <input type="hidden" name="wellId" th:value="${waterDepthWrapper.wellId}"/>
 
             <div id="card-info">
-            <h3>Уровни ПВ</h3>
+            <h3 th:text="${'Уровни ПВ скважины ' + waterDepthWrapper.wellId}"></h3>
 
             <div id="measurementFields">
                                 <table id="measurementwaterdepthtable" class="table table-striped table-bordered table-hover">
