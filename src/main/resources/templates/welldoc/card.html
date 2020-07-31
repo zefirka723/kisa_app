@@ -38,6 +38,8 @@
 <div class="container-fluid text-center">
     <div class="row content">
         <div class="col-sm-8 text-left">
+        <div><a th:href="@{'/registrations?docType=' + ${docType} + '&state=0'}"><- Назад к списку</a></div>
+
             <form th:action="'/welldoc/submit'" th:object="${well}"
                   method="post" enctype="multipart/form-data">
 
