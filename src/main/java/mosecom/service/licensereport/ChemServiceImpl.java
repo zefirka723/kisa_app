@@ -83,6 +83,7 @@ public class ChemServiceImpl {
                 chem.setDataSource(1);
                 chem.setTemplateId(chemWrapper.getTemplateId());
                 chem.setValue(chem.isTooLow() ? null : chem.getValue());
+                chem.setReportDocId(chemWrapper.getReportDocId());
                 chemRepository.save(chem);
             }
             else {
