@@ -7,6 +7,7 @@ import mosecom.dao.licensereport.LicenseReportRepository;
 import mosecom.dictionaries.DocTypes;
 import mosecom.model.Attachment;
 import mosecom.model.licencereport.LicenseReport;
+import mosecom.service.AttachmentServiceImpl;
 import mosecom.utils.DateFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,8 +31,11 @@ public class LicenseReportServiceImpl {
     @Autowired
     private LicenseReportRepository licenseReportRepository;
 
+//    @Autowired
+//    private AttachmentRepository attachmentRepository;
+
     @Autowired
-    private AttachmentRepository attachmentRepository;
+    private AttachmentServiceImpl attachmentService;
 
     @Autowired
     private DocumentTypeRepository documentTypeRepository;
@@ -48,7 +52,7 @@ public class LicenseReportServiceImpl {
 
     public LicenseReport findReportById(int id) {
         LicenseReport report = licenseReportRepository.getOne(id);
-        report.setAttachments(attachmentRepository.findAllByFileSetId(report.getFileSetId()));
+        report.setAttachments(attachmentService.findAllByFileSetId(report.getFileSetId()));
         return report;
     }
 
@@ -57,7 +61,7 @@ public class LicenseReportServiceImpl {
     }
 
     public LicenseReport save(LicenseReport licenseReport) {
-        licenseReport.setFileSetId(attachmentRepository.getNextFileSetId());
+        licenseReport.setFileSetId(attachmentService.getNextFileSetId());
         return licenseReportRepository.save(licenseReport);
     }
 
@@ -67,17 +71,17 @@ public class LicenseReportServiceImpl {
         reportForSave.setComments(licenseReport.getComments());
 
         if (licenseReport.getAttachments() == null) {
-            if (attachmentRepository.findAllByFileSetId(reportForSave.getFileSetId()) != null) {
-                for (Attachment a: attachmentRepository.findAllByFileSetId(reportForSave.getFileSetId())) {
-                    attachmentRepository.delete(a);
+            if (attachmentService.findAllByFileSetId(reportForSave.getFileSetId()) != null) {
+                for (Attachment a: attachmentService.findAllByFileSetId(reportForSave.getFileSetId())) {
+                    attachmentService.delete(a);
                 }
             }
         }
         else {
             Set<Integer> keepDocumentsIds = licenseReport.getAttachments().stream().map(d -> d.getId()).collect(Collectors.toSet());
-            for (Attachment a : attachmentRepository.findAllByFileSetId(reportForSave.getFileSetId())) {
+            for (Attachment a : attachmentService.findAllByFileSetId(reportForSave.getFileSetId())) {
                 if (!keepDocumentsIds.contains(a.getId())) {
-                    attachmentRepository.delete(a);
+                    attachmentService.delete(a);
                 }
             }
         }
@@ -118,7 +122,7 @@ public class LicenseReportServiceImpl {
                     attachment.setFileSize(file.getSize());
                     //attachment.setDocId(docType.getId());
                     attachment.setFileSetId(reportForSave.getFileSetId());
-                    attachmentRepository.save(attachment);
+                    attachmentService.save(attachment);
                     //well.getAttachments().add(attachment);
                 }
             }
