@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mosecom.model.Attachment;
 import mosecom.model.MovedType;
 import mosecom.model.licencereport.WaterDepth;
 import sun.security.krb5.internal.crypto.Des;
@@ -35,6 +36,8 @@ public class WellFullProjection extends WellProjection {
     private DescriptionProjection description;
 
     private List<WaterDepth> depthsList;
+
+    private List<Attachment> attachments;
 
 //	private int docType;
     //	private WellsDocProjection wellDoc;

@@ -4,6 +4,7 @@ import mosecom.dao.*;
 import mosecom.dictionaries.DocTypes;
 import mosecom.dto.*;
 import mosecom.model.*;
+import mosecom.service.AttachmentServiceImpl;
 import mosecom.service.licensereport.WaterDepthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +25,11 @@ public class WellServiceImpl implements WellService {
     @Autowired
     private WellRepository wellRepository;
 
+//    @Autowired
+//    private AttachmentRepository attachmentRepository;
+
     @Autowired
-    private AttachmentRepository attachmentRepository;
+    private AttachmentServiceImpl attachmentService;
 
     @Autowired
     private ConstructionTypeRepository constructionTypeRepository;
@@ -187,12 +191,20 @@ public class WellServiceImpl implements WellService {
 
 
         // удаляем все удаленные из интерфейса файлы
-        if (dto.getDocuments() == null) {
+        //if (dto.getDocuments() == null) {
+        if(dto.getAttachments() == null) {
             if (well.getAttachments() != null) {
+                well.getAttachments().stream().forEach(a -> attachmentService.delete(a));
                 well.getAttachments().clear();
             }
         } else {
-            Set<Integer> keepDocumentsIds = dto.getDocuments().stream().map(d -> d.getId()).collect(Collectors.toSet());
+            Set<Integer> keepDocumentsIds = dto.getAttachments().stream().map(d -> d.getId()).collect(Collectors.toSet());
+
+            for (Attachment a: well.getAttachments()) {
+                if (!keepDocumentsIds.contains(a.getId())) {
+                    attachmentService.delete(a);
+                }
+            }
             well.getAttachments().removeIf(d -> !keepDocumentsIds.contains(d.getId()));
         }
 
@@ -277,14 +289,13 @@ public class WellServiceImpl implements WellService {
 
         wellRepository.save(well);
         return well;
-    }
+}
 
 
     private WellssStressTest convertStressTests(Well well, WellsStressTestProjection dto) {
         if (dto.getId() == null && dto.getDepression() == null) {
             return null;
-        }
-        else {
+        } else {
             WellssStressTest stressTest = new WellssStressTest();
             stressTest.setId(dto.getId());
             stressTest.setWell(well);
@@ -297,10 +308,9 @@ public class WellServiceImpl implements WellService {
     }
 
     private WellsConstruction convertWellConstruction(Well well, WellsConstructionProjection dto) {
-        if(dto.getId() == null && dto.getDepthFrom() == null) {
+        if (dto.getId() == null && dto.getDepthFrom() == null) {
             return null;
-        }
-        else {
+        } else {
             WellsConstruction construction = new WellsConstruction();
             construction.setId(dto.getId());
             construction.setWell(well);
@@ -312,12 +322,10 @@ public class WellServiceImpl implements WellService {
         }
     }
 
-
     private WellsGeology convertWellGeology(Well well, WellsGeologyProjection dto) {
         if (dto.getId() == null && dto.getHorisontId() == null) {
             return null;
-        }
-        else {
+        } else {
             WellsGeology geology = new WellsGeology();
             geology.setId(dto.getId());
             geology.setWell(well);
@@ -330,6 +338,6 @@ public class WellServiceImpl implements WellService {
 
     @Override
     public Attachment getWellDocument(int id) {
-        return attachmentRepository.getOne(id);
+        return attachmentService.getOne(id);
     }
 }
