@@ -127,9 +127,10 @@
 
             <br>
 
+            <div>
             <a data-toggle="collapse" data-target="#conditionHistory" aria-expanded="false">
                             История изменения состояния
-                        </a>
+             </a>
                 <div id="conditionHistory">
                     <table id="inspTable" class="table table-hover">
                         <thead class="thead-dark">
@@ -148,22 +149,36 @@
                         </tr>
                         </tbody>
                     </table>
-                    </div>
+                 </div>
+            </div>
 
 
     <h3>Акт тампонажа</h3>
 
-                <div class="form-group" th:if="${act.getAttachment()} != null">
+                <div class="form-group" th:if="${act.getAttachments()} != null">
                 <table>
-                    <tr>
+                    <tr><label>Файлы</label></tr>
+                    <tr th:each="document, stat : ${act.attachments}"
+                                    th:with="namePrefix=${'attachments[' + stat.index + ']'}"
+                                    th:attr="data-index=${stat.index}">
                         <td>
-                            <a th:href="${'/file/' + act.attachment.id}" th:text="${'Акт тампонажа от ' + {#dates.format(act.date, 'dd.MM.yyyy')}}"></a>
+                            <input type="hidden" th:name="${namePrefix + '.id'}" th:value="${document.id}"/>
+                            <a th:href="${'/file/' + document.id}" th:text="${document.fileName}"></a>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td>
+                        <br>
+                            <a th:href="${'/plugging/' + conditionWrapper.wellId + '/' + conditionWrapper.reportDocId}"
+                                                    th:text="${'Редактировать акт тампонажа'}"></a>
+                        </td>
+                    </tr>
+
                 </table>
                 </div>
 
-                <div class="form-group" th:if="${act.getAttachment()} == null">
+                <div class="form-group" th:if="${act.getAttachments()} == null">
                 <table>
                     <tr>
                         <td>

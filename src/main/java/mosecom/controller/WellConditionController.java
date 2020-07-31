@@ -52,7 +52,7 @@ public class WellConditionController {
         }
         else {
             act = pluggingActService.findOneByWellId(wellId);
-            act.setAttachment(attachmentService.findOneByFileSetId(act.getFileSetId()));
+            act.setAttachments(attachmentService.findAllByFileSetId(act.getFileSetId())); // edited
         }
         result.addObject("conditionWrapper", conditionWrapper);
         result.addObject("act", act);
