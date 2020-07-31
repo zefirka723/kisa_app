@@ -36,8 +36,11 @@ public class PluggingAct implements Serializable {
     @Column(name = "Report_Doc_ID")
     private Integer reportDocId;
 
+//    @Transient
+//    private Attachment attachment;
+
     @Transient
-    private Attachment attachment;
+    private List<Attachment> attachments;
 
     @Transient
     private DocTypes docType;

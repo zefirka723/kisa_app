@@ -38,8 +38,11 @@ public class PluggingActController {
         }
         else {
             act = pluggingActService.findOneByWellId(wellId);
-            Attachment attachment = attachmentService.findOneByFileSetId(act.getFileSetId());
-            act.setLink("/file/" + attachment.getId());
+//            Attachment attachment = attachmentService.findOneByFileSetId(act.getFileSetId());
+//            act.setLink("/file/" + attachment.getId());
+            if (act.getFileSetId() != null) {
+                act.setAttachments(attachmentService.findAllByFileSetId(act.getFileSetId()));
+            }
         }
 
         if(reportDocId != 0) {
@@ -54,8 +57,8 @@ public class PluggingActController {
 
     @RequestMapping(value = "/plugging/submit")
     public String saveFlowrates(@ModelAttribute PluggingAct act,
-                                @RequestParam(value = "files", required = false) MultipartFile[] files) throws ParseException, IOException {
-        pluggingActService.save(act, files);
+                                @RequestParam(value = "file", required = false) MultipartFile[] file) throws ParseException, IOException {
+        pluggingActService.save(act, file);
         if(act.getReportDocId() == null) {
             return "redirect:/registrations?docType=" + act.getDocType();
         }

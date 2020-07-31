@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -21,8 +22,11 @@ public class PluggingActServiceImpl {
     @Autowired
     PluggingActRepository pluggingActRepository;
 
+//    @Autowired
+//    AttachmentRepository attachmentRepository;
+
     @Autowired
-    AttachmentRepository attachmentRepository;
+    AttachmentServiceImpl attachmentService;
 
 
 
@@ -34,13 +38,24 @@ public class PluggingActServiceImpl {
                      MultipartFile[] files) throws IllegalStateException, IOException {
 
         // удаляем все удаленные из интерфейса файлы
-//        if (act.getAttachment() != null) {
-//            Set<Integer> keepDocumentsIds = act.getAttachment().stream().map(d -> d.getId()).collect(Collectors.toSet());
-//            List<Attachment> attachmentsFromDB = attachmentRepository.findAllByFileSetId(act.getFileSetId());
-//
-//            attachmentsFromDB.removeIf(d -> keepDocumentsIds.contains(d.getId()));
-//            attachmentsFromDB.stream().forEach(a -> attachmentRepository.delete(a));
-//        }
+
+        if(act.getFileSetId() != null) {
+            if (act.getAttachments() == null) {
+                if (attachmentService.findAllByFileSetId(act.getFileSetId()) != null) {
+                    for (Attachment a : attachmentService.findAllByFileSetId(act.getFileSetId())) {
+                        attachmentService.delete(a);
+                    }
+                }
+            } else {
+                Set<Integer> keepDocumentsIds = act.getAttachments().stream().map(d -> d.getId()).collect(Collectors.toSet());
+                List<Attachment> attachmentsFromDB = attachmentService.findAllByFileSetId(act.getFileSetId());
+
+                attachmentsFromDB.removeIf(d -> keepDocumentsIds.contains(d.getId()));
+                attachmentsFromDB.stream().forEach(a -> {
+                    attachmentService.delete(a);
+                });
+            }
+        }
 
         // новые файлы
         if (files != null) {
@@ -48,7 +63,7 @@ public class PluggingActServiceImpl {
                 if (!file.isEmpty()) {
 
                     if (act.getFileSetId() == null) {
-                        act.setFileSetId(attachmentRepository.getNextFileSetId());
+                        act.setFileSetId(attachmentService.getNextFileSetId());
                     }
                     pluggingActRepository.save(act);
 
@@ -70,7 +85,7 @@ public class PluggingActServiceImpl {
                     attachment.setFileName(file.getOriginalFilename());
                     attachment.setFilePath(uploadDir + "/");
                     attachment.setFileSize(file.getSize());
-                    attachmentRepository.save(attachment);
+                    attachmentService.save(attachment);
                 }
             }
         }
