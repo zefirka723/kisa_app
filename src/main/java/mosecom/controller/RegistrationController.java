@@ -100,7 +100,7 @@ public class RegistrationController {
         result.addObject("globalDocType", docType);
         result.addObject("item", item);
         result.addObject("document", document);
-        result.addObject("employees", documentService.getAllEmployees());
+        result.addObject("employees", documentService.getRegistrators());
         result.addObject("organizationSource", documentService.getAllOrganizationSource());
         result.addObject("status", documentService.getAllRegStatus());
         result.addObject("secrecy", documentService.getAllSecrecy());

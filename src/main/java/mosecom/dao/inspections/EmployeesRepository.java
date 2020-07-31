@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface EmployeesRepository extends JpaRepository<Employees, Integer> {
     List<Employees> findAllByOrderByNameAsc();
+
+    List<Employees> findAllByIsRegistratorTrueOrderByNameAsc();
 }
 

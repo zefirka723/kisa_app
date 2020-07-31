@@ -19,4 +19,7 @@ public class Employees implements Serializable {
 
     @Column(name = "Name")
     private String name;
+
+    @Column(name = "registration")
+    private boolean isRegistrator;
 }
