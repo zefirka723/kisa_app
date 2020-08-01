@@ -48,6 +48,10 @@ a:focus {
     white-space: nowrap;
 }
 
+.third-level-menu  {
+    margin-left: 20px;
+}
+
 #sidebar {
     width: 250px;
     position: fixed;

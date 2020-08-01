@@ -192,10 +192,13 @@
                     <th>ID документа</th>
                     <!--th>ID ПН</th-->
                     <th>
-                        <div th:text="${docType.getId() != 4004 ? 'ID ПН' : 'Номер лицензии'}"/>
+                        <div th:text="${docType.getId() != 4004 ? (docType.getId() != 10000 ?'ID ПН' : 'Имя документа') : 'Номер лицензии'}"/>
                     </th>
                     <th th:if="${docType.getId() == 4004}">
                         Тип отчёта
+                    </th>
+                    <th th:if="${docType.getId() == 10000}">
+                        Тип документа
                     </th>
                     <th>Дата документа</th>
                     <th>Рег. номер</th>
@@ -208,7 +211,7 @@
                 <tr th:attr="data-document-id=${item.id}" th:each="item : ${items}">
                     <td th:text="${item.id}"/>
                     <td th:text="${item.observationPointId}"/>
-                    <td th:if="${docType.getId() == 4004}">
+                    <td th:if="${docType.getId() == 4004 || docType.getId() == 10000}">
                         <div th:text="${item.comments}"/>
                     </td>
                     <!--td th:text=" ${#dates.format(item.date, 'dd.MM.yyyy')}"/-->
