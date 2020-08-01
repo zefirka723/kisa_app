@@ -43,6 +43,11 @@ a:focus {
     width: 100%;
 }
 
+.scrollable-block {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
 #sidebar {
     width: 250px;
     position: fixed;
