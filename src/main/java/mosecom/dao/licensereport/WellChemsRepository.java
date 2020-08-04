@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface WellChemsRepository extends JpaRepository<WellChems, Integer> {
-    public List<WellChems> findAllByWellId(Integer wellId);
+    List<WellChems> findAllByWellId(Integer wellId);
 
 
 }

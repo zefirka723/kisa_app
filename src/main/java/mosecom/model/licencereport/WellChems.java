@@ -13,6 +13,9 @@ import java.util.Date;
 public class WellChems implements Serializable {
 
     @Id
+    @Column(name = "ID")
+    private int id;
+
     @Column(name = "Well_ID")
     private Integer wellId;
 
