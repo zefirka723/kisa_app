@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- для таблицы -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!--script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script-->
+
+
+    <script src="/js/dataTables.js"></script>
+    <script src="/js/filteringTable.js"></script>
+    <script src="/js/fixedHeader.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+
+
+
+    <title>Документы</title>
+</head>
+<body>
+<div class="wrapper">
+
+    <!-- Page Content  -->
+    <div id="content">
+
+        <h1>Первичная документация</h1>
+
+        <!-- Строка над таблицей с фильтром и кнопками -->
+        <div class="d-flex py-2">
+        <!-- Строка над таблицей с фильтром и кнопками -->
+
+
+
+        </div>
+
+        <!-- Таблица списка документов -->
+        <div>
+            <table class="display" style="width:100%" id="tableForFiltering">
+                <thead class="thead-dark">
+
+                <tr>
+                    <th>Рег. статус</th>
+                    <th>Рег. номер в фонде</th>
+                    <th>Дата регистрации</th>
+                    <th>ФИО регистратора</th>
+                    <th>Источник поступления</th>
+                    <th>Тип ПН</th>
+                    <th>Номер/название ПН</th>
+                    <th>Тип документа</th>
+                    <th>Дата составления документа</th>
+                    <th>Кол-во страниц</th>
+                    <th>Гриф</th>
+                    <th>Ссылка на файл</th>
+                    <th>Место хранения</th>
+                    <th>Примечания</th>
+                    <th>Doc_ID</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:attr="data-document-id=${doc.id}" th:each="doc : ${primaryDocs}">
+                    <td th:text="${doc.regStatus}"/>
+                    <td th:text="${doc.regNumber}"/>
+                    <td th:text=" ${doc.dateProcessing}"/>
+                    <td th:text="${doc.name}"/>
+                    <td th:text="${doc.organizationSource}"/>
+                    <td th:text="${doc.typeObserv}"/>
+                    <td th:text="${doc.observId}"/>
+                    <td th:text="${doc.docType}"/>
+                    <td th:text=" ${doc.datePrepare}"/>
+                    <td th:text="${doc.pages}"/>
+                    <td th:text="${doc.neckSecrecy}"/>
+                    <td th:text="${doc.Link}"/>
+                    <td th:text="${doc.storage}"/>
+                    <td th:text="${doc.comments}"/>
+                    <td th:text="${doc.id}"/>
+                </tr>
+                </tbody>
+                <tfoot>
+                    <th>Рег. статус</th>
+                    <th>Рег. номер в фонде</th>
+                    <th>Дата регистрации</th>
+                    <th>ФИО регистратора</th>
+                    <th>Источник поступления</th>
+                    <th>Тип ПН</th>
+                    <th>Номер/название ПН</th>
+                    <th>Тип документа</th>
+                    <th>Дата составления документа</th>
+                    <th>Кол-во страниц</th>
+                    <th>Гриф</th>
+                    <th>Ссылка на файл</th>
+                    <th>Место хранения</th>
+                    <th>Примечания</th>
+                    <th>Doc_ID</th>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+</div> <!-- закрыл wrapper -->
+
+
+
+
+</body>
+</html>
