@@ -1,44 +1,39 @@
 package mosecom.controller.catalog;
 
-import mosecom.dao.catalog.PrimaryDocRepository;
-import mosecom.model.catalog.PrimaryDoc;
+import mosecom.model.catalog.LicenseDoc;
+import mosecom.model.catalog.ProtocolDoc;
 import mosecom.service.UserService;
-import mosecom.service.catalog.PrimaryDocServiceImpl;
+import mosecom.service.catalog.LicenseDocServiceImpl;
+import mosecom.service.catalog.ProtocolDocServiceImpl;
 import mosecom.utils.DateFormatter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.List;
 
 import static mosecom.utils.ExcelGenerator.createStyleForTitle;
 
 @Controller
 //@RequestMapping("/primary")
-public class PrimaryDocController {
+public class ProtocolDocController {
 
     @Autowired
-    PrimaryDocServiceImpl primaryDocService;
+    ProtocolDocServiceImpl docService;
 
     @Autowired
     UserService userService;
@@ -46,49 +41,48 @@ public class PrimaryDocController {
     @Value("${upload.path}" + "CATALOG_REPORTS_TEMP/")
     private String uploadPath;
 
-//    @RequestMapping(value = "/")
-//    public ModelAndView primaryDocList() {
-//
-//        ModelAndView result = new ModelAndView("catalog/primary");
-//        result.addObject("primaryDocs", primaryDocService.findAll());
-//        return result;
-//    }
-
-    @GetMapping("/primary")
+    @GetMapping("/protocol-doc")
     public String getFiltered(Model model,
                               @RequestParam(name = "idFromField", required = false) String idFromField,
                               @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                               @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                               @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
-                              @RequestParam(name = "typeObservFromField", required = false) String typeObservFromField,
-                              @RequestParam(name = "observIdFromField", required = false) String observIdFromField,
-                              @RequestParam(name = "docTypeFromField", required = false) String docTypeFromField,
-                              @RequestParam(name = "datePrepareFromField", required = false) String datePrepareFromField,
+                              @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
+                              @RequestParam(name = "instanceFromField", required = false) String instanceFromField,
+                              @RequestParam(name = "numberFromField", required = false) String numberFromField,
+                              @RequestParam(name = "dateFromField", required = false) String dateFromField,
+                              @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
+                              @RequestParam(name = "fieldGeneralNameFromField", required = false) String fieldGeneralNameFromField,
+                              @RequestParam(name = "fieldNameFromField", required = false) String fieldNameFromField,
+
                               @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
                               @RequestParam(name = "itemsByPage", required = false, defaultValue = "25" ) Integer itemsByPage) throws ParseException {
-
 
         if (page < 1) {
             page = 1;
         }
 
-        Page<PrimaryDoc> primaryDocs = primaryDocService
-                .findAllByPagingAndFiltering(primaryDocService.getSpec(
+        Page<ProtocolDoc> docs = docService
+                .findAllByPagingAndFiltering(docService.getSpec(
                         idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
                                                                        regStatusFromField,
                                                                        regNumberFromField,
                         dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-                                                                       typeObservFromField,
-                                                                       observIdFromField,
-                                                                       docTypeFromField,
-                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null),
+                        subjectFromField,
+                        instanceFromField,
+                        numberFromField,
+                        dateFromField,
+                        licenseNumberFromField,
+                        fieldGeneralNameFromField,
+                        fieldNameFromField),
                         PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
 
-        // скрываем ссылки ДСП и секретных доков
+        // для проверки доступности доков
         Boolean userDspAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
 
-        for (PrimaryDoc p: primaryDocs) {
+        // обрезаем коммент и прячем секретные ссылки
+        for (ProtocolDoc p: docs) {
             if (p.getNeckSecrecy() != null) {
                 if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
                     p.setLink("нет доступа");
@@ -100,72 +94,68 @@ public class PrimaryDocController {
             }
         }
 
-        model.addAttribute("primaryDocs", primaryDocs);
+        model.addAttribute("docs", docs);
         model.addAttribute("page", page);
         model.addAttribute("itemsByPage", itemsByPage);
-        model.addAttribute("filtresString", primaryDocService.getFiltresString(
+        model.addAttribute("filtresString", docService.getFiltresString(
                 idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
-                                                                                        regStatusFromField,
-                                                                                        regNumberFromField,
-                datePrepareFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-                                                                                        typeObservFromField,
-                                                                                        observIdFromField,
-                                                                                        docTypeFromField,
-                datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null));
+                regStatusFromField,
+                regNumberFromField,
+                dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                subjectFromField,
+                instanceFromField,
+                numberFromField,
+                dateFromField,
+                licenseNumberFromField,
+                fieldGeneralNameFromField,
+                fieldNameFromField));
         model.addAttribute("idFromField", idFromField);
         model.addAttribute("regStatusFromField", regStatusFromField);
         model.addAttribute("regNumberFromField", regNumberFromField);
         model.addAttribute("dateProcessingFromField", dateProcessingFromField);
-        model.addAttribute("typeObservFromField", typeObservFromField);
-        model.addAttribute("observIdFromField", observIdFromField);
-        model.addAttribute("docTypeFromField", docTypeFromField);
-        model.addAttribute("datePrepareFromField", datePrepareFromField);
-        return "catalog/primary-table";
+        model.addAttribute("subjectFromField", subjectFromField);
+        model.addAttribute("instanceFromField", instanceFromField);
+        model.addAttribute("numberFromField", numberFromField);
+        model.addAttribute("dateFromField", dateFromField);
+        model.addAttribute("licenseNumberFromField", licenseNumberFromField);
+        model.addAttribute("fieldGeneralNameFromField", fieldGeneralNameFromField);
+        model.addAttribute("fieldNameFromField", fieldNameFromField);
+        return "catalog/protocol-doc-table";
     }
 
-    @GetMapping("/primary-excel")public String createFile(Model model,
-                                           @RequestParam(name = "idFromField", required = false) String idFromField,
-                                           @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
-                                           @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
-                                           @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
-                                           @RequestParam(name = "typeObservFromField", required = false) String typeObservFromField,
-                                           @RequestParam(name = "observIdFromField", required = false) String observIdFromField,
-                                           @RequestParam(name = "docTypeFromField", required = false) String docTypeFromField,
-                                           @RequestParam(name = "datePrepareFromField", required = false) String datePrepareFromField//,
-//                                           @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-//                                           @RequestParam(name = "itemsByPage", required = false, defaultValue = "25") Integer itemsByPage
+    @GetMapping("/protocol-doc-excel")public String createFile(Model model,
+                                                               @RequestParam(name = "idFromField", required = false) String idFromField,
+                                                               @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
+                                                               @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
+                                                               @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                                                               @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
+                                                               @RequestParam(name = "instanceFromField", required = false) String instanceFromField,
+                                                               @RequestParam(name = "numberFromField", required = false) String numberFromField,
+                                                               @RequestParam(name = "dateFromField", required = false) String dateFromField,
+                                                               @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
+                                                               @RequestParam(name = "fieldGeneralNameFromField", required = false) String fieldGeneralNameFromField,
+                                                               @RequestParam(name = "fieldNameFromField", required = false) String fieldNameFromField
                                             ) throws ParseException, IOException {
 
-        //itemsByPage = primaryDocService.getCount();
-
-//        Page<PrimaryDoc> primaryDocs = primaryDocService
-//                .findAllByPagingAndFiltering(primaryDocService.getSpec(
-//                        idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
-//                        regStatusFromField,
-//                        regNumberFromField,
-//                        dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-//                        typeObservFromField,
-//                        observIdFromField,
-//                        docTypeFromField,
-//                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null),
-//                        PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
-
-        List<PrimaryDoc> primaryDocs = primaryDocService
-                .findAllByFiltering(primaryDocService.getSpec(
+        List<ProtocolDoc> docs = docService
+                .findAllByFiltering(docService.getSpec(
                         idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
                         regStatusFromField,
                         regNumberFromField,
                         dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-                        typeObservFromField,
-                        observIdFromField,
-                        docTypeFromField,
-                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null));
+                        subjectFromField,
+                        instanceFromField,
+                        numberFromField,
+                        dateFromField,
+                        licenseNumberFromField,
+                        fieldGeneralNameFromField,
+                        fieldNameFromField));
 
 
         // скрываем ссылки ДСП и секретных доков
         Boolean userDspAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
-        for (PrimaryDoc p: primaryDocs) {
+        for (ProtocolDoc p: docs) {
             if (p.getNeckSecrecy() != null) {
                 if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
                     p.setLink("нет доступа");
@@ -178,7 +168,7 @@ public class PrimaryDocController {
         }
 
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Primary docs");
+        HSSFSheet sheet = workbook.createSheet("Protocol docs");
 
         int rownum = 0;
         Cell cell;
@@ -223,44 +213,54 @@ public class PrimaryDocController {
         cell.setCellStyle(style);
 
         cell = row.createCell(6, CellType.STRING);
-        cell.setCellValue("Тип ПН");
+        cell.setCellValue("Предмет рассмотрения");
         cell.setCellStyle(style);
 
         cell = row.createCell(7, CellType.STRING);
-        cell.setCellValue("Номер/название ПН");
+        cell.setCellValue("Инстанция утверждения");
         cell.setCellStyle(style);
 
         cell = row.createCell(8, CellType.STRING);
-        cell.setCellValue("Тип документа");
+        cell.setCellValue("№ протокола");
         cell.setCellStyle(style);
 
         cell = row.createCell(9, CellType.STRING);
-        cell.setCellValue("Дата составления документа");
+        cell.setCellValue("Дата утверждения");
         cell.setCellStyle(style);
 
         cell = row.createCell(10, CellType.STRING);
-        cell.setCellValue("Кол-во страниц");
-        cell.setCellStyle(style);
+        cell.setCellValue("Лицензия");
 
         cell = row.createCell(11, CellType.STRING);
-        cell.setCellValue("Гриф");
+        cell.setCellValue("Месторождение");
         cell.setCellStyle(style);
 
         cell = row.createCell(12, CellType.STRING);
-        cell.setCellValue("Ссылка на файл");
+        cell.setCellValue("Участок месторождения");
         cell.setCellStyle(style);
 
         cell = row.createCell(13, CellType.STRING);
-        cell.setCellValue("Место хранения");
+        cell.setCellValue("Кол-во страниц");
         cell.setCellStyle(style);
 
         cell = row.createCell(14, CellType.STRING);
+        cell.setCellValue("Гриф");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(15, CellType.STRING);
+        cell.setCellValue("Место хранения");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(16, CellType.STRING);
         cell.setCellValue("Примечания");
         cell.setCellStyle(style);
 
+        cell = row.createCell(17, CellType.STRING);
+        cell.setCellValue("Файлы");
+        cell.setCellStyle(style);
 
         // данные
-        for (PrimaryDoc p : primaryDocs) {
+        for (ProtocolDoc p : docs) {
             rownum++;
             row = sheet.createRow(rownum);
 
@@ -279,7 +279,6 @@ public class PrimaryDocController {
                 cell.setCellValue(p.getDateProcessing());
             }
 
-
             cell = row.createCell(4, CellType.STRING);
             cell.setCellValue(p.getName());
 
@@ -287,35 +286,40 @@ public class PrimaryDocController {
             cell.setCellValue(p.getOrganizationSource());
 
             cell = row.createCell(6, CellType.STRING);
-            cell.setCellValue(p.getTypeObserv());
+            cell.setCellValue(p.getSubject());
 
             cell = row.createCell(7, CellType.STRING);
-            cell.setCellValue(p.getObservId());
+            cell.setCellValue(p.getInstance());
 
             cell = row.createCell(8, CellType.STRING);
-            cell.setCellValue(p.getDocType());
+            cell.setCellValue(p.getNumber());
 
             cell = row.createCell(9, CellType.STRING);
-            cell.setCellStyle(cellDateStyle);
-            if (p.getDatePrepare() != null) {
-                cell.setCellValue(p.getDatePrepare());
-            }
+            cell.setCellValue(p.getDate());
 
             cell = row.createCell(10, CellType.STRING);
-            cell.setCellValue(p.getPages());
+            cell.setCellValue(p.getLicenseNumber());
 
             cell = row.createCell(11, CellType.STRING);
-            cell.setCellValue(p.getNeckSecrecy());
+            cell.setCellValue(p.getFieldGeneralName());
 
             cell = row.createCell(12, CellType.STRING);
-            cell.setCellValue(p.getLink());
+            cell.setCellValue(p.getFieldName());
 
             cell = row.createCell(13, CellType.STRING);
-            cell.setCellValue(p.getStorage());
+            cell.setCellValue(p.getPages());
 
             cell = row.createCell(14, CellType.STRING);
-            cell.setCellValue(p.getComments());
+            cell.setCellValue(p.getNeckSecrecy());
 
+            cell = row.createCell(15, CellType.STRING);
+            cell.setCellValue(p.getStorage());
+
+            cell = row.createCell(16, CellType.STRING);
+            cell.setCellValue(p.getComment());
+
+            cell = row.createCell(17, CellType.STRING);
+            cell.setCellValue(p.getLink());
         }
 
         String filePath = uploadPath + userService.getCurrentUserId() + "/Report.xls";
@@ -333,13 +337,5 @@ public class PrimaryDocController {
 
     }
 
-//    @GetMapping(
-//            value = "/primary-file",
-//            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
-//    )
-//    public @ResponseBody
-//    byte[] getFile() throws IOException {
-//        InputStream in = getClass().getResource("D:\\1\\CATALOG_REPORTS_TEMP\\Report.xls").openStream();
-//        return IOUtils.toByteArray(in);
-//    }
+
 }

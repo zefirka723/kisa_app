@@ -100,6 +100,10 @@ public class PrimaryDocServiceImpl {
         return primaryDocRepository.findAll(specification, pageable);
     }
 
+    public List<PrimaryDoc> findAllByFiltering(Specification<PrimaryDoc> specification) {
+        return primaryDocRepository.findAll(specification);
+    }
+
 }
 
 

@@ -74,13 +74,13 @@
             </div>
         </nav>
 
-        <h1>Первичная документация</h1>
+        <h1>Отчёты, карты, архивные материалы</h1>
 
         <!-- Строка над таблицей с фильтром и кнопками -->
         <div class="d-flex py-2">
         <!-- Строка над таблицей с фильтром и кнопками -->
 
-               <form th:action="@{/primary}" method="get">
+               <form th:action="@{/other-doc}" method="get">
 
                <table>
 
@@ -95,36 +95,39 @@
                    </tr>
 
                    <tr>
-                       <td><label>Тип пункта наблюдения
-                            <input class="form-control" th:name="typeObservFromField" th:value="${typeObservFromField}" type="text"></label></td>
-                       <td><label>ID/название ПН
-                            <input class="form-control" th:name="observIdFromField" th:value="${observIdFromField}" type="text"></label></td>
-                       <td><label>Тип документа
+                       <td><label>Тип отчёта
                             <input class="form-control" th:name="docTypeFromField" th:value="${docTypeFromField}" type="text"></label></td>
-                       <td><label>Дата создания
-                            <input class="form-control" th:name="datePrepareFromField" th:value="${datePrepareFromField}" type="date"></label></td>
+                       <td><label>Название отчёта
+                            <input class="form-control" th:name="reportNameFromField" th:value="${reportNameFromField}" type="text"></label></td>
+                       <td><label>Автор
+                            <input class="form-control" th:name="authorFromField" th:value="${authorFromField}" type="text"></label></td>
+                       <td><label>Организация-исполнитель
+                            <input class="form-control" th:name="organizationAuthorFromField" th:value="${organizationAuthorFromField}" type="text"/></label></td>
 
                    </tr>
 
+                   <tr>
+                       <td><label>Год составления
+                            <input class="form-control" th:name="compilationYearFromField" th:value="${compilationYearFromField}" type="number"></label></td>
                    <tr>
 
                         <td>
                            <span style="padding-right: 10px;">Страница: </span>
                            <input th:name="page" th:value="${page}" type="number" style="width: 53px;">
-                           <span style="padding-right: 25px; padding-left: 5px" th:text="' из ' + ${primaryDocs.getTotalPages()}"></span>
+                           <span style="padding-right: 25px; padding-left: 5px" th:text="' из ' + ${docs.getTotalPages()}"></span>
                         </td>
 
                         <td>
-                           <a style="margin-left: 10px" th:href="@{'/primary?page=1' + '&itemsByPage=' + ${itemsByPage} + ${filtresString}}" title="первая страница"><i class="fas fa-angle-double-left"></i></a>
-                           <a style="margin-left: 10px" th:href="@{'/primary?page=' + ${page - 1} + '&itemsByPage=' + ${itemsByPage} + ${filtresString}}" title="предыдущая страница"><i class="fas fa-angle-left"></i></a>
-                           <a style="margin-left: 10px" th:href="@{'/primary?page=' + ${page + 1} + '&itemsByPage=' + ${itemsByPage} + ${filtresString}}" title="следующая страница"><i class="fas fa-angle-right"></i></a>
-                           <a style="margin-left: 10px" th:href="@{'/primary?page=' + ${primaryDocs.getTotalPages()} + '&itemsByPage=' + ${itemsByPage} + ${filtresString}}" title="последняя страница"><i class="fas fa-angle-double-right"></i></a>
+                           <a style="margin-left: 10px" th:href="@{'/other-doc?page=1' + '&itemsByPage=' + ${itemsByPage} + ${filtresString}}" title="первая страница"><i class="fas fa-angle-double-left"></i></a>
+                           <a style="margin-left: 10px" th:href="@{'/other-doc?page=' + ${page - 1} + '&itemsByPage=' + ${itemsByPage} + ${filtresString}}" title="предыдущая страница"><i class="fas fa-angle-left"></i></a>
+                           <a style="margin-left: 10px" th:href="@{'/other-doc?page=' + ${page + 1} + '&itemsByPage=' + ${itemsByPage} + ${filtresString}}" title="следующая страница"><i class="fas fa-angle-right"></i></a>
+                           <a style="margin-left: 10px" th:href="@{'/other-doc?page=' + ${docs.getTotalPages()} + '&itemsByPage=' + ${itemsByPage} + ${filtresString}}" title="последняя страница"><i class="fas fa-angle-double-right"></i></a>
                        </td>
 
                         <td colspan="2">
                              <span style="padding-right: 10px;">На странице:</span>
                              <input th:name="itemsByPage" th:value="${itemsByPage}" type="number" style="width: 53px;">
-                             <span style="color: #afafaf;" th:text="' из ' + ${primaryDocs.getTotalElements()} + ' документов'"/>
+                             <span style="color: #afafaf;" th:text="' из ' + ${docs.getTotalElements()} + ' документов'"/>
                         </td>
 
                     </tr>
@@ -133,9 +136,9 @@
                 <div align="right" style="margin-top: 10px;">
 
                     <button type="submit" class="btn btn-primary" title="Применить фильтры"><i class="fas fa-search"></i></button>
-                    <a target="_blank" th:href="@{'/primary-excel?' + ${filtresString}}"
+                    <a target="_blank" th:href="@{'/other-doc-excel?' + ${filtresString}}"
                         type="submit" class="btn btn-success" title="Выгрузить в Excel"><i class="fas fa-file-excel"></i></a>
-                    <a class="btn btn-danger" title="Сбросить фильтры" th:href="@{'/primary/'}"><i class="fas fa-ban"></i></a>
+                    <a class="btn btn-danger" title="Сбросить фильтры" th:href="@{'/other-doc/'}"><i class="fas fa-ban"></i></a>
 
                 </div>
                </form>
@@ -152,49 +155,60 @@
                 <thead class="thead-dark">
 
                 <tr>
+                    <th>Doc_ID</th>
                     <th>Рег. статус</th>
                     <th>Рег. номер в фонде</th>
                     <th>Дата регистрации</th>
                     <th>ФИО регистратора</th>
                     <th>Источник поступления</th>
-                    <th>Тип ПН</th>
-                    <th>Номер/название ПН</th>
-                    <th>Тип документа</th>
-                    <th>Дата составления документа</th>
-                    <th>Кол-во страниц</th>
+                    <th>Тип отчёта</th>
+                    <th>Название отчёта</th>
+                    <th>Организация-исполнитель</th>
+                    <th>Автор</th>
+                    <th>Место составления</th>
+                    <th>Год составления</th>
+                    <th>Наличие бумажной версии</th>
+                    <th>Наличие цифровой версии</th>
+                    <th>Количество страниц</th>
+                    <th>Количество листов графики</th>
                     <th>Гриф</th>
-                    <th>Ссылка на файл</th>
                     <th>Место хранения</th>
                     <th>Примечания</th>
-                    <th>Doc_ID</th>
+                    <th>Файлы</th>
+
+
                     <!--th colspan="2"><input type="text" class="form-control pull-right" id="searchfield" title="Поиск по таблице"
                                                 placeholder="Поиск по таблице" onkeyup="tableSearch()"></th-->
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:attr="data-document-id=${doc.id}" th:each="doc : ${primaryDocs}">
-                    <td th:text="${doc.regStatus}"/>
-                    <td th:text="${doc.regNumber}"/>
-                    <td th:text="${#dates.format(doc.dateProcessing, 'dd.MM.yyyy')}"/>
-                    <td th:text="${doc.name}"/>
-                    <td th:text="${doc.organizationSource}"/>
-                    <td th:text="${doc.typeObserv}"/>
-                    <td th:text="${doc.observId}"/>
-                    <td th:text="${doc.docType}"/>
-                    <td th:text="${#dates.format(doc.datePrepare, 'dd.MM.yyyy')}"/>
-                    <td th:text="${doc.pages}"/>
-                    <td th:text="${doc.neckSecrecy}"/>
+                <tr th:attr="data-document-id=${doc.id}" th:each="doc : ${docs}">
+                        <td th:text="${doc.id}"/>
+                        <td th:text="${doc.regStatus}"/>
+                        <td th:text="${doc.regNumber}"/>
+                        <td th:text="${#dates.format(doc.dateProcessing, 'dd.MM.yyyy')}"/>
+                        <td th:text="${doc.name}"/>
+                        <td th:text="${doc.organizationSource}"/>
+                        <td th:text="${doc.docType}"/>
+                        <td th:text="${doc.reportNameForFront}" th:title="${doc.reportName}"/>
+                        <td th:text="${doc.organizationAuthor}"/>
+                        <td th:text="${doc.author}"/>
+                        <td th:text="${doc.compilationSite}"/>
+                        <td th:text="${doc.compilationYear}"/>
+                        <td th:text="${doc.paperVersion}"/>
+                        <td th:text="${doc.digitalVersion}"/>
+                        <td th:text="${doc.pages}"/>
+                        <td th:text="${doc.numberOfGraphic}"/>
+                        <td th:text="${doc.neckSecrecy}"/>
+                        <td th:text="${doc.storage}"/>
+                        <td th:text="${doc.comment}"/>
 
-                    <td th:if="${doc.link == 'нет доступа' || doc.link == null}"
-                        th:text="${doc.link}" style="color: #afafaf"/>
+                        <td th:if="${doc.link == 'нет доступа' || doc.link == null}"
+                                            th:text="${doc.link}" style="color: #afafaf"/>
 
-                    <td th:if="${doc.link != 'нет доступа' && doc.link != null}">
-                        <a th:href="@{${doc.link}}" title="Открыть папку">Открыть</a>
-                    </td>
-
-                    <td th:text="${doc.storage}"/>
-                    <td th:text="${doc.comments}"/>
-                    <td th:text="${doc.id}"/>
+                        <td th:if="${doc.link != 'нет доступа' && doc.link != null}">
+                            <a th:href="@{${doc.link}}" title="Открыть папку">Открыть</a>
+                        </td>
                 </tr>
                 </tbody>
             </table>

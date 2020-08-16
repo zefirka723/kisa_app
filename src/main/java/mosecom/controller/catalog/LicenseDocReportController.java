@@ -1,44 +1,39 @@
 package mosecom.controller.catalog;
 
-import mosecom.dao.catalog.PrimaryDocRepository;
-import mosecom.model.catalog.PrimaryDoc;
+import mosecom.model.catalog.LicenseDoc;
+import mosecom.model.catalog.LicenseReportDoc;
 import mosecom.service.UserService;
-import mosecom.service.catalog.PrimaryDocServiceImpl;
+import mosecom.service.catalog.LicenseDocServiceImpl;
+import mosecom.service.catalog.LicenseReportDocServiceImpl;
 import mosecom.utils.DateFormatter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.text.ParseException;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static mosecom.utils.ExcelGenerator.createStyleForTitle;
 
 @Controller
-//@RequestMapping("/primary")
-public class PrimaryDocController {
+public class LicenseDocReportController {
 
     @Autowired
-    PrimaryDocServiceImpl primaryDocService;
+    LicenseReportDocServiceImpl licenseReportDocService;
 
     @Autowired
     UserService userService;
@@ -46,49 +41,51 @@ public class PrimaryDocController {
     @Value("${upload.path}" + "CATALOG_REPORTS_TEMP/")
     private String uploadPath;
 
-//    @RequestMapping(value = "/")
-//    public ModelAndView primaryDocList() {
-//
-//        ModelAndView result = new ModelAndView("catalog/primary");
-//        result.addObject("primaryDocs", primaryDocService.findAll());
-//        return result;
-//    }
-
-    @GetMapping("/primary")
+    @GetMapping("/license-report-doc")
     public String getFiltered(Model model,
                               @RequestParam(name = "idFromField", required = false) String idFromField,
                               @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                               @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                               @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
-                              @RequestParam(name = "typeObservFromField", required = false) String typeObservFromField,
-                              @RequestParam(name = "observIdFromField", required = false) String observIdFromField,
-                              @RequestParam(name = "docTypeFromField", required = false) String docTypeFromField,
-                              @RequestParam(name = "datePrepareFromField", required = false) String datePrepareFromField,
+                              @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
+                              @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
+                              @RequestParam(name = "dateFromField", required = false) String dateFromField,
+                              @RequestParam(name = "reportTypeFromField", required = false) String reportTypeFromField,
+                              @RequestParam(name = "reportingPeriodFromField", required = false) String reportingPeriodFromField,
+                              @RequestParam(name = "have4LSFromField", required = false) String have4LSFromField,
+                              @RequestParam(name = "have2TPFromField", required = false) String have2TPFromField,
+                              @RequestParam(name = "have3LSFromField", required = false) String have3LSFromField,
+
                               @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
                               @RequestParam(name = "itemsByPage", required = false, defaultValue = "25" ) Integer itemsByPage) throws ParseException {
-
 
         if (page < 1) {
             page = 1;
         }
 
-        Page<PrimaryDoc> primaryDocs = primaryDocService
-                .findAllByPagingAndFiltering(primaryDocService.getSpec(
+        Page<LicenseReportDoc> licenseReportDocs = licenseReportDocService
+                .findAllByPagingAndFiltering(licenseReportDocService.getSpec(
                         idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
                                                                        regStatusFromField,
                                                                        regNumberFromField,
                         dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-                                                                       typeObservFromField,
-                                                                       observIdFromField,
-                                                                       docTypeFromField,
-                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null),
+                                                                        licenseNumberFromField,
+                                                                        subjectFromField,
+                        dateFromField!=null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                                                                        reportTypeFromField,
+                                                                        reportingPeriodFromField,
+                                                                        have4LSFromField,
+                                                                        have2TPFromField,
+                                                                        have3LSFromField
+                        ),
                         PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
 
-        // скрываем ссылки ДСП и секретных доков
+        // для проверки доступности доков
         Boolean userDspAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
 
-        for (PrimaryDoc p: primaryDocs) {
+        // прячем секретные ссылки
+        for (LicenseReportDoc p: licenseReportDocs) {
             if (p.getNeckSecrecy() != null) {
                 if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
                     p.setLink("нет доступа");
@@ -100,72 +97,72 @@ public class PrimaryDocController {
             }
         }
 
-        model.addAttribute("primaryDocs", primaryDocs);
+        model.addAttribute("licenseReportDocs", licenseReportDocs);
         model.addAttribute("page", page);
         model.addAttribute("itemsByPage", itemsByPage);
-        model.addAttribute("filtresString", primaryDocService.getFiltresString(
+        model.addAttribute("filtresString", licenseReportDocService.getFiltresString(
                 idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
-                                                                                        regStatusFromField,
-                                                                                        regNumberFromField,
-                datePrepareFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-                                                                                        typeObservFromField,
-                                                                                        observIdFromField,
-                                                                                        docTypeFromField,
-                datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null));
+                regStatusFromField,
+                regNumberFromField,
+                dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                licenseNumberFromField,
+                subjectFromField,
+                dateFromField!=null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                reportTypeFromField,
+                reportingPeriodFromField,
+                have4LSFromField,
+                have2TPFromField,
+                have3LSFromField));
         model.addAttribute("idFromField", idFromField);
         model.addAttribute("regStatusFromField", regStatusFromField);
         model.addAttribute("regNumberFromField", regNumberFromField);
         model.addAttribute("dateProcessingFromField", dateProcessingFromField);
-        model.addAttribute("typeObservFromField", typeObservFromField);
-        model.addAttribute("observIdFromField", observIdFromField);
-        model.addAttribute("docTypeFromField", docTypeFromField);
-        model.addAttribute("datePrepareFromField", datePrepareFromField);
-        return "catalog/primary-table";
+        model.addAttribute("licenseNumberFromField", licenseNumberFromField);
+        model.addAttribute("subjectFromField", subjectFromField);
+        model.addAttribute("dateFromField", dateFromField);
+        model.addAttribute("reportTypeFromField", reportTypeFromField);
+        model.addAttribute("reportingPeriodFromField", reportingPeriodFromField);
+        model.addAttribute("have4LSFromField", have4LSFromField);
+        model.addAttribute("have2TPFromField", have2TPFromField);
+        model.addAttribute("have3LSFromField", have3LSFromField);
+        return "catalog/license-report-doc-table";
     }
 
-    @GetMapping("/primary-excel")public String createFile(Model model,
-                                           @RequestParam(name = "idFromField", required = false) String idFromField,
-                                           @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
-                                           @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
-                                           @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
-                                           @RequestParam(name = "typeObservFromField", required = false) String typeObservFromField,
-                                           @RequestParam(name = "observIdFromField", required = false) String observIdFromField,
-                                           @RequestParam(name = "docTypeFromField", required = false) String docTypeFromField,
-                                           @RequestParam(name = "datePrepareFromField", required = false) String datePrepareFromField//,
-//                                           @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-//                                           @RequestParam(name = "itemsByPage", required = false, defaultValue = "25") Integer itemsByPage
+    @GetMapping("/license-report-doc-excel")public String createFile(Model model,
+                                                                     @RequestParam(name = "idFromField", required = false) String idFromField,
+                                                                     @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
+                                                                     @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
+                                                                     @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                                                                     @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
+                                                                     @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
+                                                                     @RequestParam(name = "dateFromField", required = false) String dateFromField,
+                                                                     @RequestParam(name = "reportTypeFromField", required = false) String reportTypeFromField,
+                                                                     @RequestParam(name = "reportingPeriodFromField", required = false) String reportingPeriodFromField,
+                                                                     @RequestParam(name = "have4LSFromField", required = false) String have4LSFromField,
+                                                                     @RequestParam(name = "have2TPFromField", required = false) String have2TPFromField,
+                                                                     @RequestParam(name = "have3LSFromField", required = false) String have3LSFromField
                                             ) throws ParseException, IOException {
 
-        //itemsByPage = primaryDocService.getCount();
-
-//        Page<PrimaryDoc> primaryDocs = primaryDocService
-//                .findAllByPagingAndFiltering(primaryDocService.getSpec(
-//                        idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
-//                        regStatusFromField,
-//                        regNumberFromField,
-//                        dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-//                        typeObservFromField,
-//                        observIdFromField,
-//                        docTypeFromField,
-//                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null),
-//                        PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
-
-        List<PrimaryDoc> primaryDocs = primaryDocService
-                .findAllByFiltering(primaryDocService.getSpec(
+        List<LicenseReportDoc> licenseReportDocs = licenseReportDocService
+                .findAllByFiltering(licenseReportDocService.getSpec(
                         idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
                         regStatusFromField,
                         regNumberFromField,
                         dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-                        typeObservFromField,
-                        observIdFromField,
-                        docTypeFromField,
-                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null));
+                        licenseNumberFromField,
+                        subjectFromField,
+                        dateFromField!=null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                        reportTypeFromField,
+                        reportingPeriodFromField,
+                        have4LSFromField,
+                        have2TPFromField,
+                        have3LSFromField));
 
 
         // скрываем ссылки ДСП и секретных доков
         Boolean userDspAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
-        for (PrimaryDoc p: primaryDocs) {
+        for (LicenseReportDoc p: licenseReportDocs) {
             if (p.getNeckSecrecy() != null) {
                 if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
                     p.setLink("нет доступа");
@@ -178,7 +175,7 @@ public class PrimaryDocController {
         }
 
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Primary docs");
+        HSSFSheet sheet = workbook.createSheet("License report docs");
 
         int rownum = 0;
         Cell cell;
@@ -223,44 +220,60 @@ public class PrimaryDocController {
         cell.setCellStyle(style);
 
         cell = row.createCell(6, CellType.STRING);
-        cell.setCellValue("Тип ПН");
-        cell.setCellStyle(style);
-
-        cell = row.createCell(7, CellType.STRING);
-        cell.setCellValue("Номер/название ПН");
+        cell.setCellValue("Номер лицензии");
         cell.setCellStyle(style);
 
         cell = row.createCell(8, CellType.STRING);
-        cell.setCellValue("Тип документа");
+        cell.setCellValue("Недропользователь");
         cell.setCellStyle(style);
 
         cell = row.createCell(9, CellType.STRING);
-        cell.setCellValue("Дата составления документа");
+        cell.setCellValue("Дата отчёта");
         cell.setCellStyle(style);
 
         cell = row.createCell(10, CellType.STRING);
-        cell.setCellValue("Кол-во страниц");
+        cell.setCellValue("Тип отчёта");
         cell.setCellStyle(style);
 
         cell = row.createCell(11, CellType.STRING);
-        cell.setCellValue("Гриф");
+        cell.setCellValue("Отчётный период");
         cell.setCellStyle(style);
 
         cell = row.createCell(12, CellType.STRING);
-        cell.setCellValue("Ссылка на файл");
+        cell.setCellValue("Наличие 4-ЛС");
         cell.setCellStyle(style);
 
         cell = row.createCell(13, CellType.STRING);
-        cell.setCellValue("Место хранения");
+        cell.setCellValue("Наличие 2-ТП");
         cell.setCellStyle(style);
 
         cell = row.createCell(14, CellType.STRING);
+        cell.setCellValue("Наличие 3-ЛС");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(15, CellType.STRING);
+        cell.setCellValue("Кол-во страниц");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(16, CellType.STRING);
+        cell.setCellValue("Гриф");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(17, CellType.STRING);
+        cell.setCellValue("Место хранения");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(18, CellType.STRING);
         cell.setCellValue("Примечания");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(19, CellType.STRING);
+        cell.setCellValue("Файлы");
         cell.setCellStyle(style);
 
 
         // данные
-        for (PrimaryDoc p : primaryDocs) {
+        for (LicenseReportDoc p : licenseReportDocs) {
             rownum++;
             row = sheet.createRow(rownum);
 
@@ -279,7 +292,6 @@ public class PrimaryDocController {
                 cell.setCellValue(p.getDateProcessing());
             }
 
-
             cell = row.createCell(4, CellType.STRING);
             cell.setCellValue(p.getName());
 
@@ -287,35 +299,46 @@ public class PrimaryDocController {
             cell.setCellValue(p.getOrganizationSource());
 
             cell = row.createCell(6, CellType.STRING);
-            cell.setCellValue(p.getTypeObserv());
+            cell.setCellValue(p.getLicenseNumber());
 
             cell = row.createCell(7, CellType.STRING);
-            cell.setCellValue(p.getObservId());
+            cell.setCellValue(p.getSubject());
 
             cell = row.createCell(8, CellType.STRING);
-            cell.setCellValue(p.getDocType());
-
-            cell = row.createCell(9, CellType.STRING);
             cell.setCellStyle(cellDateStyle);
-            if (p.getDatePrepare() != null) {
-                cell.setCellValue(p.getDatePrepare());
+            if(p.getDate() != null) {
+                cell.setCellValue(p.getDate());
             }
 
+            cell = row.createCell(9, CellType.STRING);
+            cell.setCellValue(p.getReportType());
+
             cell = row.createCell(10, CellType.STRING);
-            cell.setCellValue(p.getPages());
+            cell.setCellValue(p.getReportingPeriod());
 
             cell = row.createCell(11, CellType.STRING);
-            cell.setCellValue(p.getNeckSecrecy());
+            cell.setCellValue(p.getHave4LS());
 
             cell = row.createCell(12, CellType.STRING);
-            cell.setCellValue(p.getLink());
+            cell.setCellValue(p.getHave2TP());
 
             cell = row.createCell(13, CellType.STRING);
-            cell.setCellValue(p.getStorage());
+            cell.setCellValue(p.getHave3LS());
 
             cell = row.createCell(14, CellType.STRING);
+            cell.setCellValue(p.getPages());
+
+            cell = row.createCell(15, CellType.STRING);
+            cell.setCellValue(p.getNeckSecrecy());
+
+            cell = row.createCell(17, CellType.STRING);
+            cell.setCellValue(p.getStorage());
+
+            cell = row.createCell(18, CellType.STRING);
             cell.setCellValue(p.getComments());
 
+            cell = row.createCell(19, CellType.STRING);
+            cell.setCellValue(p.getLink());
         }
 
         String filePath = uploadPath + userService.getCurrentUserId() + "/Report.xls";
@@ -327,19 +350,10 @@ public class PrimaryDocController {
         FileOutputStream outFile = new FileOutputStream(file);
         workbook.write(outFile);
         outFile.close();
-        //System.out.println("Created file: " + file.getAbsolutePath());
         model.addAttribute("filePath", filePath);
         return "catalog/primary-file";
 
     }
 
-//    @GetMapping(
-//            value = "/primary-file",
-//            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
-//    )
-//    public @ResponseBody
-//    byte[] getFile() throws IOException {
-//        InputStream in = getClass().getResource("D:\\1\\CATALOG_REPORTS_TEMP\\Report.xls").openStream();
-//        return IOUtils.toByteArray(in);
-//    }
+
 }

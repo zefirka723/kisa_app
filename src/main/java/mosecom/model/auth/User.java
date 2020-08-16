@@ -1,5 +1,6 @@
 package mosecom.model.auth;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +35,13 @@ public class User implements UserDetails {
 
     @Column(name = "Name")
     private String name;
+
+    @Column(name = "official_use")
+    private Boolean isOfficialUseAllowed;
+
+    @Column(name = "confidentially")
+    private Boolean isDspUseAllowed;
+
 
     @Transient
     private boolean accountNonExpired;

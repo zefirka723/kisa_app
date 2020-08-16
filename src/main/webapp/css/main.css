@@ -52,6 +52,10 @@ a:focus {
     margin-left: 20px;
 }
 
+table tr td:nth-child(2) {
+    word-break: break-all;
+}
+
 #sidebar {
     width: 250px;
     position: fixed;
