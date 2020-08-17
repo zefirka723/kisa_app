@@ -138,7 +138,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="chem : ${wellChems}">
-                    <td th:text="${chem.date}"/>
+                    <td th:text="${#dates.format(chem.date, 'dd.MM.yyyy')}"/>
                     <td th:text="${chem.templateName}"/>
 
                     <td><a th:href="@{'/report-edit/chem/' + ${reportId} + '?wellId=' + ${wellId}
