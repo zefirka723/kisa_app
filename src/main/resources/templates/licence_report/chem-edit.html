@@ -70,6 +70,7 @@
                     <table id="constrTable" class="table table-striped table-bordered table-hover">
                         <thead>
                         <th>Компонент</th>
+                        <th>Ед. измерения</th>
                         <th>Значение</th>
                         <th></th>
                         </thead>
@@ -93,6 +94,8 @@
                                             <!--th:selected="${component.id == chem.parametrId}"/>-->
                                 <!--</select>-->
                             </td>
+
+                            <td th:text="${chem.measure}"></td>
 
                             <td>
                                 <input type="number" step="any" class="form-control"

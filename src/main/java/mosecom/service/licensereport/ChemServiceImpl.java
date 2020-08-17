@@ -61,6 +61,7 @@ public class ChemServiceImpl {
                 chem.setParametrId(i.getParametrId());
             }
             chem.setParamName(componentRepository.getOne(i.getParametrId()).getName());
+            chem.setMeasure(componentRepository.getOne(i.getParametrId()).getMeasure());
             wrapper.getChems().add(chem);
         }
         return wrapper;

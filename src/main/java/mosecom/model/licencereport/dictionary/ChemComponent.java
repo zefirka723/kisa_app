@@ -19,4 +19,7 @@ public class ChemComponent implements Serializable {
 
     @Column(name = "Value")
     private String name;
+
+    @Column(name = "Measure")
+    private String measure;
 }

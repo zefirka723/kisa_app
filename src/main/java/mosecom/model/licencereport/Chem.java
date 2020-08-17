@@ -43,4 +43,7 @@ public class Chem implements Serializable {
     @Transient
     private String paramName;
 
+    @Transient
+    private String measure;
+
 }
