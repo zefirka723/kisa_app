@@ -28,6 +28,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
     <!-- Мои скрипты -->
     <script src="/js/main.js"></script>
+    <script src="/js/table-sort.js"></script>
 
 
     <!-- Мои материалы -->
@@ -108,7 +109,7 @@
 
                    <tr>
                        <td><label>Год составления заключения
-                            <input class="form-control" th:name="yearOfConclusionFromField" th:value="${yearOfConclusionFromField}" type="number"></label></td>
+                            <input class="form-control" th:name="compilationYearFromField" th:value="${compilationYearFromField}" type="number"></label></td>
                    <tr>
 
                         <td>
@@ -151,29 +152,29 @@
 
         <!-- Таблица списка документов -->
         <div class="scrollable-block">
-            <table class="table table-hover display" id="tableForFiltering">
+            <table class="table table-hover display table_sort" id="tableForFiltering">
                 <thead class="thead-dark">
 
                 <tr>
-                    <th>Doc_ID</th>
-                    <th>Рег. статус</th>
-                    <th>Рег. номер в фонде</th>
-                    <th>Дата регистрации</th>
-                    <th>ФИО регистратора</th>
-                    <th>Источник поступления</th>
-                    <th>Название заключения</th>
-                    <th>Организация-заказчик</th>
-                    <th>Автор</th>
-                    <th>Место составления заключения</th>
-                    <th>Год составления заключения</th>
-                    <th>Наличие бумажной версии</th>
-                    <th>Наличие цифровой версии</th>
-                    <th>Количество страниц</th>
-                    <th>Количество листов графики</th>
-                    <th>Гриф</th>
-                    <th>Место хранения</th>
-                    <th>Примечания</th>
-                    <th>Файлы</th>
+                    <th>Doc_ID <i class="fas fa-sort"></i></th>
+                    <th>Рег. статус <i class="fas fa-sort"></i></th>
+                    <th>Рег. номер в фонде <i class="fas fa-sort"></i></th>
+                    <th>Дата регистрации <i class="fas fa-sort"></i></th>
+                    <th>ФИО регистратора <i class="fas fa-sort"></i></th>
+                    <th>Источник поступления <i class="fas fa-sort"></i></th>
+                    <th>Название заключения <i class="fas fa-sort"></i></th>
+                    <th>Организация-заказчик <i class="fas fa-sort"></i></th>
+                    <th>Автор <i class="fas fa-sort"></i></th>
+                    <th>Место составления заключения <i class="fas fa-sort"></i></th>
+                    <th>Год составления заключения <i class="fas fa-sort"></i></th>
+                    <th>Наличие бумажной версии <i class="fas fa-sort"></i></th>
+                    <th>Наличие цифровой версии <i class="fas fa-sort"></i></th>
+                    <th>Количество страниц <i class="fas fa-sort"></i></th>
+                    <th>Количество листов графики <i class="fas fa-sort"></i></th>
+                    <th>Гриф <i class="fas fa-sort"></i></th>
+                    <th>Место хранения <i class="fas fa-sort"></i></th>
+                    <th>Примечания <i class="fas fa-sort"></i></th>
+                    <th>Файлы <i class="fas fa-sort"></i></th>
 
 
                     <!--th colspan="2"><input type="text" class="form-control pull-right" id="searchfield" title="Поиск по таблице"
@@ -192,7 +193,7 @@
                         <td th:text="${doc.employer}"/>
                         <td th:text="${doc.author}"/>
                         <td th:text="${doc.compilationSite}"/>
-                        <td th:text="${doc.yearOfConclusion}"/>
+                        <td th:text="${doc.compilationYear}"/>
                         <td th:text="${doc.paperVersion}"/>
                         <td th:text="${doc.digitalVersion}"/>
                         <td th:text="${doc.pages}"/>
