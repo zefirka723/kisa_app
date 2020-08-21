@@ -45,7 +45,7 @@ public class ConclusionDoc {
     private String compilationSite;
 
     @Column (name = "Year_of_conclusion")
-    private Integer yearOfConclusion;
+    private Integer compilationYear;
 
     @Column (name = "Paper_version")
     private String paperVersion;

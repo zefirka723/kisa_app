@@ -34,7 +34,7 @@ public class ConclusionDocSpecification {
 
     public static Specification<ConclusionDoc> nameOfConclusionContains(String nameOfConclusionFromField) {
         return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("nameOfConclusion"), "%" + nameOfConclusionFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("nameOfConclusion")), "%" + nameOfConclusionFromField.toLowerCase() + "%");
     }
 
     public static Specification<ConclusionDoc> employerContains(String employerFromField) {

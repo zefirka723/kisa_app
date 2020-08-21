@@ -51,7 +51,7 @@ public class ConclusionDocController {
                               @RequestParam(name = "nameOfConclusionFromField", required = false) String nameOfConclusionFromField,
                               @RequestParam(name = "employerFromField", required = false) String employerFromField,
                               @RequestParam(name = "authorFromField", required = false) String authorFromField,
-                              @RequestParam(name = "yearOfConclusionFromField", required = false) String yearOfConclusionFromField,
+                              @RequestParam(name = "compilationYearFromField", required = false) String compilationYearFromField,
 
                               @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
                               @RequestParam(name = "itemsByPage", required = false, defaultValue = "25" ) Integer itemsByPage) throws ParseException {
@@ -70,7 +70,7 @@ public class ConclusionDocController {
                         nameOfConclusionFromField,
                         employerFromField,
                         authorFromField,
-                        yearOfConclusionFromField!=null && !yearOfConclusionFromField.isEmpty() ? Integer.parseInt(yearOfConclusionFromField) : null),
+                        compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null),
                         PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
 
         // для проверки доступности доков
@@ -108,7 +108,7 @@ public class ConclusionDocController {
                 nameOfConclusionFromField,
                 employerFromField,
                 authorFromField,
-                yearOfConclusionFromField!=null && !yearOfConclusionFromField.isEmpty() ? Integer.parseInt(yearOfConclusionFromField) : null));
+                compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null));
         model.addAttribute("idFromField", idFromField);
         model.addAttribute("regStatusFromField", regStatusFromField);
         model.addAttribute("regNumberFromField", regNumberFromField);
@@ -117,7 +117,7 @@ public class ConclusionDocController {
         model.addAttribute("nameOfConclusionFromField", nameOfConclusionFromField);
         model.addAttribute("employerFromField", employerFromField);
         model.addAttribute("authorFromField", authorFromField);
-        model.addAttribute("yearOfConclusionFromField", yearOfConclusionFromField);
+        model.addAttribute("compilationYearFromField", compilationYearFromField);
         return "catalog/conclusion-doc-table";
     }
 
@@ -130,7 +130,7 @@ public class ConclusionDocController {
                                                                @RequestParam(name = "nameOfConclusionFromField", required = false) String nameOfConclusionFromField,
                                                                @RequestParam(name = "employerFromField", required = false) String employerFromField,
                                                                @RequestParam(name = "authorFromField", required = false) String authorFromField,
-                                                               @RequestParam(name = "yearOfConclusionFromField", required = false) String yearOfConclusionFromField
+                                                               @RequestParam(name = "compilationYearFromField", required = false) String compilationYearFromField
                                             ) throws ParseException, IOException {
 
         List<ConclusionDoc> docs = docService
@@ -143,7 +143,7 @@ public class ConclusionDocController {
                         nameOfConclusionFromField,
                         employerFromField,
                         authorFromField,
-                        yearOfConclusionFromField!=null && !yearOfConclusionFromField.isEmpty() ? Integer.parseInt(yearOfConclusionFromField) : null));
+                        compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null));
 
 
         // скрываем ссылки ДСП и секретных доков
@@ -296,8 +296,8 @@ public class ConclusionDocController {
             cell.setCellValue(p.getCompilationSite());
 
             cell = row.createCell(10, CellType.STRING);
-            if (p.getYearOfConclusion() != null) {
-                cell.setCellValue(p.getYearOfConclusion());
+            if (p.getCompilationYear() != null) {
+                cell.setCellValue(p.getCompilationYear());
             }
 
             cell = row.createCell(11, CellType.STRING);
@@ -334,6 +334,7 @@ public class ConclusionDocController {
         FileOutputStream outFile = new FileOutputStream(file);
         workbook.write(outFile);
         outFile.close();
+        filePath.replaceAll("/", "\\");
         //System.out.println("Created file: " + file.getAbsolutePath());
         model.addAttribute("filePath", filePath);
         return "catalog/primary-file";
