@@ -57,7 +57,7 @@ table tr td:nth-child(2) {
 }
 
 #sidebar {
-    width: 250px;
+    width: 260px;
     position: fixed;
     top: 0;
     left: 0;
@@ -179,6 +179,10 @@ a.article:hover {
     }
     #sidebarCollapse span {
         display: none;
+    }
+
+    .table .thead-dark th .sorted {
+        color: yellow !important;
     }
 }
 
