@@ -35,7 +35,7 @@ public class PrimaryDocSpecification {
 
     public static Specification<PrimaryDoc> observIdContains(String observIdFromField) {
         return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("observId"), "%" + observIdFromField + "%");
+                -> criteriaBuilder.equal(root.get("observId"), observIdFromField);
     }
 
     public static Specification<PrimaryDoc> docTypeContains(String docTypeFromField) {
