@@ -15,12 +15,12 @@ public class PrimaryDocSpecification {
 
     public static Specification<PrimaryDoc> regStatusContains(String regStatusFromField) {
         return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regStatus"), "%" + regStatusFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regStatus")), "%" + regStatusFromField.toLowerCase() + "%");
     }
 
     public static Specification<PrimaryDoc> regNumberContains(String regNumberFromField) {
         return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regNumber"), "%" + regNumberFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regNumber")), "%" + regNumberFromField.toLowerCase() + "%");
     }
 
     public static Specification<PrimaryDoc> dateProcessingContains(Date dateProcessingFromField) {
@@ -30,7 +30,7 @@ public class PrimaryDocSpecification {
 
     public static Specification<PrimaryDoc> typeObservContains(String typeObservFromField) {
         return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("typeObserv"), "%" + typeObservFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("typeObserv")), "%" + typeObservFromField.toLowerCase() + "%");
     }
 
     public static Specification<PrimaryDoc> observIdContains(String observIdFromField) {
@@ -40,7 +40,7 @@ public class PrimaryDocSpecification {
 
     public static Specification<PrimaryDoc> docTypeContains(String docTypeFromField) {
         return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("docType"), "%" + docTypeFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("docType")), "%" + docTypeFromField.toLowerCase() + "%");
     }
 
     public static Specification<PrimaryDoc> datePrepareContains(Date datePrepareFromField) {

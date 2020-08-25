@@ -14,12 +14,12 @@ public class OtherDocSpecification {
 
     public static Specification<OtherDoc> regStatusContains(String regStatusFromField) {
         return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regStatus"), "%" + regStatusFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regStatus")), "%" + regStatusFromField.toLowerCase() + "%");
     }
 
     public static Specification<OtherDoc> regNumberContains(String regNumberFromField) {
         return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regNumber"), "%" + regNumberFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regNumber")), "%" + regNumberFromField.toLowerCase() + "%");
     }
 
     public static Specification<OtherDoc> dateProcessingContains(Date dateProcessingFromField) {
@@ -29,27 +29,27 @@ public class OtherDocSpecification {
 
     public static Specification<OtherDoc> organizationSourceContains(String organizationSourceFromField) {
         return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("organizationSource"), "%" + organizationSourceFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("organizationSource")), "%" + organizationSourceFromField.toLowerCase() + "%");
     }
 
     public static Specification<OtherDoc> docTypeContains(String docTypeFromField) {
         return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("docType"), "%" + docTypeFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("docType")), "%" + docTypeFromField.toLowerCase() + "%");
     }
 
     public static Specification<OtherDoc> reportNameContains(String reportNameFromField) {
         return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("reportName"), "%" + reportNameFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("reportName")), "%" + reportNameFromField.toLowerCase() + "%");
     }
 
     public static Specification<OtherDoc> organizationAuthorContains(String organizationAuthorFromField) {
         return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("organizationAuthor"), "%" + organizationAuthorFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("organizationAuthor")), "%" + organizationAuthorFromField.toLowerCase() + "%");
     }
 
     public static Specification<OtherDoc> authorContains(String authorFromField) {
         return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("author"), "%" + authorFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("author")), "%" + authorFromField.toLowerCase() + "%");
     }
 
     public static Specification<OtherDoc> compilationYearContains(Integer compilationYearFromField) {

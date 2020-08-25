@@ -14,12 +14,12 @@ public class LicenseDocSpecification {
 
     public static Specification<LicenseDoc> regStatusContains(String regStatusFromField) {
         return (Specification<LicenseDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regStatus"), "%" + regStatusFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regStatus")), "%" + regStatusFromField.toLowerCase() + "%");
     }
 
     public static Specification<LicenseDoc> regNumberContains(String regStatusFromField) {
         return (Specification<LicenseDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regNumber"), "%" + regStatusFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regNumber")), "%" + regStatusFromField.toLowerCase() + "%");
     }
 
     public static Specification<LicenseDoc> dateProcessingContains(Date dateProcessingFromField) {
@@ -28,7 +28,7 @@ public class LicenseDocSpecification {
     }
     public static Specification<LicenseDoc> licenseNumberContains(String licenseNumberFromField) {
         return (Specification<LicenseDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("licenseNumber"), "%" + licenseNumberFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("licenseNumber")), "%" + licenseNumberFromField.toLowerCase() + "%");
     }
 
     public static Specification<LicenseDoc> organizationsContains(String organizationsFromField) {
@@ -38,12 +38,12 @@ public class LicenseDocSpecification {
 
     public static Specification<LicenseDoc> subjectContains(String subjectFromField) {
         return (Specification<LicenseDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("subject"), "%" + subjectFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("subject")), "%" + subjectFromField.toLowerCase() + "%");
     }
 
     public static Specification<LicenseDoc> statusContains(String statusFromField) {
         return (Specification<LicenseDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("status"), "%" + statusFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("status")), "%" + statusFromField.toLowerCase() + "%");
     }
 
     public static Specification<LicenseDoc> dateStartContains(Date dateStartFromField) {
@@ -63,7 +63,7 @@ public class LicenseDocSpecification {
 
     public static Specification<LicenseDoc> commentsDocsContains(String commentsDocsFromField) {
         return (Specification<LicenseDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("commentsDocs"), "%" + commentsDocsFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("commentsDocs")), "%" + commentsDocsFromField.toLowerCase() + "%");
     }
 
 }

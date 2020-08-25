@@ -1,6 +1,5 @@
 package mosecom.specification;
 
-import mosecom.model.catalog.LicenseDoc;
 import mosecom.model.catalog.LicenseReportDoc;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -15,12 +14,12 @@ public class LicenseReportDocSpecification {
 
     public static Specification<LicenseReportDoc> regStatusContains(String regStatusFromField) {
         return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regStatus"), "%" + regStatusFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regStatus")), "%" + regStatusFromField.toLowerCase() + "%");
     }
 
     public static Specification<LicenseReportDoc> regNumberContains(String regStatusFromField) {
         return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regNumber"), "%" + regStatusFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regNumber")), "%" + regStatusFromField.toLowerCase() + "%");
     }
 
     public static Specification<LicenseReportDoc> dateProcessingContains(Date dateProcessingFromField) {
@@ -30,12 +29,12 @@ public class LicenseReportDocSpecification {
 
     public static Specification<LicenseReportDoc> licenseNumberContains(String regStatusFromField) {
         return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("licenseNumber"), "%" + regStatusFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("licenseNumber")), "%" + regStatusFromField.toLowerCase() + "%");
     }
 
     public static Specification<LicenseReportDoc> subjectContains(String subjectFromField) {
         return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("subject"), "%" + subjectFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("subject")), "%" + subjectFromField.toLowerCase() + "%");
     }
 
     public static Specification<LicenseReportDoc> dateContains(Date dateFromField) {
@@ -45,7 +44,7 @@ public class LicenseReportDocSpecification {
 
     public static Specification<LicenseReportDoc> reportTypeContains(String reportType) {
         return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("reportType"), "%" + reportType + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("reportType")), "%" + reportType.toLowerCase() + "%");
     }
 
     public static Specification<LicenseReportDoc> reportingPeriodContains(String reportingPeriod) {

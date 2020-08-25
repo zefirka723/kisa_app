@@ -14,12 +14,12 @@ public class ConclusionDocSpecification {
 
     public static Specification<ConclusionDoc> regStatusContains(String regStatusFromField) {
         return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regStatus"), "%" + regStatusFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regStatus")), "%" + regStatusFromField.toLowerCase() + "%");
     }
 
     public static Specification<ConclusionDoc> regNumberContains(String regNumberFromField) {
         return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regNumber"), "%" + regNumberFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regNumber")), "%" + regNumberFromField.toLowerCase() + "%");
     }
 
     public static Specification<ConclusionDoc> dateProcessingContains(Date dateProcessingFromField) {
@@ -29,7 +29,7 @@ public class ConclusionDocSpecification {
 
     public static Specification<ConclusionDoc> organizationSourceContains(String organizationSourceFromField) {
         return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("organizationSource"), "%" + organizationSourceFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("organizationSource")), "%" + organizationSourceFromField.toLowerCase() + "%");
     }
 
     public static Specification<ConclusionDoc> nameOfConclusionContains(String nameOfConclusionFromField) {
@@ -39,12 +39,12 @@ public class ConclusionDocSpecification {
 
     public static Specification<ConclusionDoc> employerContains(String employerFromField) {
         return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("employer"), "%" + employerFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("employer")), "%" + employerFromField.toLowerCase() + "%");
     }
 
     public static Specification<ConclusionDoc> authorContains(String authorFromField) {
         return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("author"), "%" + authorFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("author")), "%" + authorFromField.toLowerCase() + "%");
     }
 
     public static Specification<ConclusionDoc> compilationYearContains(Integer compilationYearFromField) {

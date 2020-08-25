@@ -1,6 +1,5 @@
 package mosecom.specification;
 
-import mosecom.model.catalog.LicenseDoc;
 import mosecom.model.catalog.ProtocolDoc;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -15,12 +14,12 @@ public class ProtocolDocSpecification {
 
     public static Specification<ProtocolDoc> regStatusContains(String regStatusFromField) {
         return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regStatus"), "%" + regStatusFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regStatus")), "%" + regStatusFromField.toLowerCase() + "%");
     }
 
     public static Specification<ProtocolDoc> regNumberContains(String regNumberFromField) {
         return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("regNumber"), "%" + regNumberFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("regNumber")), "%" + regNumberFromField.toLowerCase() + "%");
     }
 
     public static Specification<ProtocolDoc> dateProcessingContains(Date dateProcessingFromField) {
@@ -30,17 +29,17 @@ public class ProtocolDocSpecification {
 
     public static Specification<ProtocolDoc> subjectContains(String subjectFromField) {
         return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("subject"), "%" + subjectFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("subject")), "%" + subjectFromField.toLowerCase() + "%");
     }
 
     public static Specification<ProtocolDoc> instanceContains(String instanceFromField) {
         return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("instance"), "%" + instanceFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("instance")), "%" + instanceFromField.toLowerCase() + "%");
     }
 
     public static Specification<ProtocolDoc> numberContains(String numberFromField) {
         return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("number"), "%" + numberFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("number")), "%" + numberFromField.toLowerCase() + "%");
     }
 
     public static Specification<ProtocolDoc> dateContains(String dateFromField) {
@@ -50,17 +49,17 @@ public class ProtocolDocSpecification {
 
     public static Specification<ProtocolDoc> licenseNumberContains(String licenseNumberFromField) {
         return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("licenseNumber"), "%" + licenseNumberFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("licenseNumber")), "%" + licenseNumberFromField.toLowerCase() + "%");
     }
 
     public static Specification<ProtocolDoc> fieldGeneralNameContains(String fieldGeneralNameFromField) {
         return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("fieldGeneralName"), "%" + fieldGeneralNameFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("fieldGeneralName")), "%" + fieldGeneralNameFromField.toLowerCase() + "%");
     }
 
     public static Specification<ProtocolDoc> fieldNameContains(String fieldNameFromField) {
         return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.like(root.get("fieldName"), "%" + fieldNameFromField + "%");
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("fieldName")), "%" + fieldNameFromField.toLowerCase() + "%");
     }
 
 }
