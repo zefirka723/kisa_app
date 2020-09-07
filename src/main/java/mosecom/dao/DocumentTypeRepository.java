@@ -5,7 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import mosecom.model.DocumentType;
 
+import java.util.List;
+
 @Repository
 public interface DocumentTypeRepository extends JpaRepository<DocumentType, Integer> {
+    DocumentType findOneById(int id);
 }
 
