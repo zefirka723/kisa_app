@@ -25,11 +25,13 @@ public class ConclusionDocServiceImpl {
                                               String regStatusFromField,
                                               String regNumberFromField,
                                               Date dateProcessingFromField,
+                                              Date dateProcessingToFromField,
                                               String organizationSourceFromField,
                                               String nameOfConclusionFromField,
                                               String employerFromField,
                                               String authorFromField,
-                                              Integer compilationYearFromField
+                                              Integer compilationYearFromField,
+                                              Integer compilationYearToFromField
     ) {
 
         Specification<ConclusionDoc> spec = Specification.where(null);
@@ -42,8 +44,14 @@ public class ConclusionDocServiceImpl {
         if (regNumberFromField != null && !regNumberFromField.isEmpty()) {
             spec = spec.and(ConclusionDocSpecification.regNumberContains(regNumberFromField));
         }
-        if (dateProcessingFromField != null) {
+        if(dateProcessingFromField != null && dateProcessingToFromField != null) {
+            spec = spec.and(ConclusionDocSpecification.dateProcessingBetween(dateProcessingFromField, dateProcessingToFromField));
+        }
+        if (dateProcessingFromField != null && dateProcessingToFromField == null) {
             spec = spec.and(ConclusionDocSpecification.dateProcessingContains(dateProcessingFromField));
+        }
+        if (dateProcessingToFromField != null && dateProcessingFromField == null) {
+            spec = spec.and(ConclusionDocSpecification.dateProcessingToContains(dateProcessingToFromField));
         }
         if (organizationSourceFromField != null && !organizationSourceFromField.isEmpty()) {
             spec = spec.and(ConclusionDocSpecification.organizationSourceContains(organizationSourceFromField));
@@ -57,8 +65,14 @@ public class ConclusionDocServiceImpl {
         if (authorFromField != null && !authorFromField.isEmpty()) {
             spec = spec.and(ConclusionDocSpecification.authorContains(authorFromField));
         }
-        if (compilationYearFromField != null) {
+        if (compilationYearFromField != null && compilationYearToFromField == null) {
             spec = spec.and(ConclusionDocSpecification.compilationYearContains(compilationYearFromField));
+        }
+        if (compilationYearFromField != null && compilationYearToFromField != null) {
+            spec = spec.and(ConclusionDocSpecification.compilationYearBetween(compilationYearFromField, compilationYearToFromField));
+        }
+        if (compilationYearFromField == null && compilationYearToFromField != null) {
+            spec = spec.and(ConclusionDocSpecification.compilationYearToContains(compilationYearToFromField));
         }
         return spec;
     }
@@ -67,11 +81,13 @@ public class ConclusionDocServiceImpl {
                                    String regStatusFromField,
                                    String regNumberFromField,
                                    Date dateProcessingFromField,
+                                   Date dateProcessingToFromField,
                                    String organizationSourceFromField,
                                    String nameOfConclusionFromField,
                                    String employerFromField,
                                    String authorFromField,
-                                   Integer compilationYearFromField) {
+                                   Integer compilationYearFromField,
+                                   Integer compilationYearToFromField) {
         StringBuilder filtersBuilder = new StringBuilder();
         if (idFromField != null) {
             filtersBuilder.append("&idFromField=" + idFromField);
@@ -84,6 +100,9 @@ public class ConclusionDocServiceImpl {
         }
         if (dateProcessingFromField != null) {
             filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
+        }
+        if (dateProcessingToFromField != null) {
+            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
         }
         if (organizationSourceFromField != null && !organizationSourceFromField.isEmpty()) {
             filtersBuilder.append("&organizationSourceFromField=" + organizationSourceFromField);
@@ -102,6 +121,9 @@ public class ConclusionDocServiceImpl {
         }
         if (compilationYearFromField != null) {
             filtersBuilder.append("compilationYearFromField=" + compilationYearFromField);
+        }
+        if (compilationYearToFromField != null) {
+            filtersBuilder.append("compilationYearToFromField=" + compilationYearToFromField);
         }
         return filtersBuilder.toString();
     }

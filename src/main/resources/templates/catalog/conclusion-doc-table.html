@@ -29,6 +29,7 @@
     <!-- Мои скрипты -->
     <script src="/js/main.js"></script>
     <script src="/js/table-sort.js"></script>
+    <script src="/js/copyLink.js"></script>
 
 
     <!-- Мои материалы -->
@@ -88,28 +89,50 @@
                    <tr>
                        <td><label>Doc_ID<input class="form-control" th:name="idFromField" th:value="${idFromField}" type="text"></label></td>
                        <td><label>Регистрационный статус
-                            <input class="form-control" th:name="regStatusFromField" th:value="${regStatusFromField}" type="text"></label></td>
+                             <select style="width: 205px;" class="form-control"
+                                    th:attr="data-name=${regStatusFromField}" name="regStatusFromField">
+                                <option value="">Все</option>
+                                <option class="form-control" th:each="status : ${regStatuses}"
+                                        th:value="${status.name}"
+                                        th:text="${status.name}"
+                                        th:selected="${status.name == regStatusFromField}"/>
+                            </select>
+                            </label>
+                       </td>
                        <td><label>Регистрационный номер
                            <input class="form-control" th:name="regNumberFromField" th:value="${regNumberFromField}" type="text"></label></td>
-                       <td><label>Дата регистрации
-                           <input class="form-control" th:name="dateProcessingFromField" th:value="${dateProcessingFromField}" type="date"></label></td>
+                       <td><label>Дата регистрации с:
+                           <input style="width: 205px;" class="form-control" th:name="dateProcessingFromField" th:value="${dateProcessingFromField}" type="date"></label></td>
+                       <td><label>по:
+                           <input style="width: 178px;" class="form-control" th:name="dateProcessingToFromField" th:value="${dateProcessingToFromField}" type="date"></label></td>
                    </tr>
 
                    <tr>
-                       <td><label>Источник поступления
-                            <input class="form-control" th:name="organizationSourceFromField" th:value="${organizationSourceFromField}" type="text"></label></td>
+                       <td><label>Год составления с:
+                                                   <input class="form-control" th:name="compilationYearFromField" th:value="${compilationYearFromField}" type="number"></label></td>
+                                              <td><label>по:
+                                                   <input class="form-control" th:name="compilationYearToFromField" th:value="${compilationYearToFromField}" type="number"></label></td>
                        <td><label>Название заключения
                             <input class="form-control" th:name="nameOfConclusionFromField" th:value="${nameOfConclusionFromField}" type="text"></label></td>
                        <td><label>Организация-заказчик
                             <input class="form-control" th:name="employerFromField" th:value="${employerFromField}" type="text"></label></td>
                        <td><label>Автор
-                            <input class="form-control" th:name="authorFromField" th:value="${authorFromField}" type="text"/></label></td>
+                            <input style="width: 178px;" class="form-control" th:name="authorFromField" th:value="${authorFromField}" type="text"/></label></td>
 
                    </tr>
 
                    <tr>
-                       <td><label>Год составления заключения
-                            <input class="form-control" th:name="compilationYearFromField" th:value="${compilationYearFromField}" type="number"></label></td>
+                       <td colspan="2"><label>Источник поступления
+                            <select style="width: 418.99074px;" class="form-control"
+                                   th:attr="data-name=${organizationSourceFromField}" name="organizationSourceFromField">
+                               <option value="">Все</option>
+                               <option class="form-control" th:each="organization : ${organizations}"
+                                       th:value="${organization.name}"
+                                       th:text="${organization.name}"
+                                       th:selected="${organization.name == organizationSourceFromField}"/>
+                           </select>
+                           </label>
+                       </td>
                    <tr>
 
                         <td>
@@ -207,7 +230,7 @@
                                             th:text="${doc.link}" style="color: #afafaf"/>
 
                         <td th:if="${doc.link != 'нет доступа' && doc.link != null}">
-                            <a th:href="@{${doc.link}}" title="Открыть папку">Открыть</a>
+                                                <input type="text" th:value="${doc.link}" th:id="${doc.id}" onclick="copyLink(this.id)" title="Нажмите, чтобы скопировать">
                         </td>
                 </tr>
                 </tbody>

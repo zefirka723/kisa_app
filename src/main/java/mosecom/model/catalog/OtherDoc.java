@@ -74,6 +74,9 @@ public class OtherDoc {
     @Column (name = "Comments")
     private String comment;
 
+    @Column (name = "Neck_secrecy_ID")
+    private int neckSecrecyId;
+
     @Transient
     private String reportNameForFront;
 

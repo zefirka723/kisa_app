@@ -26,12 +26,15 @@ public class LicenseDocServiceImpl {
                                              String regStatusFromField,
                                              String regNumberFromField,
                                              Date dateProcessingFromField,
+                                             Date dateProcessingToFromField,
                                              String licenseNumberFromField,
                                              String organizationsFromField,
                                              String subjectFromField,
                                              String statusFromField,
                                              Date dateStartFromField,
+                                             Date dateStartToFromField,
                                              Date dateEndFromField,
+                                             Date dateEndToFromField,
                                              Float flowRateSummFromField,
                                              String commentsDocsFromField) {
 
@@ -45,8 +48,14 @@ public class LicenseDocServiceImpl {
         if (regNumberFromField != null && !regNumberFromField.isEmpty()) {
             spec = spec.and(LicenseDocSpecification.regNumberContains(regNumberFromField));
         }
-        if (dateProcessingFromField != null) {
+        if(dateProcessingFromField != null && dateProcessingToFromField != null) {
+            spec = spec.and(LicenseDocSpecification.dateProcessingBetween(dateProcessingFromField, dateProcessingToFromField));
+        }
+        if (dateProcessingFromField != null && dateProcessingToFromField == null) {
             spec = spec.and(LicenseDocSpecification.dateProcessingContains(dateProcessingFromField));
+        }
+        if (dateProcessingToFromField != null && dateProcessingFromField == null) {
+            spec = spec.and(LicenseDocSpecification.dateProcessingToContains(dateProcessingToFromField));
         }
         if (licenseNumberFromField != null && !licenseNumberFromField.isEmpty()) {
             spec = spec.and(LicenseDocSpecification.licenseNumberContains(licenseNumberFromField));
@@ -60,11 +69,23 @@ public class LicenseDocServiceImpl {
         if (statusFromField != null && !statusFromField.isEmpty()) {
             spec = spec.and(LicenseDocSpecification.statusContains(statusFromField));
         }
-        if (dateStartFromField != null) {
+        if(dateStartFromField != null && dateStartToFromField != null) {
+            spec = spec.and(LicenseDocSpecification.dateStartBetween(dateStartFromField, dateStartToFromField));
+        }
+        if (dateStartFromField != null && dateStartToFromField == null) {
             spec = spec.and(LicenseDocSpecification.dateStartContains(dateStartFromField));
         }
-        if (dateEndFromField != null) {
+        if (dateStartToFromField != null && dateStartFromField == null) {
+            spec = spec.and(LicenseDocSpecification.dateStartToContains(dateStartToFromField));
+        }
+        if(dateEndFromField != null && dateEndToFromField != null) {
+            spec = spec.and(LicenseDocSpecification.dateEndBetween(dateEndFromField, dateEndToFromField));
+        }
+        if (dateEndFromField != null && dateEndToFromField == null) {
             spec = spec.and(LicenseDocSpecification.dateEndContains(dateEndFromField));
+        }
+        if (dateEndToFromField != null && dateEndFromField == null) {
+            spec = spec.and(LicenseDocSpecification.dateEndToContains(dateEndToFromField));
         }
         if (flowRateSummFromField != null) {
             spec = spec.and(LicenseDocSpecification.flowRateSummContains(flowRateSummFromField));
@@ -79,12 +100,15 @@ public class LicenseDocServiceImpl {
                                    String regStatusFromField,
                                    String regNumberFromField,
                                    Date dateProcessingFromField,
+                                   Date dateProcessingToFromField,
                                    String licenseNumberFromField,
                                    String organizationsFromField,
                                    String subjectFromField,
                                    String statusFromField,
                                    Date dateStartFromField,
+                                   Date dateStartToFromField,
                                    Date dateEndFromField,
+                                   Date dateEndToFromField,
                                    Float flowRateSummFromField,
                                    String commentsDocsFromField) {
         StringBuilder filtersBuilder = new StringBuilder();
@@ -99,6 +123,9 @@ public class LicenseDocServiceImpl {
         }
         if (dateProcessingFromField != null) {
             filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
+        }
+        if (dateProcessingToFromField != null) {
+            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
         }
         if (licenseNumberFromField != null && !licenseNumberFromField.isEmpty()) {
             filtersBuilder.append("&licenseNumberFromField=" + licenseNumberFromField);
@@ -115,8 +142,14 @@ public class LicenseDocServiceImpl {
         if (dateStartFromField != null) {
             filtersBuilder.append("&dateStartFromField=" + dateStartFromField);
         }
+        if (dateStartToFromField != null) {
+            filtersBuilder.append("&dateStartToFromField=" + dateStartToFromField);
+        }
         if (dateEndFromField != null) {
             filtersBuilder.append("&dateEndFromField=" + dateEndFromField);
+        }
+        if (dateEndToFromField != null) {
+            filtersBuilder.append("&dateEndToFromField=" + dateEndToFromField);
         }
         if (flowRateSummFromField != null) {
             filtersBuilder.append("&flowRateSummFromField=" + flowRateSummFromField);

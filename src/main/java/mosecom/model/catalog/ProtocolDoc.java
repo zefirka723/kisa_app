@@ -42,8 +42,8 @@ public class ProtocolDoc {
     private String number;
 
     @Column (name = "Date")
-    //@DateTimeFormat(pattern = "yyyy.MM.dd")
-    private String date;
+    @DateTimeFormat(pattern = "yyyy.MM.dd")
+    private Date date;
 
     @Column (name = "License_number")
     private String licenseNumber;
@@ -69,5 +69,6 @@ public class ProtocolDoc {
     @Column (name = "Comments")
     private String comment;
 
-
+    @Column (name = "Neck_secrecy_ID")
+    private int neckSecrecyId;
 }

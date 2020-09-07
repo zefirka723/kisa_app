@@ -27,6 +27,16 @@ public class LicenseReportDocSpecification {
                 -> criteriaBuilder.equal(root.get("dateProcessing"), dateProcessingFromField );
     }
 
+    public static Specification<LicenseReportDoc> dateProcessingToContains(Date dateProcessingToFromField) {
+        return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("dateProcessing"), dateProcessingToFromField );
+    }
+
+    public static Specification<LicenseReportDoc> dateProcessingBetween(Date dateProcessingFromField, Date dateProcessingToFromField) {
+        return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.between(root.get("dateProcessing"), dateProcessingFromField, dateProcessingToFromField);
+    }
+
     public static Specification<LicenseReportDoc> licenseNumberContains(String regStatusFromField) {
         return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.like(criteriaBuilder.lower(root.get("licenseNumber")), "%" + regStatusFromField.toLowerCase() + "%");
@@ -40,6 +50,16 @@ public class LicenseReportDocSpecification {
     public static Specification<LicenseReportDoc> dateContains(Date dateFromField) {
         return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.equal(root.get("date"), dateFromField );
+    }
+
+    public static Specification<LicenseReportDoc> dateToContains(Date dateToFromField) {
+        return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("date"), dateToFromField );
+    }
+
+    public static Specification<LicenseReportDoc> dateBetween(Date dateFromField, Date dateToFromField) {
+        return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.between(root.get("date"), dateFromField, dateToFromField);
     }
 
     public static Specification<LicenseReportDoc> reportTypeContains(String reportType) {

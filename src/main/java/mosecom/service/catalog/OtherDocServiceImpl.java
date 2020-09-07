@@ -23,12 +23,14 @@ public class OtherDocServiceImpl {
                                               String regStatusFromField,
                                               String regNumberFromField,
                                               Date dateProcessingFromField,
+                                              Date dateProcessingToFromField,
                                               String organizationSourceFromField,
                                               String docTypeFromField,
                                               String reportNameFromField,
                                               String authorFromField,
                                               String organizationAuthorFromField,
-                                              Integer compilationYearFromField
+                                              Integer compilationYearFromField,
+                                              Integer compilationYearToFromField
     ) {
 
         Specification<OtherDoc> spec = Specification.where(null);
@@ -41,8 +43,14 @@ public class OtherDocServiceImpl {
         if (regNumberFromField != null && !regNumberFromField.isEmpty()) {
             spec = spec.and(OtherDocSpecification.regNumberContains(regNumberFromField));
         }
-        if (dateProcessingFromField != null) {
+        if(dateProcessingFromField != null && dateProcessingToFromField != null) {
+            spec = spec.and(OtherDocSpecification.dateProcessingBetween(dateProcessingFromField, dateProcessingToFromField));
+        }
+        if (dateProcessingFromField != null && dateProcessingToFromField == null) {
             spec = spec.and(OtherDocSpecification.dateProcessingContains(dateProcessingFromField));
+        }
+        if (dateProcessingToFromField != null && dateProcessingFromField == null) {
+            spec = spec.and(OtherDocSpecification.dateProcessingToContains(dateProcessingToFromField));
         }
         if (organizationSourceFromField != null && !organizationSourceFromField.isEmpty()) {
             spec = spec.and(OtherDocSpecification.organizationSourceContains(organizationSourceFromField));
@@ -59,8 +67,14 @@ public class OtherDocServiceImpl {
         if (organizationAuthorFromField != null && !organizationAuthorFromField.isEmpty()) {
             spec = spec.and(OtherDocSpecification.organizationAuthorContains(organizationAuthorFromField));
         }
-        if (compilationYearFromField != null) {
+        if (compilationYearFromField != null && compilationYearToFromField == null) {
             spec = spec.and(OtherDocSpecification.compilationYearContains(compilationYearFromField));
+        }
+        if (compilationYearFromField != null && compilationYearToFromField != null) {
+            spec = spec.and(OtherDocSpecification.compilationYearBetween(compilationYearFromField, compilationYearToFromField));
+        }
+        if (compilationYearFromField == null && compilationYearToFromField != null) {
+            spec = spec.and(OtherDocSpecification.compilationYearToContains(compilationYearToFromField));
         }
         return spec;
     }
@@ -69,12 +83,14 @@ public class OtherDocServiceImpl {
                                    String regStatusFromField,
                                    String regNumberFromField,
                                    Date dateProcessingFromField,
+                                   Date dateProcessingToFromField,
                                    String organizationSourceFromField,
                                    String docTypeFromField,
                                    String reportNameFromField,
                                    String authorFromField,
                                    String organizationAuthorFromField,
-                                   Integer compilationYearFromField) {
+                                   Integer compilationYearFromField,
+                                   Integer compilationYearToFromField) {
         StringBuilder filtersBuilder = new StringBuilder();
         if (idFromField != null) {
             filtersBuilder.append("&idFromField=" + idFromField);
@@ -87,6 +103,9 @@ public class OtherDocServiceImpl {
         }
         if (dateProcessingFromField != null) {
             filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
+        }
+        if (dateProcessingToFromField != null) {
+            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
         }
         if (organizationSourceFromField != null && !organizationSourceFromField.isEmpty()) {
             filtersBuilder.append("&organizationSourceFromField=" + organizationSourceFromField);
@@ -105,6 +124,9 @@ public class OtherDocServiceImpl {
         }
         if (compilationYearFromField != null) {
             filtersBuilder.append("&compilationYearFromField=" + compilationYearFromField);
+        }
+        if (compilationYearToFromField != null) {
+            filtersBuilder.append("&compilationYearToFromField=" + compilationYearToFromField);
         }
         return filtersBuilder.toString();
     }

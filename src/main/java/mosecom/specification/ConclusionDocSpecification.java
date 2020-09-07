@@ -27,6 +27,16 @@ public class ConclusionDocSpecification {
                 -> criteriaBuilder.equal(root.get("dateProcessing"), dateProcessingFromField );
     }
 
+    public static Specification<ConclusionDoc> dateProcessingToContains(Date dateProcessingToFromField) {
+        return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("dateProcessing"), dateProcessingToFromField );
+    }
+
+    public static Specification<ConclusionDoc> dateProcessingBetween(Date dateProcessingFromField, Date dateProcessingToFromField) {
+        return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.between(root.get("dateProcessing"), dateProcessingFromField, dateProcessingToFromField);
+    }
+
     public static Specification<ConclusionDoc> organizationSourceContains(String organizationSourceFromField) {
         return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.like(criteriaBuilder.lower(root.get("organizationSource")), "%" + organizationSourceFromField.toLowerCase() + "%");
@@ -50,5 +60,15 @@ public class ConclusionDocSpecification {
     public static Specification<ConclusionDoc> compilationYearContains(Integer compilationYearFromField) {
         return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.equal(root.get("compilationYear"), compilationYearFromField );
+    }
+
+    public static Specification<ConclusionDoc> compilationYearToContains(Integer compilationYearToFromField) {
+        return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("compilationYear"), compilationYearToFromField);
+    }
+
+    public static Specification<ConclusionDoc> compilationYearBetween(Integer compilationYearFromField, Integer compilationYearToFromField) {
+        return (Specification<ConclusionDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.between(root.get("compilationYear"), compilationYearFromField, compilationYearToFromField);
     }
 }

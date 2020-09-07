@@ -1,5 +1,7 @@
 package mosecom.controller.catalog;
 
+import mosecom.dao.inspections.OrganizationSourceRepository;
+import mosecom.dao.inspections.RegStatusRepository;
 import mosecom.model.catalog.ConclusionDoc;
 import mosecom.model.catalog.ProtocolDoc;
 import mosecom.service.UserService;
@@ -38,6 +40,12 @@ public class ConclusionDocController {
     @Autowired
     UserService userService;
 
+    @Autowired // TODO: заменить на сервис
+    OrganizationSourceRepository organizationSourceRepository;
+
+    @Autowired
+    RegStatusRepository regStatusRepository;
+
     @Value("${upload.path}" + "CATALOG_REPORTS_TEMP/")
     private String uploadPath;
 
@@ -47,11 +55,13 @@ public class ConclusionDocController {
                               @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                               @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                               @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                              @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
                               @RequestParam(name = "organizationSourceFromField", required = false) String organizationSourceFromField,
                               @RequestParam(name = "nameOfConclusionFromField", required = false) String nameOfConclusionFromField,
                               @RequestParam(name = "employerFromField", required = false) String employerFromField,
                               @RequestParam(name = "authorFromField", required = false) String authorFromField,
                               @RequestParam(name = "compilationYearFromField", required = false) String compilationYearFromField,
+                              @RequestParam(name = "compilationYearToFromField", required = false) String compilationYearToFromField,
 
                               @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
                               @RequestParam(name = "itemsByPage", required = false, defaultValue = "25" ) Integer itemsByPage) throws ParseException {
@@ -66,11 +76,13 @@ public class ConclusionDocController {
                                                                        regStatusFromField,
                                                                        regNumberFromField,
                         dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField!=null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                         organizationSourceFromField,
                         nameOfConclusionFromField,
                         employerFromField,
                         authorFromField,
-                        compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null),
+                        compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null,
+                        compilationYearToFromField!=null && !compilationYearToFromField.isEmpty() ? Integer.parseInt(compilationYearToFromField) : null),
                         PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
 
         // для проверки доступности доков
@@ -86,11 +98,10 @@ public class ConclusionDocController {
             }
 
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -104,20 +115,29 @@ public class ConclusionDocController {
                 regStatusFromField,
                 regNumberFromField,
                 dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                dateProcessingToFromField!=null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                 organizationSourceFromField,
                 nameOfConclusionFromField,
                 employerFromField,
                 authorFromField,
-                compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null));
+                compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null,
+                compilationYearToFromField!=null && !compilationYearToFromField.isEmpty() ? Integer.parseInt(compilationYearToFromField) : null));
         model.addAttribute("idFromField", idFromField);
         model.addAttribute("regStatusFromField", regStatusFromField);
         model.addAttribute("regNumberFromField", regNumberFromField);
         model.addAttribute("dateProcessingFromField", dateProcessingFromField);
+        model.addAttribute("dateProcessingToFromField", dateProcessingToFromField);
         model.addAttribute("organizationSourceFromField", organizationSourceFromField);
         model.addAttribute("nameOfConclusionFromField", nameOfConclusionFromField);
         model.addAttribute("employerFromField", employerFromField);
         model.addAttribute("authorFromField", authorFromField);
         model.addAttribute("compilationYearFromField", compilationYearFromField);
+        model.addAttribute("compilationYearToFromField", compilationYearToFromField);
+
+        //справочники
+        model.addAttribute("regStatuses", regStatusRepository.findAll());
+        model.addAttribute("organizations", organizationSourceRepository.findAll());
+
         return "catalog/conclusion-doc-table";
     }
 
@@ -126,11 +146,13 @@ public class ConclusionDocController {
                                                                @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                                                                @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                                                                @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                                                               @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
                                                                @RequestParam(name = "organizationSourceFromField", required = false) String organizationSourceFromField,
                                                                @RequestParam(name = "nameOfConclusionFromField", required = false) String nameOfConclusionFromField,
                                                                @RequestParam(name = "employerFromField", required = false) String employerFromField,
                                                                @RequestParam(name = "authorFromField", required = false) String authorFromField,
-                                                               @RequestParam(name = "compilationYearFromField", required = false) String compilationYearFromField
+                                                               @RequestParam(name = "compilationYearFromField", required = false) String compilationYearFromField,
+                                                               @RequestParam(name = "compilationYearToFromField", required = false) String compilationYearToFromField
                                             ) throws ParseException, IOException {
 
         List<ConclusionDoc> docs = docService
@@ -139,11 +161,13 @@ public class ConclusionDocController {
                         regStatusFromField,
                         regNumberFromField,
                         dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField!=null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                         organizationSourceFromField,
                         nameOfConclusionFromField,
                         employerFromField,
                         authorFromField,
-                        compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null));
+                        compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null,
+                        compilationYearToFromField!=null && !compilationYearToFromField.isEmpty() ? Integer.parseInt(compilationYearToFromField) : null));
 
 
         // скрываем ссылки ДСП и секретных доков
@@ -151,11 +175,10 @@ public class ConclusionDocController {
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         for (ConclusionDoc p: docs) {
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -334,10 +357,9 @@ public class ConclusionDocController {
         FileOutputStream outFile = new FileOutputStream(file);
         workbook.write(outFile);
         outFile.close();
-        filePath.replaceAll("/", "\\");
-        //System.out.println("Created file: " + file.getAbsolutePath());
+        filePath = filePath.replace("/", "\\");
         model.addAttribute("filePath", filePath);
-        return "catalog/primary-file";
+        return "redirect:" + "/download/file/" + userService.getCurrentUserId() + "/Report.xls";
 
     }
 

@@ -1,8 +1,11 @@
 package mosecom.controller.catalog;
 
+import mosecom.dao.inspections.OrganizationSourceRepository;
+import mosecom.dao.inspections.RegStatusRepository;
 import mosecom.model.catalog.ConclusionDoc;
 import mosecom.model.catalog.OtherDoc;
 import mosecom.service.UserService;
+import mosecom.service.catalog.DocumentTypeServiceImpl;
 import mosecom.service.catalog.OtherDocServiceImpl;
 import mosecom.utils.DateFormatter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -37,6 +40,15 @@ public class OtherDocController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    DocumentTypeServiceImpl documentTypeService;
+
+    @Autowired // TODO:  переделать на сервис
+    RegStatusRepository regStatusRepository;
+
+    @Autowired
+    OrganizationSourceRepository organizationSourceRepository;
+
     @Value("${upload.path}" + "CATALOG_REPORTS_TEMP/")
     private String uploadPath;
 
@@ -46,12 +58,14 @@ public class OtherDocController {
                               @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                               @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                               @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                              @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
                               @RequestParam(name = "organizationSourceFromField", required = false) String organizationSourceFromField,
                               @RequestParam(name = "docTypeFromField", required = false) String docTypeFromField,
                               @RequestParam(name = "reportNameFromField", required = false) String reportNameFromField,
                               @RequestParam(name = "authorFromField", required = false) String authorFromField,
                               @RequestParam(name = "organizationAuthorFromField", required = false) String organizationAuthorFromField,
                               @RequestParam(name = "compilationYearFromField", required = false) String compilationYearFromField,
+                              @RequestParam(name = "compilationYearToFromField", required = false) String compilationYearToFromField,
 
                               @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
                               @RequestParam(name = "itemsByPage", required = false, defaultValue = "25" ) Integer itemsByPage) throws ParseException {
@@ -66,12 +80,14 @@ public class OtherDocController {
                                                                        regStatusFromField,
                                                                        regNumberFromField,
                         dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField!=null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                         organizationSourceFromField,
                         docTypeFromField,
                         reportNameFromField,
                         authorFromField,
                         organizationAuthorFromField,
-                        compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null),
+                        compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null,
+                        compilationYearToFromField!=null && !compilationYearToFromField.isEmpty() ? Integer.parseInt(compilationYearToFromField) : null),
                         PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
 
         // для проверки доступности доков
@@ -87,11 +103,10 @@ public class OtherDocController {
             }
 
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -105,22 +120,33 @@ public class OtherDocController {
                 regStatusFromField,
                 regNumberFromField,
                 dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                dateProcessingToFromField!=null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                 organizationSourceFromField,
                 docTypeFromField,
                 reportNameFromField,
                 authorFromField,
                 organizationAuthorFromField,
-                compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null));
+                compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null,
+                compilationYearToFromField!=null && !compilationYearToFromField.isEmpty() ? Integer.parseInt(compilationYearToFromField) : null));
         model.addAttribute("idFromField", idFromField);
         model.addAttribute("regStatusFromField", regStatusFromField);
         model.addAttribute("regNumberFromField", regNumberFromField);
         model.addAttribute("dateProcessingFromField", dateProcessingFromField);
+        model.addAttribute("dateProcessingToFromField", dateProcessingToFromField);
         model.addAttribute("organizationSourceFromField", organizationSourceFromField);
         model.addAttribute("docTypeFromField", docTypeFromField);
         model.addAttribute("reportNameFromField", reportNameFromField);
         model.addAttribute("authorFromField", authorFromField);
         model.addAttribute("organizationAuthorFromField", organizationAuthorFromField);
         model.addAttribute("compilationYearFromField", compilationYearFromField);
+        model.addAttribute("compilationYearToFromField", compilationYearToFromField);
+
+        // справочники
+        model.addAttribute("regStatuses", regStatusRepository.findAll());
+        model.addAttribute("organizations", organizationSourceRepository.findAll());
+        int[] docTypesForOtherDocs = new int[]{4003, 4005, 4006, 4007, 6001, 7001, 8002, 8003};
+        model.addAttribute("docTypes", documentTypeService.getTypesByIds(docTypesForOtherDocs));
+
         return "catalog/other-doc-table";
     }
 
@@ -129,12 +155,14 @@ public class OtherDocController {
                                                             @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                                                             @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                                                             @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                                                            @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
                                                             @RequestParam(name = "organizationSourceFromField", required = false) String organizationSourceFromField,
                                                             @RequestParam(name = "docTypeFromField", required = false) String docTypeFromField,
                                                             @RequestParam(name = "reportNameFromField", required = false) String reportNameFromField,
                                                             @RequestParam(name = "authorFromField", required = false) String authorFromField,
                                                             @RequestParam(name = "organizationAuthorFromField", required = false) String organizationAuthorFromField,
-                                                            @RequestParam(name = "compilationYearFromField", required = false) String compilationYearFromField
+                                                            @RequestParam(name = "compilationYearFromField", required = false) String compilationYearFromField,
+                                                            @RequestParam(name = "compilationYearToFromField", required = false) String compilationYearToFromField
                                             ) throws ParseException, IOException {
 
         List<OtherDoc> docs = docService
@@ -143,12 +171,14 @@ public class OtherDocController {
                         regStatusFromField,
                         regNumberFromField,
                         dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField!=null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                         organizationSourceFromField,
                         docTypeFromField,
                         reportNameFromField,
                         authorFromField,
                         organizationAuthorFromField,
-                        compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null));
+                        compilationYearFromField!=null && !compilationYearFromField.isEmpty() ? Integer.parseInt(compilationYearFromField) : null,
+                        compilationYearToFromField!=null && !compilationYearToFromField.isEmpty() ? Integer.parseInt(compilationYearToFromField) : null));
 
 
         // скрываем ссылки ДСП и секретных доков
@@ -156,11 +186,10 @@ public class OtherDocController {
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         for (OtherDoc p: docs) {
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -349,7 +378,7 @@ public class OtherDocController {
         outFile.close();
         //System.out.println("Created file: " + file.getAbsolutePath());
         model.addAttribute("filePath", filePath);
-        return "catalog/primary-file";
+        return "redirect:" + "/download/file/" + userService.getCurrentUserId() + "/Report.xls";
 
     }
 

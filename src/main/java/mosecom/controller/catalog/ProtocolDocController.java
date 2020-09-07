@@ -1,5 +1,6 @@
 package mosecom.controller.catalog;
 
+import mosecom.dao.inspections.RegStatusRepository;
 import mosecom.model.catalog.LicenseDoc;
 import mosecom.model.catalog.ProtocolDoc;
 import mosecom.service.UserService;
@@ -38,6 +39,9 @@ public class ProtocolDocController {
     @Autowired
     UserService userService;
 
+    @Autowired // TODO: переделать на сервис
+    RegStatusRepository regStatusRepository;
+
     @Value("${upload.path}" + "CATALOG_REPORTS_TEMP/")
     private String uploadPath;
 
@@ -47,10 +51,12 @@ public class ProtocolDocController {
                               @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                               @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                               @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                              @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
                               @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
                               @RequestParam(name = "instanceFromField", required = false) String instanceFromField,
                               @RequestParam(name = "numberFromField", required = false) String numberFromField,
                               @RequestParam(name = "dateFromField", required = false) String dateFromField,
+                              @RequestParam(name = "dateToFromField", required = false) String dateToFromField,
                               @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
                               @RequestParam(name = "fieldGeneralNameFromField", required = false) String fieldGeneralNameFromField,
                               @RequestParam(name = "fieldNameFromField", required = false) String fieldNameFromField,
@@ -68,10 +74,12 @@ public class ProtocolDocController {
                                                                        regStatusFromField,
                                                                        regNumberFromField,
                         dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField!=null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                         subjectFromField,
                         instanceFromField,
                         numberFromField,
-                        dateFromField,
+                        dateFromField!=null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                        dateToFromField!=null && !dateToFromField.isEmpty() ? DateFormatter.getDateFromString(dateToFromField) : null,
                         licenseNumberFromField,
                         fieldGeneralNameFromField,
                         fieldNameFromField),
@@ -84,11 +92,10 @@ public class ProtocolDocController {
         // обрезаем коммент и прячем секретные ссылки
         for (ProtocolDoc p: docs) {
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -102,10 +109,12 @@ public class ProtocolDocController {
                 regStatusFromField,
                 regNumberFromField,
                 dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                dateProcessingToFromField!=null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                 subjectFromField,
                 instanceFromField,
                 numberFromField,
-                dateFromField,
+                dateFromField!=null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                dateToFromField!=null && !dateToFromField.isEmpty() ? DateFormatter.getDateFromString(dateToFromField) : null,
                 licenseNumberFromField,
                 fieldGeneralNameFromField,
                 fieldNameFromField));
@@ -113,13 +122,19 @@ public class ProtocolDocController {
         model.addAttribute("regStatusFromField", regStatusFromField);
         model.addAttribute("regNumberFromField", regNumberFromField);
         model.addAttribute("dateProcessingFromField", dateProcessingFromField);
+        model.addAttribute("dateProcessingToFromField", dateProcessingToFromField);
         model.addAttribute("subjectFromField", subjectFromField);
         model.addAttribute("instanceFromField", instanceFromField);
         model.addAttribute("numberFromField", numberFromField);
         model.addAttribute("dateFromField", dateFromField);
+        model.addAttribute("dateToFromField", dateToFromField);
         model.addAttribute("licenseNumberFromField", licenseNumberFromField);
         model.addAttribute("fieldGeneralNameFromField", fieldGeneralNameFromField);
         model.addAttribute("fieldNameFromField", fieldNameFromField);
+
+        //справочники
+        model.addAttribute("regStatuses", regStatusRepository.findAll());
+
         return "catalog/protocol-doc-table";
     }
 
@@ -128,10 +143,12 @@ public class ProtocolDocController {
                                                                @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                                                                @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                                                                @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                                                               @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
                                                                @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
                                                                @RequestParam(name = "instanceFromField", required = false) String instanceFromField,
                                                                @RequestParam(name = "numberFromField", required = false) String numberFromField,
                                                                @RequestParam(name = "dateFromField", required = false) String dateFromField,
+                                                               @RequestParam(name = "dateToFromField", required = false) String dateToFromField,
                                                                @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
                                                                @RequestParam(name = "fieldGeneralNameFromField", required = false) String fieldGeneralNameFromField,
                                                                @RequestParam(name = "fieldNameFromField", required = false) String fieldNameFromField
@@ -143,10 +160,12 @@ public class ProtocolDocController {
                         regStatusFromField,
                         regNumberFromField,
                         dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField!=null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                         subjectFromField,
                         instanceFromField,
                         numberFromField,
-                        dateFromField,
+                        dateFromField!=null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                        dateToFromField!=null && !dateToFromField.isEmpty() ? DateFormatter.getDateFromString(dateToFromField) : null,
                         licenseNumberFromField,
                         fieldGeneralNameFromField,
                         fieldNameFromField));
@@ -157,11 +176,10 @@ public class ProtocolDocController {
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         for (ProtocolDoc p: docs) {
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -295,7 +313,10 @@ public class ProtocolDocController {
             cell.setCellValue(p.getNumber());
 
             cell = row.createCell(9, CellType.STRING);
-            cell.setCellValue(p.getDate());
+            cell.setCellStyle(cellDateStyle);
+            if(p.getDate() != null) {
+                cell.setCellValue(p.getDate());
+            }
 
             cell = row.createCell(10, CellType.STRING);
             cell.setCellValue(p.getLicenseNumber());
@@ -331,9 +352,8 @@ public class ProtocolDocController {
         FileOutputStream outFile = new FileOutputStream(file);
         workbook.write(outFile);
         outFile.close();
-        //System.out.println("Created file: " + file.getAbsolutePath());
         model.addAttribute("filePath", filePath);
-        return "catalog/primary-file";
+        return "redirect:" + "/download/file/" + userService.getCurrentUserId() + "/Report.xls";
 
     }
 

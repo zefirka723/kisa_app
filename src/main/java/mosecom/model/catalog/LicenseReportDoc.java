@@ -72,4 +72,7 @@ public class LicenseReportDoc {
     @Column (name = "Comments")
     private String comments;
 
+    @Column (name = "Neck_secrecy_ID")
+    private int neckSecrecyId;
+
 }

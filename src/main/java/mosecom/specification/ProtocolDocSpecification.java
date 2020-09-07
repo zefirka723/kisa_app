@@ -27,6 +27,17 @@ public class ProtocolDocSpecification {
                 -> criteriaBuilder.equal(root.get("dateProcessing"), dateProcessingFromField );
     }
 
+    public static Specification<ProtocolDoc> dateProcessingToContains(Date dateProcessingToFromField) {
+        return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("dateProcessing"), dateProcessingToFromField );
+    }
+
+    public static Specification<ProtocolDoc> dateProcessingBetween(Date dateProcessingFromField, Date dateProcessingToFromField) {
+        return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.between(root.get("dateProcessing"), dateProcessingFromField, dateProcessingToFromField);
+    }
+
+
     public static Specification<ProtocolDoc> subjectContains(String subjectFromField) {
         return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.like(criteriaBuilder.lower(root.get("subject")), "%" + subjectFromField.toLowerCase() + "%");
@@ -42,9 +53,19 @@ public class ProtocolDocSpecification {
                 -> criteriaBuilder.like(criteriaBuilder.lower(root.get("number")), "%" + numberFromField.toLowerCase() + "%");
     }
 
-    public static Specification<ProtocolDoc> dateContains(String dateFromField) {
+    public static Specification<ProtocolDoc> dateContains(Date dateFromField) {
         return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.equal(root.get("date"), dateFromField );
+    }
+
+    public static Specification<ProtocolDoc> dateToContains(Date dateToFromField) {
+        return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("date"), dateToFromField );
+    }
+
+    public static Specification<ProtocolDoc> dateBetween(Date dateFromField, Date dateToFromField) {
+        return (Specification<ProtocolDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.between(root.get("date"), dateFromField, dateToFromField);
     }
 
     public static Specification<ProtocolDoc> licenseNumberContains(String licenseNumberFromField) {

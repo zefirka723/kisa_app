@@ -1,9 +1,12 @@
 package mosecom.controller.catalog;
 
+import mosecom.dao.inspections.RegStatusRepository;
 import mosecom.model.catalog.LicenseDoc;
 import mosecom.model.catalog.PrimaryDoc;
 import mosecom.service.UserService;
 import mosecom.service.catalog.LicenseDocServiceImpl;
+import mosecom.service.catalog.LicenseOrganizationServiceImpl;
+import mosecom.service.catalog.LicenseStatusServiceImpl;
 import mosecom.utils.DateFormatter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -37,6 +40,16 @@ public class LicenseDocController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    LicenseOrganizationServiceImpl licenseOrganizationService;
+
+    @Autowired
+    LicenseStatusServiceImpl licenseStatusService;
+
+    @Autowired // TODO: переделать всё на сервисы
+            RegStatusRepository regStatusRepository;
+
+
     @Value("${upload.path}" + "CATALOG_REPORTS_TEMP/")
     private String uploadPath;
 
@@ -46,17 +59,20 @@ public class LicenseDocController {
                               @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                               @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                               @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                              @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
                               @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
                               @RequestParam(name = "organizationsFromField", required = false) String organizationsFromField,
                               @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
                               @RequestParam(name = "statusFromField", required = false) String statusFromField,
                               @RequestParam(name = "dateStartFromField", required = false) String dateStartFromField,
+                              @RequestParam(name = "dateStartToFromField", required = false) String dateStartToFromField,
                               @RequestParam(name = "dateEndFromField", required = false) String dateEndFromField,
+                              @RequestParam(name = "dateEndToFromField", required = false) String dateEndToFromField,
                               @RequestParam(name = "flowRateSummFromField", required = false) String flowRateSummFromField,
                               @RequestParam(name = "commentsDocsFromField", required = false) String commentsDocsFromField,
 
                               @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-                              @RequestParam(name = "itemsByPage", required = false, defaultValue = "25" ) Integer itemsByPage) throws ParseException {
+                              @RequestParam(name = "itemsByPage", required = false, defaultValue = "25") Integer itemsByPage) throws ParseException {
 
         if (page < 1) {
             page = 1;
@@ -64,18 +80,21 @@ public class LicenseDocController {
 
         Page<LicenseDoc> licenseDocs = licenseDocService
                 .findAllByPagingAndFiltering(licenseDocService.getSpec(
-                        idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
-                                                                       regStatusFromField,
-                                                                       regNumberFromField,
-                        dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-                                                                        licenseNumberFromField,
-                                                                        organizationsFromField,
-                                                                        subjectFromField,
-                                                                        statusFromField,
-                        dateStartFromField!=null && !dateStartFromField.isEmpty() ? DateFormatter.getDateFromString(dateStartFromField) : null,
-                        dateEndFromField!=null && !dateEndFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndFromField) : null,
-                        flowRateSummFromField!= null && !flowRateSummFromField.isEmpty() ? Float.parseFloat(flowRateSummFromField) : null,
-                                                                        commentsDocsFromField
+                        idFromField != null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
+                        regStatusFromField,
+                        regNumberFromField,
+                        dateProcessingFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField != null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
+                        licenseNumberFromField,
+                        organizationsFromField,
+                        subjectFromField,
+                        statusFromField,
+                        dateStartFromField != null && !dateStartFromField.isEmpty() ? DateFormatter.getDateFromString(dateStartFromField) : null,
+                        dateStartToFromField != null && !dateStartToFromField.isEmpty() ? DateFormatter.getDateFromString(dateStartToFromField) : null,
+                        dateEndFromField != null && !dateEndFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndFromField) : null,
+                        dateEndToFromField != null && !dateEndToFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndToFromField) : null,
+                        flowRateSummFromField != null && !flowRateSummFromField.isEmpty() ? Float.parseFloat(flowRateSummFromField) : null,
+                        commentsDocsFromField
 
                         ),
                         PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
@@ -85,17 +104,16 @@ public class LicenseDocController {
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
 
         // обрезаем коммент и прячем секретные ссылки
-        for (LicenseDoc p: licenseDocs) {
+        for (LicenseDoc p : licenseDocs) {
             p.setCommentsLicenseForFront(p.getCommentsLicense().length() > 45 ?
-                    p.getCommentsLicense().substring(0, 45)+"..."
+                    p.getCommentsLicense().substring(0, 45) + "..."
                     : p.getCommentsLicense()
             );
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -105,75 +123,95 @@ public class LicenseDocController {
         model.addAttribute("page", page);
         model.addAttribute("itemsByPage", itemsByPage);
         model.addAttribute("filtresString", licenseDocService.getFiltresString(
-                idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
+                idFromField != null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
                 regStatusFromField,
                 regNumberFromField,
-                dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                dateProcessingFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                dateProcessingToFromField != null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                 licenseNumberFromField,
                 organizationsFromField,
                 subjectFromField,
                 statusFromField,
-                dateStartFromField!=null && !dateStartFromField.isEmpty() ? DateFormatter.getDateFromString(dateStartFromField) : null,
-                dateEndFromField!=null && !dateEndFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndFromField) : null,
-                flowRateSummFromField!= null && !flowRateSummFromField.isEmpty() ? Float.parseFloat(flowRateSummFromField) : null,
+                dateStartFromField != null && !dateStartFromField.isEmpty() ? DateFormatter.getDateFromString(dateStartFromField) : null,
+                dateStartToFromField != null && !dateStartToFromField.isEmpty() ? DateFormatter.getDateFromString(dateStartToFromField) : null,
+                dateEndFromField != null && !dateEndFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndFromField) : null,
+                dateEndToFromField != null && !dateEndToFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndToFromField) : null,
+                flowRateSummFromField != null && !flowRateSummFromField.isEmpty() ? Float.parseFloat(flowRateSummFromField) : null,
                 commentsDocsFromField));
         model.addAttribute("idFromField", idFromField);
         model.addAttribute("regStatusFromField", regStatusFromField);
         model.addAttribute("regNumberFromField", regNumberFromField);
         model.addAttribute("dateProcessingFromField", dateProcessingFromField);
+        model.addAttribute("dateProcessingToFromField", dateProcessingToFromField);
         model.addAttribute("licenseNumberFromField", licenseNumberFromField);
         model.addAttribute("organizationsFromField", organizationsFromField);
         model.addAttribute("subjectFromField", subjectFromField);
         model.addAttribute("statusFromField", statusFromField);
         model.addAttribute("dateStartFromField", dateStartFromField);
+        model.addAttribute("dateStartToFromField", dateStartToFromField);
         model.addAttribute("dateEndFromField", dateEndFromField);
+        model.addAttribute("dateEndToFromField", dateEndToFromField);
         model.addAttribute("flowRateSummFromField", flowRateSummFromField);
         model.addAttribute("commentsDocsFromField", commentsDocsFromField);
+
+        // справочники
+        model.addAttribute("regStatuses", regStatusRepository.findAll());
+        model.addAttribute("licenseStatuses", licenseStatusService.findAll());
+        model.addAttribute("licenseOrganizations", licenseOrganizationService.findAll());
+
         return "catalog/license-doc-table";
     }
 
-    @GetMapping("/license-doc-excel")public String createFile(Model model,
-                                                              @RequestParam(name = "idFromField", required = false) String idFromField,
-                                                              @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
-                                                              @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
-                                                              @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
-                                                              @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
-                                                              @RequestParam(name = "organizationsFromField", required = false) String organizationsFromField,
-                                                              @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
-                                                              @RequestParam(name = "statusFromField", required = false) String statusFromField,
-                                                              @RequestParam(name = "dateStartFromField", required = false) String dateStartFromField,
-                                                              @RequestParam(name = "dateEndFromField", required = false) String dateEndFromField,
-                                                              @RequestParam(name = "flowRateSummFromField", required = false) String flowRateSummFromField,
-                                                              @RequestParam(name = "commentsDocsFromField", required = false) String commentsDocsFromField
-                                            ) throws ParseException, IOException {
+    @GetMapping("/license-doc-excel")
+    public String createFile(Model model,
+                             @RequestParam(name = "idFromField", required = false) String idFromField,
+                             @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
+                             @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
+                             @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                             @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
+                             @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
+                             @RequestParam(name = "organizationsFromField", required = false) String organizationsFromField,
+                             @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
+                             @RequestParam(name = "statusFromField", required = false) String statusFromField,
+                             @RequestParam(name = "dateStartFromField", required = false) String dateStartFromField,
+                             @RequestParam(name = "dateStartToFromField", required = false) String dateStartToFromField,
+                             @RequestParam(name = "dateEndFromField", required = false) String dateEndFromField,
+                             @RequestParam(name = "dateEndToFromField", required = false) String dateEndToFromField,
+                             @RequestParam(name = "flowRateSummFromField", required = false) String flowRateSummFromField,
+                             @RequestParam(name = "commentsDocsFromField", required = false) String commentsDocsFromField
+    ) throws ParseException, IOException {
 
         List<LicenseDoc> licenseDocs = licenseDocService
                 .findAllByFiltering(licenseDocService.getSpec(
-                        idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
+                        idFromField != null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
                         regStatusFromField,
                         regNumberFromField,
-                        dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField != null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                         licenseNumberFromField,
                         organizationsFromField,
                         subjectFromField,
                         statusFromField,
-                        dateStartFromField!=null && !dateStartFromField.isEmpty() ? DateFormatter.getDateFromString(dateStartFromField) : null,
-                        dateEndFromField!=null && !dateEndFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndFromField) : null,
-                        flowRateSummFromField!= null && !flowRateSummFromField.isEmpty() ? Float.parseFloat(flowRateSummFromField) : null,
+                        dateStartFromField != null && !dateStartFromField.isEmpty() ? DateFormatter.getDateFromString(dateStartFromField) : null,
+                        dateStartToFromField != null && !dateStartToFromField.isEmpty() ? DateFormatter.getDateFromString(dateStartToFromField) : null,
+                        dateEndFromField != null && !dateEndFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndFromField) : null,
+                        dateEndToFromField != null && !dateEndToFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndToFromField) : null,
+                        flowRateSummFromField != null && !flowRateSummFromField.isEmpty() ? Float.parseFloat(flowRateSummFromField) : null,
                         commentsDocsFromField));
 
 
         // скрываем ссылки ДСП и секретных доков
         Boolean userDspAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
-        for (LicenseDoc p: licenseDocs) {
+        for (LicenseDoc p : licenseDocs) {
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
-                    p.setLink("нет доступа");
-                }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
-                    p.setLink("нет доступа");
+                if (p.getNeckSecrecy() != null) {
+                    if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
+                        p.setLink("нет доступа");
+                    }
+                    if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
+                        p.setLink("нет доступа");
+                    }
                 }
             }
         }
@@ -292,7 +330,7 @@ public class LicenseDocController {
 
             cell = row.createCell(3, CellType.STRING);
             cell.setCellStyle(cellDateStyle);
-            if(p.getDateProcessing() != null) {
+            if (p.getDateProcessing() != null) {
                 cell.setCellValue(p.getDateProcessing());
             }
 
@@ -315,17 +353,17 @@ public class LicenseDocController {
             cell.setCellValue(p.getStatus());
 
             cell = row.createCell(10, CellType.STRING);
-            if(p.getDateStart() != null) {
+            if (p.getDateStart() != null) {
                 cell.setCellValue(p.getDateStart());
             }
 
             cell = row.createCell(11, CellType.STRING);
-            if(p.getDateEnd() != null) {
+            if (p.getDateEnd() != null) {
                 cell.setCellValue(p.getDateEnd());
             }
 
             cell = row.createCell(12, CellType.STRING);
-            if(p.getFlowRateSumm() != null) {
+            if (p.getFlowRateSumm() != null) {
                 cell.setCellValue(p.getFlowRateSumm());
             }
 
@@ -359,7 +397,7 @@ public class LicenseDocController {
         outFile.close();
         //System.out.println("Created file: " + file.getAbsolutePath());
         model.addAttribute("filePath", filePath);
-        return "catalog/primary-file";
+        return "redirect:" + "/download/file/" + userService.getCurrentUserId() + "/Report.xls";
 
     }
 

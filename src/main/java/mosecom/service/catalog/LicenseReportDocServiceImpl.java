@@ -23,9 +23,11 @@ public class LicenseReportDocServiceImpl {
                                              String regStatusFromField,
                                              String regNumberFromField,
                                              Date dateProcessingFromField,
+                                             Date dateProcessingToFromField,
                                              String licenseNumberFromField,
                                              String subjectFromField,
                                              Date dateFromField,
+                                             Date dateToFromField,
                                              String reportTypeFromField,
                                              String reportingPeriodFromField,
                                              String have4LSFromField,
@@ -43,18 +45,37 @@ public class LicenseReportDocServiceImpl {
         if (regNumberFromField != null && !regNumberFromField.isEmpty()) {
             spec = spec.and(LicenseReportDocSpecification.regNumberContains(regNumberFromField));
         }
-        if (dateProcessingFromField != null) {
+
+        if(dateProcessingFromField != null && dateProcessingToFromField != null) {
+            spec = spec.and(LicenseReportDocSpecification.dateProcessingBetween(dateProcessingFromField, dateProcessingToFromField));
+        }
+        if (dateProcessingFromField != null && dateProcessingToFromField == null) {
             spec = spec.and(LicenseReportDocSpecification.dateProcessingContains(dateProcessingFromField));
         }
+        if (dateProcessingToFromField != null && dateProcessingFromField == null) {
+            spec = spec.and(LicenseReportDocSpecification.dateProcessingToContains(dateProcessingToFromField));
+        }
+
+
         if (licenseNumberFromField != null && !licenseNumberFromField.isEmpty()) {
             spec = spec.and(LicenseReportDocSpecification.licenseNumberContains(licenseNumberFromField));
         }
         if (subjectFromField != null && !subjectFromField.isEmpty()) {
             spec = spec.and(LicenseReportDocSpecification.subjectContains(subjectFromField));
         }
-        if (dateFromField != null) {
+
+        if(dateFromField != null && dateToFromField != null) {
+            spec = spec.and(LicenseReportDocSpecification.dateBetween(dateFromField, dateToFromField));
+        }
+        if (dateFromField != null && dateToFromField == null) {
             spec = spec.and(LicenseReportDocSpecification.dateContains(dateFromField));
         }
+        if (dateToFromField != null && dateFromField == null) {
+            spec = spec.and(LicenseReportDocSpecification.dateToContains(dateToFromField));
+        }
+
+
+
         if (reportTypeFromField != null && !reportTypeFromField.isEmpty()) {
             spec = spec.and(LicenseReportDocSpecification.reportTypeContains(reportTypeFromField));
         }
@@ -77,9 +98,11 @@ public class LicenseReportDocServiceImpl {
                                    String regStatusFromField,
                                    String regNumberFromField,
                                    Date dateProcessingFromField,
+                                   Date dateProcessingToFromField,
                                    String licenseNumberFromField,
                                    String subjectFromField,
                                    Date dateFromField,
+                                   Date dateToFromField,
                                    String reportTypeFromField,
                                    String reportingPeriodFromField,
                                    String have4LSFromField,
@@ -98,6 +121,9 @@ public class LicenseReportDocServiceImpl {
         if (dateProcessingFromField != null) {
             filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
         }
+        if (dateProcessingToFromField != null) {
+            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
+        }
         if (licenseNumberFromField != null && !licenseNumberFromField.isEmpty()) {
             filtersBuilder.append("&licenseNumberFromField=" + licenseNumberFromField);
         }
@@ -106,6 +132,9 @@ public class LicenseReportDocServiceImpl {
         }
         if (dateFromField != null) {
             filtersBuilder.append("&dateFromField=" + dateFromField);
+        }
+        if (dateToFromField != null) {
+            filtersBuilder.append("&dateToFromField=" + dateToFromField);
         }
         if (reportTypeFromField != null && !reportTypeFromField.isEmpty()) {
             filtersBuilder.append("&reportTypeFromField=" + reportTypeFromField);

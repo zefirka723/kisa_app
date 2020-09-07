@@ -26,10 +26,12 @@ public class ProtocolDocServiceImpl {
                                               String regStatusFromField,
                                               String regNumberFromField,
                                               Date dateProcessingFromField,
+                                              Date dateProcessingToFromField,
                                               String subjectFromField,
                                               String instanceFromField,
                                               String numberFromField,
-                                              String dateFromField,
+                                              Date dateFromField,
+                                              Date dateToFromField,
                                               String licenseNumberFromField,
                                               String fieldGeneralNameFromField,
                                               String fieldNameFromField) {
@@ -44,8 +46,14 @@ public class ProtocolDocServiceImpl {
         if (regNumberFromField != null && !regNumberFromField.isEmpty()) {
             spec = spec.and(ProtocolDocSpecification.regNumberContains(regNumberFromField));
         }
-        if (dateProcessingFromField != null) {
+        if(dateProcessingFromField != null && dateProcessingToFromField != null) {
+            spec = spec.and(ProtocolDocSpecification.dateProcessingBetween(dateProcessingFromField, dateProcessingToFromField));
+        }
+        if (dateProcessingFromField != null && dateProcessingToFromField == null) {
             spec = spec.and(ProtocolDocSpecification.dateProcessingContains(dateProcessingFromField));
+        }
+        if (dateProcessingToFromField != null && dateProcessingFromField == null) {
+            spec = spec.and(ProtocolDocSpecification.dateProcessingToContains(dateProcessingToFromField));
         }
         if (subjectFromField != null && !subjectFromField.isEmpty()) {
             spec = spec.and(ProtocolDocSpecification.subjectContains(subjectFromField));
@@ -56,8 +64,14 @@ public class ProtocolDocServiceImpl {
         if (numberFromField != null && !numberFromField.isEmpty()) {
             spec = spec.and(ProtocolDocSpecification.numberContains(numberFromField));
         }
-        if (dateFromField != null && !dateFromField.isEmpty()) {
+        if(dateFromField != null && dateToFromField != null) {
+            spec = spec.and(ProtocolDocSpecification.dateBetween(dateFromField, dateToFromField));
+        }
+        if (dateFromField != null && dateToFromField == null) {
             spec = spec.and(ProtocolDocSpecification.dateContains(dateFromField));
+        }
+        if (dateToFromField != null && dateFromField == null) {
+            spec = spec.and(ProtocolDocSpecification.dateToContains(dateToFromField));
         }
         if (licenseNumberFromField != null && !licenseNumberFromField.isEmpty()) {
             spec = spec.and(ProtocolDocSpecification.licenseNumberContains(licenseNumberFromField));
@@ -75,10 +89,12 @@ public class ProtocolDocServiceImpl {
                                    String regStatusFromField,
                                    String regNumberFromField,
                                    Date dateProcessingFromField,
+                                   Date dateProcessingToFromField,
                                    String subjectFromField,
                                    String instanceFromField,
                                    String numberFromField,
-                                   String dateFromField,
+                                   Date dateFromField,
+                                   Date dateToFromField,
                                    String licenseNumberFromField,
                                    String fieldGeneralNameFromField,
                                    String fieldNameFromField) {
@@ -95,6 +111,9 @@ public class ProtocolDocServiceImpl {
         if (dateProcessingFromField != null) {
             filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
         }
+        if (dateProcessingToFromField != null) {
+            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
+        }
         if (subjectFromField != null && !subjectFromField.isEmpty()) {
             filtersBuilder.append("&subjectFromField=" + subjectFromField);
         }
@@ -106,6 +125,9 @@ public class ProtocolDocServiceImpl {
         }
         if (dateFromField != null) {
             filtersBuilder.append("&dateFromField=" + dateFromField);
+        }
+        if (dateToFromField != null) {
+            filtersBuilder.append("&dateToFromField=" + dateToFromField);
         }
         if (licenseNumberFromField != null && !licenseNumberFromField.isEmpty()) {
             filtersBuilder.append("&licenseNumberFromField=" + licenseNumberFromField);

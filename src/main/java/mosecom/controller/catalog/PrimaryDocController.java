@@ -1,9 +1,14 @@
 package mosecom.controller.catalog;
 
 import mosecom.dao.catalog.PrimaryDocRepository;
+import mosecom.dao.catalog.dictionaties.TypeObservRepository;
+import mosecom.dao.inspections.RegStatusRepository;
+import mosecom.dao.inspections.SecrecyRepository;
 import mosecom.model.catalog.PrimaryDoc;
 import mosecom.service.UserService;
+import mosecom.service.catalog.DocumentTypeServiceImpl;
 import mosecom.service.catalog.PrimaryDocServiceImpl;
+import mosecom.service.registration.DocumentServiceImpl;
 import mosecom.utils.DateFormatter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -26,6 +31,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.Arrays;
@@ -42,6 +48,15 @@ public class PrimaryDocController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    RegStatusRepository regStatusRepository; // TODO: переделать на сервисы тут и далее
+
+    @Autowired
+    TypeObservRepository typeObservRepository;
+
+    @Autowired
+    DocumentTypeServiceImpl documentTypeService;
 
     @Value("${upload.path}" + "CATALOG_REPORTS_TEMP/")
     private String uploadPath;
@@ -60,12 +75,14 @@ public class PrimaryDocController {
                               @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                               @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                               @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                              @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
                               @RequestParam(name = "typeObservFromField", required = false) String typeObservFromField,
                               @RequestParam(name = "observIdFromField", required = false) String observIdFromField,
                               @RequestParam(name = "docTypeFromField", required = false) String docTypeFromField,
                               @RequestParam(name = "datePrepareFromField", required = false) String datePrepareFromField,
+                              @RequestParam(name = "datePrepareToFromField", required = false) String datePrepareToFromField,
                               @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-                              @RequestParam(name = "itemsByPage", required = false, defaultValue = "25" ) Integer itemsByPage) throws ParseException {
+                              @RequestParam(name = "itemsByPage", required = false, defaultValue = "25") Integer itemsByPage) throws ParseException {
 
 
         if (page < 1) {
@@ -74,27 +91,28 @@ public class PrimaryDocController {
 
         Page<PrimaryDoc> primaryDocs = primaryDocService
                 .findAllByPagingAndFiltering(primaryDocService.getSpec(
-                        idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
-                                                                       regStatusFromField,
-                                                                       regNumberFromField,
-                        dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-                                                                       typeObservFromField,
-                                                                       observIdFromField,
-                                                                       docTypeFromField,
-                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null),
+                        idFromField != null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
+                        regStatusFromField,
+                        regNumberFromField,
+                        dateProcessingFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField != null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
+                        typeObservFromField,
+                        observIdFromField,
+                        docTypeFromField,
+                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null,
+                        datePrepareToFromField != null && !datePrepareToFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareToFromField) : null),
                         PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
 
         // скрываем ссылки ДСП и секретных доков
         Boolean userDspAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
 
-        for (PrimaryDoc p: primaryDocs) {
+        for (PrimaryDoc p : primaryDocs) {
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -104,74 +122,78 @@ public class PrimaryDocController {
         model.addAttribute("page", page);
         model.addAttribute("itemsByPage", itemsByPage);
         model.addAttribute("filtresString", primaryDocService.getFiltresString(
-                idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
-                                                                                        regStatusFromField,
-                                                                                        regNumberFromField,
+                idFromField != null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
+                regStatusFromField,
+                regNumberFromField,
                 datePrepareFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-                                                                                        typeObservFromField,
-                                                                                        observIdFromField,
-                                                                                        docTypeFromField,
-                datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null));
+                datePrepareToFromField != null && !datePrepareToFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareToFromField) : null,
+                typeObservFromField,
+                observIdFromField,
+                docTypeFromField,
+                datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null,
+                datePrepareToFromField != null && !datePrepareToFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareToFromField) : null));
         model.addAttribute("idFromField", idFromField);
         model.addAttribute("regStatusFromField", regStatusFromField);
         model.addAttribute("regNumberFromField", regNumberFromField);
         model.addAttribute("dateProcessingFromField", dateProcessingFromField);
+        model.addAttribute("dateProcessingToFromField", dateProcessingToFromField);
         model.addAttribute("typeObservFromField", typeObservFromField);
         model.addAttribute("observIdFromField", observIdFromField);
         model.addAttribute("docTypeFromField", docTypeFromField);
         model.addAttribute("datePrepareFromField", datePrepareFromField);
+        model.addAttribute("datePrepareToFromField", datePrepareToFromField);
+
+        //справочники
+        model.addAttribute("regStatuses", regStatusRepository.findAll());
+        model.addAttribute("observTypes", typeObservRepository.findAllByOrderByNameAsc());
+
+        int[] docTypesForPrimary = new int[]{1001, 1002, 1003, 1004, 1101, 1102, 1201, 1202, 1203, 1900, 2001,
+                2002, 2003, 2004, 2005, 2101, 2102, 2201, 3001, 3002, 3003, 3004,
+                3005, 3006, 3007, 8001
+        };
+        model.addAttribute("docTypes", documentTypeService.getTypesByIds(docTypesForPrimary));
+
         return "catalog/primary-table";
     }
 
-    @GetMapping("/primary-excel")public String createFile(Model model,
-                                           @RequestParam(name = "idFromField", required = false) String idFromField,
-                                           @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
-                                           @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
-                                           @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
-                                           @RequestParam(name = "typeObservFromField", required = false) String typeObservFromField,
-                                           @RequestParam(name = "observIdFromField", required = false) String observIdFromField,
-                                           @RequestParam(name = "docTypeFromField", required = false) String docTypeFromField,
-                                           @RequestParam(name = "datePrepareFromField", required = false) String datePrepareFromField//,
-//                                           @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-//                                           @RequestParam(name = "itemsByPage", required = false, defaultValue = "25") Integer itemsByPage
-                                            ) throws ParseException, IOException {
+    @GetMapping("/primary-excel")
+    public String createFile(Model model,
+                             @RequestParam(name = "idFromField", required = false) String idFromField,
+                             @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
+                             @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
+                             @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                             @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
+                             @RequestParam(name = "typeObservFromField", required = false) String typeObservFromField,
+                             @RequestParam(name = "observIdFromField", required = false) String observIdFromField,
+                             @RequestParam(name = "docTypeFromField", required = false) String docTypeFromField,
+                             @RequestParam(name = "datePrepareFromField", required = false) String datePrepareFromField,
+                             @RequestParam(name = "datePrepareToFromField", required = false) String datePrepareToFromField//,
+    ) throws ParseException, IOException {
 
-        //itemsByPage = primaryDocService.getCount();
-
-//        Page<PrimaryDoc> primaryDocs = primaryDocService
-//                .findAllByPagingAndFiltering(primaryDocService.getSpec(
-//                        idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
-//                        regStatusFromField,
-//                        regNumberFromField,
-//                        dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-//                        typeObservFromField,
-//                        observIdFromField,
-//                        docTypeFromField,
-//                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null),
-//                        PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
 
         List<PrimaryDoc> primaryDocs = primaryDocService
                 .findAllByFiltering(primaryDocService.getSpec(
-                        idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
+                        idFromField != null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
                         regStatusFromField,
                         regNumberFromField,
-                        dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField != null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                         typeObservFromField,
                         observIdFromField,
                         docTypeFromField,
-                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null));
+                        datePrepareFromField != null && !datePrepareFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareFromField) : null,
+                        datePrepareToFromField != null && !datePrepareToFromField.isEmpty() ? DateFormatter.getDateFromString(datePrepareToFromField) : null));
 
 
         // скрываем ссылки ДСП и секретных доков
         Boolean userDspAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
-        for (PrimaryDoc p: primaryDocs) {
+        for (PrimaryDoc p : primaryDocs) {
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -275,7 +297,7 @@ public class PrimaryDocController {
 
             cell = row.createCell(3, CellType.STRING);
             cell.setCellStyle(cellDateStyle);
-            if(p.getDateProcessing() != null) {
+            if (p.getDateProcessing() != null) {
                 cell.setCellValue(p.getDateProcessing());
             }
 
@@ -329,17 +351,9 @@ public class PrimaryDocController {
         outFile.close();
         //System.out.println("Created file: " + file.getAbsolutePath());
         model.addAttribute("filePath", filePath);
-        return "catalog/primary-file";
+        model.addAttribute("file", file);
+        return "redirect:" + "/download/file/" + userService.getCurrentUserId() + "/Report.xls";
 
     }
 
-//    @GetMapping(
-//            value = "/primary-file",
-//            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
-//    )
-//    public @ResponseBody
-//    byte[] getFile() throws IOException {
-//        InputStream in = getClass().getResource("D:\\1\\CATALOG_REPORTS_TEMP\\Report.xls").openStream();
-//        return IOUtils.toByteArray(in);
-//    }
 }

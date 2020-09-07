@@ -71,6 +71,9 @@ public class ConclusionDoc {
     @Column (name = "Comments")
     private String comment;
 
+    @Column (name = "Neck_secrecy_ID")
+    private int neckSecrecyId;
+
     @Transient
     private String conclusionNameForFront;
 }

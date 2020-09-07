@@ -27,6 +27,16 @@ public class OtherDocSpecification {
                 -> criteriaBuilder.equal(root.get("dateProcessing"), dateProcessingFromField );
     }
 
+    public static Specification<OtherDoc> dateProcessingToContains(Date dateProcessingToFromField) {
+        return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("dateProcessing"), dateProcessingToFromField );
+    }
+
+    public static Specification<OtherDoc> dateProcessingBetween(Date dateProcessingFromField, Date dateProcessingToFromField) {
+        return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.between(root.get("dateProcessing"), dateProcessingFromField, dateProcessingToFromField);
+    }
+
     public static Specification<OtherDoc> organizationSourceContains(String organizationSourceFromField) {
         return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.like(criteriaBuilder.lower(root.get("organizationSource")), "%" + organizationSourceFromField.toLowerCase() + "%");
@@ -55,5 +65,15 @@ public class OtherDocSpecification {
     public static Specification<OtherDoc> compilationYearContains(Integer compilationYearFromField) {
         return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.equal(root.get("compilationYear"), compilationYearFromField );
+    }
+
+    public static Specification<OtherDoc> compilationYearToContains(Integer compilationYearToFromField) {
+        return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("compilationYear"), compilationYearToFromField);
+    }
+
+    public static Specification<OtherDoc> compilationYearBetween(Integer compilationYearFromField, Integer compilationYearToFromField) {
+        return (Specification<OtherDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.between(root.get("compilationYear"), compilationYearFromField, compilationYearToFromField);
     }
 }

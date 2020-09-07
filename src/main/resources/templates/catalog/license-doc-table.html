@@ -29,6 +29,7 @@
     <!-- Мои скрипты -->
     <script src="/js/main.js"></script>
     <script src="/js/table-sort.js"></script>
+    <script src="/js/copyLink.js"></script>
 
 
     <!-- Мои материалы -->
@@ -88,33 +89,68 @@
                    <tr>
                        <td><label>Doc_ID<input class="form-control" th:name="idFromField" th:value="${idFromField}" type="text"></label></td>
                        <td><label>Регистрационный статус
-                            <input class="form-control" th:name="regStatusFromField" th:value="${regStatusFromField}" type="text"></label></td>
+                            <select style="width: 205px;" class="form-control"
+                                    th:attr="data-name=${regStatusFromField}" name="regStatusFromField">
+                                <option value="">Все</option>
+                                <option class="form-control" th:each="status : ${regStatuses}"
+                                        th:value="${status.name}"
+                                        th:text="${status.name}"
+                                        th:selected="${status.name == regStatusFromField}"/>
+                            </select>
+                            </label>
+                       </td>
                        <td><label>Регистрационный номер
                            <input class="form-control" th:name="regNumberFromField" th:value="${regNumberFromField}" type="text"></label></td>
-                       <td><label>Дата регистрации
-                           <input class="form-control" th:name="dateProcessingFromField" th:value="${dateProcessingFromField}" type="date"></label></td>
+                       <td><label>Дата регистрации c:
+                        <input class="form-control" th:name="dateProcessingFromField" th:value="${dateProcessingFromField}" type="date"></label></td>
+                        <td><label>по:
+                        <input style="width: 205px;" class="form-control" th:name="dateProcessingToFromField" th:value="${dateProcessingToFromField}" type="date"></label></td>
                    </tr>
 
                    <tr>
                        <td><label>Номер лицензии
                             <input class="form-control" th:name="licenseNumberFromField" th:value="${licenseNumberFromField}" type="text"></label></td>
                        <td><label>Выдавший орган
-                            <input class="form-control" th:name="organizationsFromField" th:value="${organizationsFromField}" type="text"></label></td>
+
+                            <select style="width: 205px;" class="form-control"
+                                    th:attr="data-name=${organizationsFromField}" name="organizationsFromField">
+                                <option value="">Все</option>
+                                <option class="form-control" th:each="organization : ${licenseOrganizations}"
+                                        th:value="${organization.name}"
+                                        th:text="${organization.name}"
+                                        th:selected="${organization.name == organizationsFromField}"/>
+                            </select>
+                            </label>
+                       </td>
                        <td><label>Недропользователь
                             <input class="form-control" th:name="subjectFromField" th:value="${subjectFromField}" type="text"></label></td>
                        <td><label>Статус лицензии
-                            <input class="form-control" th:name="statusFromField" th:value="${statusFromField}" type="text"></label></td>
+                            <select style="width: 175px;" class="form-control"
+                                    th:attr="data-name=${statusFromField}" name="statusFromField">
+                                <option value="">Все</option>
+                                <option class="form-control" th:each="status : ${licenseStatuses}"
+                                        th:value="${status.name}"
+                                        th:text="${status.name}"
+                                        th:selected="${status.name == statusFromField}"/>
+                            </select>
+                            </label>
+                       </td>
+                       <td><label>Разреш. среднесут. отбор
+                                                   <input class="form-control" th:name="flowRateSummFromField" th:value="${flowRateSummFromField}" type="text" placeholder="м3/сут"></label></td>
 
                    </tr>
 
                    <tr>
-                       <td><label>Регистрация лицензии
+                       <td><label>Регистрация лицензии c:
                             <input class="form-control" th:name="dateStartFromField" th:value="${dateStartFromField}" type="date" style="width: 206px;"></label></td>
-                       <td><label>Окончание лицензии
+                            <td><label>по:
+                            <input class="form-control" th:name="dateStartToFromField" th:value="${dateStartToFromField}" type="date" style="width: 206px;"></label></td>
+                       <td><label>Окончание лицензии с:
                             <input class="form-control" th:name="dateEndFromField" th:value="${dateEndFromField}" type="date" style="width: 206px;"></label></td>
-                       <td><label>Разреш. среднесут. отбор
-                            <input class="form-control" th:name="flowRateSummFromField" th:value="${flowRateSummFromField}" type="text" placeholder="м3/сут"></label></td>
-                       <td><label>Местополож. участка недр/примеч.
+                            <td><label>по:
+                            <input class="form-control" th:name="dateEndToFromField" th:value="${dateEndToFromField}" type="date"></label></td>
+
+                       <td><label title="Местоположение участка недр / Примечания при регистрации">Местополож. участка/прим.
                             <input class="form-control" th:name="commentsDocsFromField" th:value="${commentsDocsFromField}" type="text"></label></td>
 
                    </tr>
@@ -179,7 +215,7 @@
                     <th>Окончание лицензии <i class="fas fa-sort"></i></th>
                     <th>Разреш. среднесут. водоотбор (м3/сут) <i class="fas fa-sort"></i></th>
                     <th>Примечания к лицензии <i class="fas fa-sort"></i></th>
-                    <th>Примечания при рег/местополож. участка <i class="fas fa-sort"></i></th>
+                    <th>Местополож. участка/прим. при рег.<i class="fas fa-sort" title="Местоположение участка недр / Примечания при регистрации"></i></th>
                     <th>Кол-во страниц <i class="fas fa-sort"></i></th>
                     <th>Гриф <i class="fas fa-sort"></i></th>
                     <th>Место хранения <i class="fas fa-sort"></i></th>
@@ -214,7 +250,7 @@
                                             th:text="${doc.link}" style="color: #afafaf"/>
 
                         <td th:if="${doc.link != 'нет доступа' && doc.link != null}">
-                            <a th:href="@{${doc.link}}" title="Открыть папку">Открыть</a>
+                            <input type="text" th:value="${doc.link}" th:id="${doc.id}" onclick="copyLink(this.id)" title="Нажмите, чтобы скопировать">
                         </td>
                 </tr>
                 </tbody>

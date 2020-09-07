@@ -1,10 +1,10 @@
 package mosecom.controller.catalog;
 
-import mosecom.model.catalog.LicenseDoc;
+import mosecom.dao.inspections.RegStatusRepository;
 import mosecom.model.catalog.LicenseReportDoc;
 import mosecom.service.UserService;
-import mosecom.service.catalog.LicenseDocServiceImpl;
 import mosecom.service.catalog.LicenseReportDocServiceImpl;
+import mosecom.service.licensereport.ReportNameServiceImpl;
 import mosecom.utils.DateFormatter;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 import static mosecom.utils.ExcelGenerator.createStyleForTitle;
@@ -38,6 +37,12 @@ public class LicenseDocReportController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ReportNameServiceImpl reportNameService;
+
+    @Autowired //TODO: переделать на сервис
+            RegStatusRepository regStatusRepository;
+
     @Value("${upload.path}" + "CATALOG_REPORTS_TEMP/")
     private String uploadPath;
 
@@ -47,9 +52,11 @@ public class LicenseDocReportController {
                               @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
                               @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
                               @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                              @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
                               @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
                               @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
                               @RequestParam(name = "dateFromField", required = false) String dateFromField,
+                              @RequestParam(name = "dateToFromField", required = false) String dateToFromField,
                               @RequestParam(name = "reportTypeFromField", required = false) String reportTypeFromField,
                               @RequestParam(name = "reportingPeriodFromField", required = false) String reportingPeriodFromField,
                               @RequestParam(name = "have4LSFromField", required = false) String have4LSFromField,
@@ -57,7 +64,7 @@ public class LicenseDocReportController {
                               @RequestParam(name = "have3LSFromField", required = false) String have3LSFromField,
 
                               @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-                              @RequestParam(name = "itemsByPage", required = false, defaultValue = "25" ) Integer itemsByPage) throws ParseException {
+                              @RequestParam(name = "itemsByPage", required = false, defaultValue = "25") Integer itemsByPage) throws ParseException {
 
         if (page < 1) {
             page = 1;
@@ -65,18 +72,20 @@ public class LicenseDocReportController {
 
         Page<LicenseReportDoc> licenseReportDocs = licenseReportDocService
                 .findAllByPagingAndFiltering(licenseReportDocService.getSpec(
-                        idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
-                                                                       regStatusFromField,
-                                                                       regNumberFromField,
-                        dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
-                                                                        licenseNumberFromField,
-                                                                        subjectFromField,
-                        dateFromField!=null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
-                                                                        reportTypeFromField,
-                                                                        reportingPeriodFromField,
-                                                                        have4LSFromField,
-                                                                        have2TPFromField,
-                                                                        have3LSFromField
+                        idFromField != null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
+                        regStatusFromField,
+                        regNumberFromField,
+                        dateProcessingFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField != null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
+                        licenseNumberFromField,
+                        subjectFromField,
+                        dateFromField != null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                        dateToFromField != null && !dateToFromField.isEmpty() ? DateFormatter.getDateFromString(dateToFromField) : null,
+                        reportTypeFromField,
+                        reportingPeriodFromField,
+                        have4LSFromField,
+                        have2TPFromField,
+                        have3LSFromField
                         ),
                         PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
 
@@ -85,13 +94,12 @@ public class LicenseDocReportController {
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
 
         // прячем секретные ссылки
-        for (LicenseReportDoc p: licenseReportDocs) {
+        for (LicenseReportDoc p : licenseReportDocs) {
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -101,13 +109,15 @@ public class LicenseDocReportController {
         model.addAttribute("page", page);
         model.addAttribute("itemsByPage", itemsByPage);
         model.addAttribute("filtresString", licenseReportDocService.getFiltresString(
-                idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
+                idFromField != null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
                 regStatusFromField,
                 regNumberFromField,
-                dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                dateProcessingFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                dateProcessingToFromField != null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                 licenseNumberFromField,
                 subjectFromField,
-                dateFromField!=null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                dateFromField != null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                dateToFromField != null && !dateToFromField.isEmpty() ? DateFormatter.getDateFromString(dateToFromField) : null,
                 reportTypeFromField,
                 reportingPeriodFromField,
                 have4LSFromField,
@@ -117,41 +127,53 @@ public class LicenseDocReportController {
         model.addAttribute("regStatusFromField", regStatusFromField);
         model.addAttribute("regNumberFromField", regNumberFromField);
         model.addAttribute("dateProcessingFromField", dateProcessingFromField);
+        model.addAttribute("dateProcessingToFromField", dateProcessingToFromField);
         model.addAttribute("licenseNumberFromField", licenseNumberFromField);
         model.addAttribute("subjectFromField", subjectFromField);
         model.addAttribute("dateFromField", dateFromField);
+        model.addAttribute("dateToFromField", dateToFromField);
         model.addAttribute("reportTypeFromField", reportTypeFromField);
         model.addAttribute("reportingPeriodFromField", reportingPeriodFromField);
         model.addAttribute("have4LSFromField", have4LSFromField);
         model.addAttribute("have2TPFromField", have2TPFromField);
         model.addAttribute("have3LSFromField", have3LSFromField);
+
+        // справочники
+        model.addAttribute("regStatuses", regStatusRepository.findAll());
+        model.addAttribute("reportTypes", reportNameService.findAllReportNames());
+
         return "catalog/license-report-doc-table";
     }
 
-    @GetMapping("/license-report-doc-excel")public String createFile(Model model,
-                                                                     @RequestParam(name = "idFromField", required = false) String idFromField,
-                                                                     @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
-                                                                     @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
-                                                                     @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
-                                                                     @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
-                                                                     @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
-                                                                     @RequestParam(name = "dateFromField", required = false) String dateFromField,
-                                                                     @RequestParam(name = "reportTypeFromField", required = false) String reportTypeFromField,
-                                                                     @RequestParam(name = "reportingPeriodFromField", required = false) String reportingPeriodFromField,
-                                                                     @RequestParam(name = "have4LSFromField", required = false) String have4LSFromField,
-                                                                     @RequestParam(name = "have2TPFromField", required = false) String have2TPFromField,
-                                                                     @RequestParam(name = "have3LSFromField", required = false) String have3LSFromField
-                                            ) throws ParseException, IOException {
+    @GetMapping("/license-report-doc-excel")
+    public String createFile(Model model,
+                             @RequestParam(name = "idFromField", required = false) String idFromField,
+                             @RequestParam(name = "regStatusFromField", required = false) String regStatusFromField,
+                             @RequestParam(name = "regNumberFromField", required = false) String regNumberFromField,
+                             @RequestParam(name = "dateProcessingFromField", required = false) String dateProcessingFromField,
+                             @RequestParam(name = "dateProcessingToFromField", required = false) String dateProcessingToFromField,
+                             @RequestParam(name = "licenseNumberFromField", required = false) String licenseNumberFromField,
+                             @RequestParam(name = "subjectFromField", required = false) String subjectFromField,
+                             @RequestParam(name = "dateFromField", required = false) String dateFromField,
+                             @RequestParam(name = "dateToFromField", required = false) String dateToFromField,
+                             @RequestParam(name = "reportTypeFromField", required = false) String reportTypeFromField,
+                             @RequestParam(name = "reportingPeriodFromField", required = false) String reportingPeriodFromField,
+                             @RequestParam(name = "have4LSFromField", required = false) String have4LSFromField,
+                             @RequestParam(name = "have2TPFromField", required = false) String have2TPFromField,
+                             @RequestParam(name = "have3LSFromField", required = false) String have3LSFromField
+    ) throws ParseException, IOException {
 
         List<LicenseReportDoc> licenseReportDocs = licenseReportDocService
                 .findAllByFiltering(licenseReportDocService.getSpec(
-                        idFromField!=null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
+                        idFromField != null && !idFromField.isEmpty() ? Integer.parseInt(idFromField) : null,
                         regStatusFromField,
                         regNumberFromField,
-                        dateProcessingFromField!=null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingFromField != null && !dateProcessingFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingFromField) : null,
+                        dateProcessingToFromField != null && !dateProcessingToFromField.isEmpty() ? DateFormatter.getDateFromString(dateProcessingToFromField) : null,
                         licenseNumberFromField,
                         subjectFromField,
-                        dateFromField!=null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                        dateFromField != null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
+                        dateToFromField != null && !dateToFromField.isEmpty() ? DateFormatter.getDateFromString(dateToFromField) : null,
                         reportTypeFromField,
                         reportingPeriodFromField,
                         have4LSFromField,
@@ -162,13 +184,12 @@ public class LicenseDocReportController {
         // скрываем ссылки ДСП и секретных доков
         Boolean userDspAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
         Boolean userConfAllowed = userService.getUser(userService.getCurrentUserId()).getIsOfficialUseAllowed();
-        for (LicenseReportDoc p: licenseReportDocs) {
+        for (LicenseReportDoc p : licenseReportDocs) {
             if (p.getNeckSecrecy() != null) {
-                if (p.getNeckSecrecy().equals("Для служебного пользования") && !userDspAllowed) {
+                if (p.getNeckSecrecyId() == 1 && !userDspAllowed) { // ДСП
                     p.setLink("нет доступа");
                 }
-                if ((p.getNeckSecrecy().equals("Конфиденциально в течение 5 лет") || p.getNeckSecrecy().equals("Конфиденциально в течение 7 лет"))
-                        && !userConfAllowed) {
+                if ((p.getNeckSecrecyId() == 2 || p.getNeckSecrecyId() == 3) && !userConfAllowed) { // конфиденциально
                     p.setLink("нет доступа");
                 }
             }
@@ -288,7 +309,7 @@ public class LicenseDocReportController {
 
             cell = row.createCell(3, CellType.STRING);
             cell.setCellStyle(cellDateStyle);
-            if(p.getDateProcessing() != null) {
+            if (p.getDateProcessing() != null) {
                 cell.setCellValue(p.getDateProcessing());
             }
 
@@ -306,7 +327,7 @@ public class LicenseDocReportController {
 
             cell = row.createCell(8, CellType.STRING);
             cell.setCellStyle(cellDateStyle);
-            if(p.getDate() != null) {
+            if (p.getDate() != null) {
                 cell.setCellValue(p.getDate());
             }
 
@@ -351,7 +372,7 @@ public class LicenseDocReportController {
         workbook.write(outFile);
         outFile.close();
         model.addAttribute("filePath", filePath);
-        return "catalog/primary-file";
+        return "redirect:" + "/download/file/" + userService.getCurrentUserId() + "/Report.xls";
 
     }
 

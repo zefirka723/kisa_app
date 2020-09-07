@@ -60,4 +60,8 @@ public class PrimaryDoc {
     @Column(name = "Comments")
     private String comments;
 
+
+    @Column (name = "Neck_secrecy_ID")
+    private int neckSecrecyId;
+
 }

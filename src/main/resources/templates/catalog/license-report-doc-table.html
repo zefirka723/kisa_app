@@ -29,6 +29,7 @@
     <!-- Мои скрипты -->
     <script src="/js/main.js"></script>
     <script src="/js/table-sort.js"></script>
+    <script src="/js/copyLink.js"></script>
 
 
     <!-- Мои материалы -->
@@ -88,11 +89,22 @@
                    <tr>
                        <td><label>Doc_ID<input class="form-control" th:name="idFromField" th:value="${idFromField}" type="text"></label></td>
                        <td><label>Регистрационный статус
-                            <input class="form-control" th:name="regStatusFromField" th:value="${regStatusFromField}" type="text"></label></td>
+                            <select style="width: 205px;" class="form-control"
+                                        th:attr="data-name=${regStatusFromField}" name="regStatusFromField">
+                                    <option value="">Все</option>
+                                    <option class="form-control" th:each="status : ${regStatuses}"
+                                            th:value="${status.name}"
+                                            th:text="${status.name}"
+                                            th:selected="${status.name == regStatusFromField}"/>
+                            </select>
+                            </label>
+                       </td>
                        <td><label>Регистрационный номер
                            <input class="form-control" th:name="regNumberFromField" th:value="${regNumberFromField}" type="text"></label></td>
-                       <td><label>Дата регистрации
+                       <td><label>Дата регистрации с:
                            <input class="form-control" th:name="dateProcessingFromField" th:value="${dateProcessingFromField}" type="date"></label></td>
+                       <td><label>по:
+                           <input class="form-control" th:name="dateProcessingToFromField" th:value="${dateProcessingToFromField}" type="date"></label></td>
                    </tr>
 
                    <tr>
@@ -100,10 +112,21 @@
                             <input class="form-control" th:name="licenseNumberFromField" th:value="${licenseNumberFromField}" type="text"></label></td>
                         <td><label>Недропользователь
                             <input class="form-control" th:name="subjectFromField" th:value="${subjectFromField}" type="text"></label></td>
-                       <td><label>Дата отчёта
-                            <input class="form-control" th:name="dateFromField" th:value="${dateFromField}" type="date"></label></td>
+                       <td><label>Дата отчёта с:
+                            <input style="width: 205px;" class="form-control" th:name="dateFromField" th:value="${dateFromField}" type="date"></label></td>
+                        <td><label>по:
+                            <input class="form-control" th:name="dateToFromField" th:value="${dateToFromField}" type="date"></label></td>
                        <td><label>Тип отчёта
-                            <input class="form-control" th:name="reportTypeFromField" th:value="${reportTypeFromField}" type="text"></label></td>
+                            <select class="form-control" style="width: 178px;"
+                                    th:attr="data-name=${reportTypeFromField}" name="reportTypeFromField">
+                                <option value="">Все</option>
+                                <option class="form-control" th:each="type : ${reportTypes}"
+                                        th:value="${type.name}"
+                                        th:text="${type.shortName}"
+                                        th:selected="${type.name == reportTypeFromField}"/>
+                            </select>
+                            </label>
+                       </td>
                    </tr>
 
                    <tr>
@@ -131,7 +154,7 @@
 
 
                        <td><label>3-ЛС
-                            <select class="form-control" th:name="have3LSFromField" th:value="${have3LSFromField}" style="width: 206px;">
+                            <select class="form-control" th:name="have3LSFromField" th:value="${have3LSFromField}" style="width: 177px;">
                                 <option value="">Неважно</option>
                                 <option value="+" th:selected="${have3LSFromField == '+'}">Есть</option>
                                 <option value="-" th:selected="${have3LSFromField == '-'}">Нет</option>
@@ -235,7 +258,7 @@
                                             th:text="${doc.link}" style="color: #afafaf"/>
 
                         <td th:if="${doc.link != 'нет доступа' && doc.link != null}">
-                            <a th:href="@{${doc.link}}" title="Открыть папку">Открыть</a>
+                            <input type="text" th:value="${doc.link}" th:id="${doc.id}" onclick="copyLink(this.id)" title="Нажмите, чтобы скопировать">
                         </td>
                 </tr>
                 </tbody>

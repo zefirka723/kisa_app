@@ -27,10 +27,12 @@ public class PrimaryDocServiceImpl {
                                              String regStatusFromField,
                                              String regNumberFromField,
                                              Date dateProcessingFromField,
+                                             Date dateProcessingToFromField,
                                              String typeObservFromField,
                                              String observIdFromField,
                                              String docTypeFromField,
-                                             Date datePrepareFromField) {
+                                             Date datePrepareFromField,
+                                             Date datePrepareToFromField) {
 
         Specification<PrimaryDoc> spec = Specification.where(null);
         if (idFromField != null) {
@@ -42,9 +44,16 @@ public class PrimaryDocServiceImpl {
         if (regNumberFromField != null && !regNumberFromField.isEmpty()) {
             spec = spec.and(PrimaryDocSpecification.regNumberContains(regNumberFromField));
         }
-        if (dateProcessingFromField != null) {
+        if(dateProcessingFromField != null && dateProcessingToFromField != null) {
+            spec = spec.and(PrimaryDocSpecification.dateProcessingBetween(dateProcessingFromField, dateProcessingToFromField));
+        }
+        if (dateProcessingFromField != null && dateProcessingToFromField == null) {
             spec = spec.and(PrimaryDocSpecification.dateProcessingContains(dateProcessingFromField));
         }
+        if (dateProcessingToFromField != null && dateProcessingFromField == null) {
+            spec = spec.and(PrimaryDocSpecification.dateProcessingToContains(dateProcessingToFromField));
+        }
+
         if (typeObservFromField != null && !typeObservFromField.isEmpty()) {
             spec = spec.and(PrimaryDocSpecification.typeObservContains(typeObservFromField));
         }
@@ -54,8 +63,14 @@ public class PrimaryDocServiceImpl {
         if (docTypeFromField != null && !docTypeFromField.isEmpty()) {
             spec = spec.and(PrimaryDocSpecification.docTypeContains(docTypeFromField));
         }
-        if (datePrepareFromField != null){ // && !datePrepareFromField.isEmpty()) {
+        if (datePrepareFromField != null && datePrepareToFromField == null){
             spec = spec.and(PrimaryDocSpecification.datePrepareContains(datePrepareFromField));
+        }
+        if (datePrepareToFromField != null && datePrepareFromField == null){
+            spec = spec.and(PrimaryDocSpecification.datePrepareToContains(datePrepareToFromField));
+        }
+        if (datePrepareFromField != null && datePrepareToFromField != null){
+            spec = spec.and(PrimaryDocSpecification.datePrepareBetween(datePrepareFromField, datePrepareToFromField));
         }
         return spec;
     }
@@ -64,10 +79,12 @@ public class PrimaryDocServiceImpl {
                                    String regStatusFromField,
                                    String regNumberFromField,
                                    Date dateProcessingFromField,
+                                   Date dateProcessingToFromField,
                                    String typeObservFromField,
                                    String observIdFromField,
                                    String docTypeFromField,
-                                   Date datePrepareFromField) {
+                                   Date datePrepareFromField,
+                                   Date datePrepareToFromField) {
         StringBuilder filtersBuilder = new StringBuilder();
         if (idFromField != null) {
             filtersBuilder.append("&idFromField=" + idFromField);
@@ -81,6 +98,9 @@ public class PrimaryDocServiceImpl {
         if (dateProcessingFromField != null) {
             filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
         }
+        if (dateProcessingToFromField != null) {
+            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
+        }
         if (typeObservFromField != null && !typeObservFromField.isEmpty()) {
             filtersBuilder.append("&typeObservFromField=" + typeObservFromField);
         }
@@ -92,6 +112,9 @@ public class PrimaryDocServiceImpl {
         }
         if (datePrepareFromField != null){ // && !datePrepareFromField.isEmpty()) {
             filtersBuilder.append("&datePrepareFromField=" + datePrepareFromField);
+        }
+        if (datePrepareToFromField != null){
+            filtersBuilder.append("&datePrepareToFromField=" + datePrepareToFromField);
         }
         return filtersBuilder.toString();
     }

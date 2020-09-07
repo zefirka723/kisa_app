@@ -28,6 +28,16 @@ public class PrimaryDocSpecification {
                 -> criteriaBuilder.equal(root.get("dateProcessing"), dateProcessingFromField );
     }
 
+    public static Specification<PrimaryDoc> dateProcessingToContains(Date dateProcessingToFromField) {
+        return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("dateProcessing"), dateProcessingToFromField );
+    }
+
+    public static Specification<PrimaryDoc> dateProcessingBetween(Date dateProcessingFromField, Date dateProcessingToFromField) {
+        return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.between(root.get("dateProcessing"), dateProcessingFromField, dateProcessingToFromField);
+    }
+
     public static Specification<PrimaryDoc> typeObservContains(String typeObservFromField) {
         return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.like(criteriaBuilder.lower(root.get("typeObserv")), "%" + typeObservFromField.toLowerCase() + "%");
@@ -47,6 +57,16 @@ public class PrimaryDocSpecification {
         return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.equal(root.get("datePrepare"), datePrepareFromField);
                 //.like(root.get("datePrepare"), "%" + datePrepareFromField + "%");
+    }
+
+    public static Specification<PrimaryDoc> datePrepareToContains(Date datePrepareToFromField) {
+        return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("datePrepare"), datePrepareToFromField);
+    }
+
+    public static Specification<PrimaryDoc> datePrepareBetween(Date datePrepareFromField, Date datePrepareToFromField) {
+        return (Specification<PrimaryDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.between(root.get("datePrepare"), datePrepareFromField, datePrepareToFromField);
     }
 
 }

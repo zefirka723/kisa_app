@@ -73,6 +73,9 @@ public class LicenseDoc {
     @Column (name = "Storage")
     private String storage;
 
+    @Column (name = "Neck_secrecy_ID")
+    private int neckSecrecyId;
+
     @Transient
     private String commentsLicenseForFront;
 
