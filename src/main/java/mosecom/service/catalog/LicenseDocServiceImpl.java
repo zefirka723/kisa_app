@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -122,10 +123,10 @@ public class LicenseDocServiceImpl {
             filtersBuilder.append("&regStatusFromField=" + regStatusFromField);
         }
         if (dateProcessingFromField != null) {
-            filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
+            filtersBuilder.append("&dateProcessingFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateProcessingFromField));
         }
         if (dateProcessingToFromField != null) {
-            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
+            filtersBuilder.append("&dateProcessingToFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateProcessingToFromField));
         }
         if (licenseNumberFromField != null && !licenseNumberFromField.isEmpty()) {
             filtersBuilder.append("&licenseNumberFromField=" + licenseNumberFromField);
@@ -140,16 +141,16 @@ public class LicenseDocServiceImpl {
             filtersBuilder.append("&statusFromField=" + statusFromField);
         }
         if (dateStartFromField != null) {
-            filtersBuilder.append("&dateStartFromField=" + dateStartFromField);
+            filtersBuilder.append("&dateStartFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateStartFromField));
         }
         if (dateStartToFromField != null) {
-            filtersBuilder.append("&dateStartToFromField=" + dateStartToFromField);
+            filtersBuilder.append("&dateStartToFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateStartToFromField));
         }
         if (dateEndFromField != null) {
-            filtersBuilder.append("&dateEndFromField=" + dateEndFromField);
+            filtersBuilder.append("&dateEndFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateEndFromField));
         }
         if (dateEndToFromField != null) {
-            filtersBuilder.append("&dateEndToFromField=" + dateEndToFromField);
+            filtersBuilder.append("&dateEndToFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateEndToFromField));
         }
         if (flowRateSummFromField != null) {
             filtersBuilder.append("&flowRateSummFromField=" + flowRateSummFromField);

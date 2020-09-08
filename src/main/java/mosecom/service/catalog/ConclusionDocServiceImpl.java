@@ -2,15 +2,15 @@ package mosecom.service.catalog;
 
 import mosecom.dao.catalog.ConclusionDocRepository;
 import mosecom.model.catalog.ConclusionDoc;
-import mosecom.model.catalog.ProtocolDoc;
 import mosecom.specification.ConclusionDocSpecification;
-import mosecom.specification.ProtocolDocSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -87,7 +87,7 @@ public class ConclusionDocServiceImpl {
                                    String employerFromField,
                                    String authorFromField,
                                    Integer compilationYearFromField,
-                                   Integer compilationYearToFromField) {
+                                   Integer compilationYearToFromField) throws ParseException {
         StringBuilder filtersBuilder = new StringBuilder();
         if (idFromField != null) {
             filtersBuilder.append("&idFromField=" + idFromField);
@@ -99,10 +99,10 @@ public class ConclusionDocServiceImpl {
             filtersBuilder.append("&regStatusFromField=" + regStatusFromField);
         }
         if (dateProcessingFromField != null) {
-            filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
+            filtersBuilder.append("&dateProcessingFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateProcessingFromField));
         }
         if (dateProcessingToFromField != null) {
-            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
+            filtersBuilder.append("&dateProcessingToFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateProcessingToFromField));
         }
         if (organizationSourceFromField != null && !organizationSourceFromField.isEmpty()) {
             filtersBuilder.append("&organizationSourceFromField=" + organizationSourceFromField);

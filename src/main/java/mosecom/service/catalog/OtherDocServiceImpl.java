@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -102,10 +103,10 @@ public class OtherDocServiceImpl {
             filtersBuilder.append("&regStatusFromField=" + regStatusFromField);
         }
         if (dateProcessingFromField != null) {
-            filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
+            filtersBuilder.append("&dateProcessingFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateProcessingFromField));
         }
         if (dateProcessingToFromField != null) {
-            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
+            filtersBuilder.append("&dateProcessingToFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateProcessingToFromField));
         }
         if (organizationSourceFromField != null && !organizationSourceFromField.isEmpty()) {
             filtersBuilder.append("&organizationSourceFromField=" + organizationSourceFromField);

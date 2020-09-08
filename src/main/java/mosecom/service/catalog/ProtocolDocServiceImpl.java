@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -109,10 +110,10 @@ public class ProtocolDocServiceImpl {
             filtersBuilder.append("&regStatusFromField=" + regStatusFromField);
         }
         if (dateProcessingFromField != null) {
-            filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
+            filtersBuilder.append("&dateProcessingFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateProcessingFromField));
         }
         if (dateProcessingToFromField != null) {
-            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
+            filtersBuilder.append("&dateProcessingToFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateProcessingToFromField));
         }
         if (subjectFromField != null && !subjectFromField.isEmpty()) {
             filtersBuilder.append("&subjectFromField=" + subjectFromField);
@@ -124,10 +125,10 @@ public class ProtocolDocServiceImpl {
             filtersBuilder.append("&numberFromField=" + numberFromField);
         }
         if (dateFromField != null) {
-            filtersBuilder.append("&dateFromField=" + dateFromField);
+            filtersBuilder.append("&dateFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateFromField));
         }
         if (dateToFromField != null) {
-            filtersBuilder.append("&dateToFromField=" + dateToFromField);
+            filtersBuilder.append("&dateToFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateToFromField));
         }
         if (licenseNumberFromField != null && !licenseNumberFromField.isEmpty()) {
             filtersBuilder.append("&licenseNumberFromField=" + licenseNumberFromField);

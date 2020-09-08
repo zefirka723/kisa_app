@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -96,10 +97,10 @@ public class PrimaryDocServiceImpl {
             filtersBuilder.append("&regNumberFromField=" + regNumberFromField);
         }
         if (dateProcessingFromField != null) {
-            filtersBuilder.append("&dateProcessingFromField=" + dateProcessingFromField);
+            filtersBuilder.append("&dateProcessingFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateProcessingFromField));
         }
         if (dateProcessingToFromField != null) {
-            filtersBuilder.append("&dateProcessingToFromField=" + dateProcessingToFromField);
+            filtersBuilder.append("&dateProcessingToFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(dateProcessingToFromField));
         }
         if (typeObservFromField != null && !typeObservFromField.isEmpty()) {
             filtersBuilder.append("&typeObservFromField=" + typeObservFromField);
@@ -111,10 +112,10 @@ public class PrimaryDocServiceImpl {
             filtersBuilder.append("&docTypeFromField=" + docTypeFromField);
         }
         if (datePrepareFromField != null){ // && !datePrepareFromField.isEmpty()) {
-            filtersBuilder.append("&datePrepareFromField=" + datePrepareFromField);
+            filtersBuilder.append("&datePrepareFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(datePrepareFromField));
         }
         if (datePrepareToFromField != null){
-            filtersBuilder.append("&datePrepareToFromField=" + datePrepareToFromField);
+            filtersBuilder.append("&datePrepareToFromField=" + new SimpleDateFormat("yyyy-MM-dd").format(datePrepareToFromField));
         }
         return filtersBuilder.toString();
     }
