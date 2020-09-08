@@ -72,7 +72,7 @@ public class ConclusionDoc {
     private String comment;
 
     @Column (name = "Neck_secrecy_ID")
-    private int neckSecrecyId;
+    private Integer neckSecrecyId;
 
     @Transient
     private String conclusionNameForFront;

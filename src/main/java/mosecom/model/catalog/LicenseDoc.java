@@ -74,7 +74,7 @@ public class LicenseDoc {
     private String storage;
 
     @Column (name = "Neck_secrecy_ID")
-    private int neckSecrecyId;
+    private Integer neckSecrecyId;
 
     @Transient
     private String commentsLicenseForFront;

@@ -70,5 +70,5 @@ public class ProtocolDoc {
     private String comment;
 
     @Column (name = "Neck_secrecy_ID")
-    private int neckSecrecyId;
+    private Integer neckSecrecyId;
 }

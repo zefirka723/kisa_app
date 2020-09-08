@@ -62,6 +62,6 @@ public class PrimaryDoc {
 
 
     @Column (name = "Neck_secrecy_ID")
-    private int neckSecrecyId;
+    private Integer neckSecrecyId;
 
 }
