@@ -99,7 +99,7 @@
                             </select>
                             </label>
                        </td>
-                       <td><label>Регистрационный номер
+                       <td><label title="Рег. номер в фонде">Рег. номер
                            <input class="form-control" th:name="regNumberFromField" th:value="${regNumberFromField}" type="text"></label></td>
                        <td><label>Дата регистрации с:
                            <input class="form-control" th:name="dateProcessingFromField" th:value="${dateProcessingFromField}" type="date"></label></td>
@@ -200,9 +200,9 @@
                 <tr>
                     <th>Doc_ID <i class="fas fa-sort"></i></th>
                     <th>Рег. статус <i class="fas fa-sort"></i></th>
-                    <th>Рег. номер в фонде <i class="fas fa-sort"></i></th>
+                    <th title="Рег. номер в фонде">Рег. номер <i class="fas fa-sort"></i></th>
                     <th>Дата регистрации <i class="fas fa-sort"></i></th>
-                    <th>ФИО регистратора <i class="fas fa-sort"></i></th>
+                    <th title="ФИО регистратора">Регистратор <i class="fas fa-sort"></i></th>
                     <th>Источник поступления <i class="fas fa-sort"></i></th>
                     <th>Тип отчёта <i class="fas fa-sort"></i></th>
                     <th>Название отчёта <i class="fas fa-sort"></i></th>
@@ -210,10 +210,10 @@
                     <th>Автор <i class="fas fa-sort"></i></th>
                     <th>Место составления <i class="fas fa-sort"></i></th>
                     <th>Год составления <i class="fas fa-sort"></i></th>
-                    <th>Наличие бумажной версии <i class="fas fa-sort"></i></th>
-                    <th>Наличие цифровой версии <i class="fas fa-sort"></i></th>
-                    <th>Количество страниц <i class="fas fa-sort"></i></th>
-                    <th>Количество листов графики <i class="fas fa-sort"></i></th>
+                    <th>Бум. версия <i class="fas fa-sort"></i></th>
+                    <th>Эл. версия <i class="fas fa-sort"></i></th>
+                    <th title="Количество страниц">Стр. <i class="fas fa-sort"></i></th>
+                    <th title="Количество листов графики">Графика <i class="fas fa-sort"></i></th>
                     <th>Гриф <i class="fas fa-sort"></i></th>
                     <th>Место хранения <i class="fas fa-sort"></i></th>
                     <th>Примечания <i class="fas fa-sort"></i></th>
@@ -233,9 +233,9 @@
                         <td th:text="${doc.name}"/>
                         <td th:text="${doc.organizationSource}"/>
                         <td th:text="${doc.docType}"/>
-                        <td th:text="${doc.reportNameForFront}" th:title="${doc.reportName}"/>
+                        <td th:text="${#strings.abbreviate(doc.reportName,78)}" th:title="${doc.reportName}"/>
                         <td th:text="${doc.organizationAuthor}"/>
-                        <td th:text="${doc.author}"/>
+                        <td th:text="${#strings.abbreviate(doc.author,23)}" th:text="${doc.author}"/>
                         <td th:text="${doc.compilationSite}"/>
                         <td th:text="${doc.compilationYear}"/>
                         <td th:text="${doc.paperVersion}"/>

@@ -99,7 +99,7 @@
                             </select>
                             </label>
                        </td>
-                       <td><label>Регистрационный номер
+                       <td><label title="Рег. номер в фонде">Рег. номер
                            <input class="form-control" th:name="regNumberFromField" th:value="${regNumberFromField}" type="text"></label></td>
                        <td><label>Дата регистрации с:
                            <input class="form-control" th:name="dateProcessingFromField" th:value="${dateProcessingFromField}" type="date"></label></td>
@@ -133,7 +133,7 @@
                        <td><label>Отчётный период
                             <input class="form-control" th:name="reportingPeriodFromField" th:value="${reportingPeriodFromField}" type="date" style="width: 206px;"></label></td>
 
-                       <td><label>4-ЛС
+                       <td><label title="Отчётный период 4-ЛС">4-ЛС
 
                                 <select class="form-control" th:name="have4LSFromField" th:value="${have4LSFromField}" style="width: 206px;">
                                     <option value="">Неважно</option>
@@ -143,7 +143,7 @@
                                 </label>
                         </td>
 
-                       <td><label>2-ТП
+                       <td><label title="Отчётный период 2-ТП">2-ТП
                             <select class="form-control" th:name="have2TPFromField" th:value="${have2TPFromField}" style="width: 206px;">
                                 <option value="">Неважно</option>
                                 <option value="+" th:selected="${have2TPFromField == '+'}">Есть</option>
@@ -153,7 +153,7 @@
                             </td>
 
 
-                       <td><label>3-ЛС
+                       <td><label title="Отчётный период 3-ЛС">3-ЛС
                             <select class="form-control" th:name="have3LSFromField" th:value="${have3LSFromField}" style="width: 177px;">
                                 <option value="">Неважно</option>
                                 <option value="+" th:selected="${have3LSFromField == '+'}">Есть</option>
@@ -211,19 +211,19 @@
                 <tr>
                     <th>Doc_ID <i class="fas fa-sort"></i></th>
                     <th>Рег. статус <i class="fas fa-sort"></i></th>
-                    <th>Рег. номер в фонде <i class="fas fa-sort"></i></th>
+                    <th title="Рег. номер в фонде">Рег. номер<i class="fas fa-sort"></i></th>
                     <th>Дата регистрации <i class="fas fa-sort"></i></th>
-                    <th>ФИО регистратора <i class="fas fa-sort"></i></th>
+                    <th title="ФИО регистратора">Регистратор <i class="fas fa-sort"></i></th>
                     <th>Источник поступления <i class="fas fa-sort"></i></th>
                     <th>Номер лицензии <i class="fas fa-sort"></i></th>
                     <th>Недропользователь <i class="fas fa-sort"></i></th>
                     <th>Дата отчёта <i class="fas fa-sort"></i></th>
                     <th>Тип отчёта <i class="fas fa-sort"></i></th>
                     <th>Отчётный период <i class="fas fa-sort"></i></th>
-                    <th>Наличие 4-ЛС <i class="fas fa-sort"></i></th>
-                    <th>Наличие 2-ТП <i class="fas fa-sort"></i></th>
-                    <th>Наличие 3-ЛС <i class="fas fa-sort"></i></th>
-                    <th>Кол-во страниц <i class="fas fa-sort"></i></th>
+                    <th title="Отчётный период 4-ЛС">4-ЛС <i class="fas fa-sort"></i></th>
+                    <th title="Отчётный период 2-ТП">2-ТП <i class="fas fa-sort"></i></th>
+                    <th title="Отчётный период 3-ЛС">3-ЛС <i class="fas fa-sort"></i></th>
+                    <th title="Количество страниц">Стр. <i class="fas fa-sort"></i></th>
                     <th>Гриф <i class="fas fa-sort"></i></th>
                     <th>Место хранения <i class="fas fa-sort"></i></th>
                     <th>Примечания <i class="fas fa-sort"></i></th>
@@ -242,13 +242,13 @@
                         <td th:text="${doc.name}"/>
                         <td th:text="${doc.organizationSource}"/>
                         <td th:text="${doc.licenseNumber}"/>
-                        <td th:text="${doc.subject}"/>
+                        <td th:text="${#strings.abbreviate(doc.subject,23)}" th:title="${doc.subject}"/>
                         <td th:text="${#dates.format(doc.date, 'dd.MM.yyyy')}"/>
-                        <td th:text="${doc.reportType}"/>
+                        <td th:text="${#strings.abbreviate(doc.reportType,14)}" th:title="${doc.reportType}"/>
                         <td th:text="${doc.reportingPeriod}"/>
-                        <td th:text="${doc.have4LS}"/>
-                        <td th:text="${doc.have2TP}"/>
-                        <td th:text="${doc.have3LS}"/>
+                        <td th:text="${#strings.abbreviate(doc.have4LS,14)}" th:title="${doc.have4LS}"/>
+                        <td th:text="${#strings.abbreviate(doc.have2TP,14)}" th:title="${doc.have2TP}"/>
+                        <td th:text="${#strings.abbreviate(doc.have3LS,14)}" th:title="${doc.have3LS}"/>
                         <td th:text="${doc.pages}"/>
                         <td th:text="${doc.neckSecrecy}"/>
                         <td th:text="${doc.storage}"/>

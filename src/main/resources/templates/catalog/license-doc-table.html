@@ -99,7 +99,7 @@
                             </select>
                             </label>
                        </td>
-                       <td><label>Регистрационный номер
+                       <td><label title="Рег. номер в фонде">Рег. номер
                            <input class="form-control" th:name="regNumberFromField" th:value="${regNumberFromField}" type="text"></label></td>
                        <td><label>Дата регистрации c:
                         <input class="form-control" th:name="dateProcessingFromField" th:value="${dateProcessingFromField}" type="date"></label></td>
@@ -110,7 +110,7 @@
                    <tr>
                        <td><label>Номер лицензии
                             <input class="form-control" th:name="licenseNumberFromField" th:value="${licenseNumberFromField}" type="text"></label></td>
-                       <td><label>Выдавший орган
+                       <td><label title="Орган, выдавший лицензию">Выдана
 
                             <select style="width: 205px;" class="form-control"
                                     th:attr="data-name=${organizationsFromField}" name="organizationsFromField">
@@ -135,7 +135,7 @@
                             </select>
                             </label>
                        </td>
-                       <td><label>Разреш. среднесут. отбор
+                       <td><label title="Разреш. среднесут. водоотбор (м3/сут)">м3/сут
                                                    <input class="form-control" th:name="flowRateSummFromField" th:value="${flowRateSummFromField}" type="text" placeholder="м3/сут"></label></td>
 
                    </tr>
@@ -150,7 +150,7 @@
                             <td><label>по:
                             <input class="form-control" th:name="dateEndToFromField" th:value="${dateEndToFromField}" type="date"></label></td>
 
-                       <td><label title="Местоположение участка недр / Примечания при регистрации">Местополож. участка/прим.
+                       <td><label title="Примечания при рег./Местоположение участка">Примечания
                             <input class="form-control" th:name="commentsDocsFromField" th:value="${commentsDocsFromField}" type="text"></label></td>
 
                    </tr>
@@ -203,19 +203,19 @@
                 <tr>
                     <th>Doc_ID <i class="fas fa-sort"></i></th>
                     <th>Рег. статус <i class="fas fa-sort"></i></th>
-                    <th>Рег. номер в фонде <i class="fas fa-sort"></i></th>
+                    <th title="Рег. номер в фонде">Рег. номер <i class="fas fa-sort"></i></th>
                     <th>Дата регистрации <i class="fas fa-sort"></i></th>
-                    <th>ФИО регистратора <i class="fas fa-sort"></i></th>
+                    <th title="ФИО регистратора">Регистратор <i class="fas fa-sort"></i></th>
                     <th>Источник поступления <i class="fas fa-sort"></i></th>
                     <th>Номер лицензии <i class="fas fa-sort"></i></th>
-                    <th>Орган, выдавший лицензию <i class="fas fa-sort"></i></th>
+                    <th title="Орган, выдавший лицензию">Выдана <i class="fas fa-sort"></i></th>
                     <th>Недропользователь <i class="fas fa-sort"></i></th>
                     <th>Статус лицензии <i class="fas fa-sort"></i></th>
                     <th>Регистрация лицензии <i class="fas fa-sort"></i></th>
                     <th>Окончание лицензии <i class="fas fa-sort"></i></th>
-                    <th>Разреш. среднесут. водоотбор (м3/сут) <i class="fas fa-sort"></i></th>
-                    <th>Примечания к лицензии <i class="fas fa-sort"></i></th>
-                    <th>Местополож. участка/прим. при рег.<i class="fas fa-sort" title="Местоположение участка недр / Примечания при регистрации"></i></th>
+                    <th title="Разреш. среднесут. водоотбор (м3/сут)">м3/сут <i class="fas fa-sort"></i></th>
+                    <th title="Дополнительная информация по лицензии/участку недр">Комментарий <i class="fas fa-sort"></i></th>
+                    <th title="Примечания при рег/местополож. участка">Примечания <i class="fas fa-sort" title="Местоположение участка недр / Примечания при регистрации"></i></th>
                     <th>Кол-во страниц <i class="fas fa-sort"></i></th>
                     <th>Гриф <i class="fas fa-sort"></i></th>
                     <th>Место хранения <i class="fas fa-sort"></i></th>

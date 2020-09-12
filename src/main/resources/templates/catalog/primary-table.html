@@ -100,7 +100,7 @@
                             </label>
                        </td>
                             <!--input class="form-control" th:name="regStatusFromField" th:value="${regStatusFromField}" type="text"></label></td-->
-                       <td><label>Регистрационный номер
+                       <td><label title="Рег. номер в фонде">Рег. номер
                            <input class="form-control" th:name="regNumberFromField" th:value="${regNumberFromField}" type="text"></label></td>
                        <td><label>Дата регистрации c
                            <input class="form-control" th:name="dateProcessingFromField" th:value="${dateProcessingFromField}" type="date"></label></td>
@@ -121,7 +121,7 @@
                             </label>
                             </td>
                             <!--input class="form-control" th:name="typeObservFromField" th:value="${typeObservFromField}" type="text"></label></td-->
-                       <td><label>ID/название ПН
+                       <td><label>Номер ПН
                             <input class="form-control" th:name="observIdFromField" th:value="${observIdFromField}" type="text"></label></td>
                        <td><label>Тип документа
                            <select class="form-control" style="width: 205px;"
@@ -135,10 +135,10 @@
                            </label>
                        </td>
                             <!--input class="form-control" th:name="docTypeFromField" th:value="${docTypeFromField}" type="text"></label></td-->
-                       <td><label>Дата создания: с
+                       <td><label title="Дата составления документа">Дата документа: с
                             <input class="form-control" th:name="datePrepareFromField" th:value="${datePrepareFromField}" type="date"></label></td>
 
-                       <td><label>по
+                       <td><label title="Дата составления документа">по
                        <input class="form-control" th:name="datePrepareToFromField" th:value="${datePrepareToFromField}" type="date"></label></td>
 
                    </tr>
@@ -190,15 +190,15 @@
 
                 <tr>
                     <th>Рег. статус <i class="fas fa-sort"></i></th>
-                    <th>Рег. номер в фонде <i class="fas fa-sort"></i></th>
+                    <th title="Рег. номер в фонде">Рег. номер <i class="fas fa-sort"></i></th>
                     <th>Дата регистрации <i class="fas fa-sort"></i></th>
-                    <th>ФИО регистратора <i class="fas fa-sort"></i></th>
+                    <th title="ФИО регистратора">Регистратор <i class="fas fa-sort"></i></th>
                     <th>Источник поступления <i class="fas fa-sort"></i></th>
                     <th>Тип ПН <i class="fas fa-sort"></i></th>
-                    <th>Номер/название ПН <i class="fas fa-sort"></i></th>
+                    <th>Номер ПН <i class="fas fa-sort"></i></th>
                     <th>Тип документа <i class="fas fa-sort"></i></th>
-                    <th>Дата составления документа <i class="fas fa-sort"></i></th>
-                    <th>Кол-во страниц <i class="fas fa-sort"></i></th>
+                    <th title="Дата составления документа">Дата документа <i class="fas fa-sort"></i></th>
+                    <th title="Кол-во страниц">Стр. <i class="fas fa-sort"></i></th>
                     <th>Гриф <i class="fas fa-sort"></i></th>
                     <th>Ссылка на файл <i class="fas fa-sort"></i></th>
                     <th>Место хранения <i class="fas fa-sort"></i></th>
