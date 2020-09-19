@@ -30,10 +30,11 @@ public class LicenseReportDocServiceImpl {
                                              Date dateFromField,
                                              Date dateToFromField,
                                              String reportTypeFromField,
-                                             String reportingPeriodFromField,
+                                             //String reportingPeriodFromField,
                                              String have4LSFromField,
                                              String have2TPFromField,
-                                             String have3LSFromField
+                                             String have3LSFromField,
+                                             String quarterRepFromField
     ) {
 
         Specification<LicenseReportDoc> spec = Specification.where(null);
@@ -80,9 +81,9 @@ public class LicenseReportDocServiceImpl {
         if (reportTypeFromField != null && !reportTypeFromField.isEmpty()) {
             spec = spec.and(LicenseReportDocSpecification.reportTypeContains(reportTypeFromField));
         }
-        if (reportingPeriodFromField != null && !reportingPeriodFromField.isEmpty()) {
-            spec = spec.and(LicenseReportDocSpecification.reportingPeriodContains(reportingPeriodFromField));
-        }
+//        if (reportingPeriodFromField != null && !reportingPeriodFromField.isEmpty()) {
+//            spec = spec.and(LicenseReportDocSpecification.reportingPeriodContains(reportingPeriodFromField));
+//        }
         if (have4LSFromField != null && !have4LSFromField.isEmpty()) {
             spec = spec.and(LicenseReportDocSpecification.have4LSContains(have4LSFromField));
         }
@@ -91,6 +92,9 @@ public class LicenseReportDocServiceImpl {
         }
         if (have3LSFromField != null && !have3LSFromField.isEmpty()) {
             spec = spec.and(LicenseReportDocSpecification.have3LSContains(have3LSFromField));
+        }
+        if (quarterRepFromField != null && !quarterRepFromField.isEmpty()) {
+            spec = spec.and(LicenseReportDocSpecification.quarterRepContains(quarterRepFromField));
         }
         return spec;
     }
@@ -105,10 +109,11 @@ public class LicenseReportDocServiceImpl {
                                    Date dateFromField,
                                    Date dateToFromField,
                                    String reportTypeFromField,
-                                   String reportingPeriodFromField,
+                                  // String reportingPeriodFromField,
                                    String have4LSFromField,
                                    String have2TPFromField,
-                                   String have3LSFromField) {
+                                   String have3LSFromField,
+                                   String quarterRepFromField) {
         StringBuilder filtersBuilder = new StringBuilder();
         if (idFromField != null) {
             filtersBuilder.append("&idFromField=" + idFromField);
@@ -140,9 +145,9 @@ public class LicenseReportDocServiceImpl {
         if (reportTypeFromField != null && !reportTypeFromField.isEmpty()) {
             filtersBuilder.append("&reportTypeFromField=" + reportTypeFromField);
         }
-        if (reportingPeriodFromField != null && !reportingPeriodFromField.isEmpty()) {
-            filtersBuilder.append("&reportingPeriodFromField=" + reportingPeriodFromField);
-        }
+//        if (reportingPeriodFromField != null && !reportingPeriodFromField.isEmpty()) {
+//            filtersBuilder.append("&reportingPeriodFromField=" + reportingPeriodFromField);
+//        }
         if (have4LSFromField != null && !have4LSFromField.isEmpty()) {
             filtersBuilder.append("&have4LSFromField=" + have4LSFromField);
         }
@@ -151,6 +156,9 @@ public class LicenseReportDocServiceImpl {
         }
         if (have3LSFromField != null && !have3LSFromField.isEmpty()) {
             filtersBuilder.append("&have3LSFromField=" + have3LSFromField);
+        }
+        if (quarterRepFromField != null && !quarterRepFromField.isEmpty()) {
+            filtersBuilder.append("&quarterRepFromField=" + quarterRepFromField);
         }
         return filtersBuilder.toString();
     }

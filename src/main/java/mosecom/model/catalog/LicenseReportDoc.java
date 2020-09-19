@@ -45,8 +45,8 @@ public class LicenseReportDoc {
     @Column (name = "Report_type")
     private String reportType;
 
-    @Column (name = "Reporting_period")
-    private String reportingPeriod;
+//    @Column (name = "Reporting_period")
+//    private String reportingPeriod;
 
     @Column (name = "4LS")
     private String have4LS;
@@ -56,6 +56,9 @@ public class LicenseReportDoc {
 
     @Column (name = "3LS")
     private String have3LS;
+
+    @Column (name = "QuarterRep")
+    private String quarterRep;
 
     @Column (name = "Pages")
     private String pages;

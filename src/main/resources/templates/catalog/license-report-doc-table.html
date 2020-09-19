@@ -130,35 +130,47 @@
                    </tr>
 
                    <tr>
-                       <td><label>Отчётный период
-                            <input class="form-control" th:name="reportingPeriodFromField" th:value="${reportingPeriodFromField}" type="date" style="width: 206px;"></label></td>
+                       <!--td><label>Отчётный период
+                            <input class="form-control" th:name="reportingPeriodFromField" th:value="${reportingPeriodFromField}" type="date" style="width: 206px;"></label></td-->
 
                        <td><label title="Отчётный период 4-ЛС">4-ЛС
-
-                                <select class="form-control" th:name="have4LSFromField" th:value="${have4LSFromField}" style="width: 206px;">
+                                <input class="form-control" th:name="have4LSFromField" th:value="${have4LSFromField}" type="text">
+                                <!--select class="form-control" th:name="have4LSFromField" th:value="${have4LSFromField}" style="width: 206px;">
                                     <option value="">Неважно</option>
                                     <option value="+" th:selected="${have4LSFromField == '+'}">Есть</option>
                                     <option value="-" th:selected="${have4LSFromField == '-'}">Нет</option>
-                                </select>
+                                </select-->
                                 </label>
                         </td>
 
                        <td><label title="Отчётный период 2-ТП">2-ТП
-                            <select class="form-control" th:name="have2TPFromField" th:value="${have2TPFromField}" style="width: 206px;">
+                            <input class="form-control" th:name="have2TPFromField" th:value="${have2TPFromField}" type="text">
+                            <!--select class="form-control" th:name="have2TPFromField" th:value="${have2TPFromField}" style="width: 206px;">
                                 <option value="">Неважно</option>
                                 <option value="+" th:selected="${have2TPFromField == '+'}">Есть</option>
                                 <option value="-" th:selected="${have2TPFromField == '-'}">Нет</option>
-                            </select>
+                            </select-->
                             </label>
                             </td>
 
 
                        <td><label title="Отчётный период 3-ЛС">3-ЛС
-                            <select class="form-control" th:name="have3LSFromField" th:value="${have3LSFromField}" style="width: 177px;">
+                       <input class="form-control" th:name="have3LSFromField" th:value="${have3LSFromField}" type="text">
+                            <!--select class="form-control" th:name="have3LSFromField" th:value="${have3LSFromField}" style="width: 177px;">
                                 <option value="">Неважно</option>
                                 <option value="+" th:selected="${have3LSFromField == '+'}">Есть</option>
                                 <option value="-" th:selected="${have3LSFromField == '-'}">Нет</option>
-                            </select>
+                            </select-->
+                            </label>
+                        </td>
+
+                        <td><label title="Наличие отч.по использованию ПВ">Кв. отч.
+                       <input class="form-control" th:name="quarterRepFromField" th:value="${quarterRepFromField}" type="text">
+                            <!--select class="form-control" th:name="have3LSFromField" th:value="${have3LSFromField}" style="width: 177px;">
+                                <option value="">Неважно</option>
+                                <option value="+" th:selected="${have3LSFromField == '+'}">Есть</option>
+                                <option value="-" th:selected="${have3LSFromField == '-'}">Нет</option>
+                            </select-->
                             </label>
                         </td>
                    </tr>
@@ -219,10 +231,11 @@
                     <th>Недропользователь <i class="fas fa-sort"></i></th>
                     <th>Дата отчёта <i class="fas fa-sort"></i></th>
                     <th>Тип отчёта <i class="fas fa-sort"></i></th>
-                    <th>Отчётный период <i class="fas fa-sort"></i></th>
+                    <!--th>Отчётный период <i class="fas fa-sort"></i></th-->
                     <th title="Отчётный период 4-ЛС">4-ЛС <i class="fas fa-sort"></i></th>
                     <th title="Отчётный период 2-ТП">2-ТП <i class="fas fa-sort"></i></th>
                     <th title="Отчётный период 3-ЛС">3-ЛС <i class="fas fa-sort"></i></th>
+                    <th title="Наличие отч.по использованию ПВ">Кв. отчёт <i class="fas fa-sort"></i></th>
                     <th title="Количество страниц">Стр. <i class="fas fa-sort"></i></th>
                     <th>Гриф <i class="fas fa-sort"></i></th>
                     <th>Место хранения <i class="fas fa-sort"></i></th>
@@ -245,10 +258,11 @@
                         <td th:text="${#strings.abbreviate(doc.subject,23)}" th:title="${doc.subject}"/>
                         <td th:text="${#dates.format(doc.date, 'dd.MM.yyyy')}"/>
                         <td th:text="${#strings.abbreviate(doc.reportType,14)}" th:title="${doc.reportType}"/>
-                        <td th:text="${doc.reportingPeriod}"/>
+                        <!--td th:text="${doc.reportingPeriod}"/-->
                         <td th:text="${#strings.abbreviate(doc.have4LS,14)}" th:title="${doc.have4LS}"/>
                         <td th:text="${#strings.abbreviate(doc.have2TP,14)}" th:title="${doc.have2TP}"/>
                         <td th:text="${#strings.abbreviate(doc.have3LS,14)}" th:title="${doc.have3LS}"/>
+                        <td th:text="${#strings.abbreviate(doc.quarterRep,14)}" th:title="${doc.quarterRep}"/>
                         <td th:text="${doc.pages}"/>
                         <td th:text="${doc.neckSecrecy}"/>
                         <td th:text="${doc.storage}"/>

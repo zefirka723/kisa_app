@@ -62,6 +62,7 @@ public class LicenseDocReportController {
                               @RequestParam(name = "have4LSFromField", required = false) String have4LSFromField,
                               @RequestParam(name = "have2TPFromField", required = false) String have2TPFromField,
                               @RequestParam(name = "have3LSFromField", required = false) String have3LSFromField,
+                              @RequestParam(name = "quarterRepFromField", required = false) String quarterRepFromField,
 
                               @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
                               @RequestParam(name = "itemsByPage", required = false, defaultValue = "25") Integer itemsByPage) throws ParseException {
@@ -82,10 +83,11 @@ public class LicenseDocReportController {
                         dateFromField != null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
                         dateToFromField != null && !dateToFromField.isEmpty() ? DateFormatter.getDateFromString(dateToFromField) : null,
                         reportTypeFromField,
-                        reportingPeriodFromField,
+                        //reportingPeriodFromField,
                         have4LSFromField,
                         have2TPFromField,
-                        have3LSFromField
+                        have3LSFromField,
+                        quarterRepFromField
                         ),
                         PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
 
@@ -119,10 +121,11 @@ public class LicenseDocReportController {
                 dateFromField != null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
                 dateToFromField != null && !dateToFromField.isEmpty() ? DateFormatter.getDateFromString(dateToFromField) : null,
                 reportTypeFromField,
-                reportingPeriodFromField,
+                //reportingPeriodFromField,
                 have4LSFromField,
                 have2TPFromField,
-                have3LSFromField));
+                have3LSFromField,
+                quarterRepFromField));
         model.addAttribute("idFromField", idFromField);
         model.addAttribute("regStatusFromField", regStatusFromField);
         model.addAttribute("regNumberFromField", regNumberFromField);
@@ -133,10 +136,11 @@ public class LicenseDocReportController {
         model.addAttribute("dateFromField", dateFromField);
         model.addAttribute("dateToFromField", dateToFromField);
         model.addAttribute("reportTypeFromField", reportTypeFromField);
-        model.addAttribute("reportingPeriodFromField", reportingPeriodFromField);
+       // model.addAttribute("reportingPeriodFromField", reportingPeriodFromField);
         model.addAttribute("have4LSFromField", have4LSFromField);
         model.addAttribute("have2TPFromField", have2TPFromField);
         model.addAttribute("have3LSFromField", have3LSFromField);
+        model.addAttribute("quarterRepFromField", quarterRepFromField);
 
         // справочники
         model.addAttribute("regStatuses", regStatusRepository.findAll());
@@ -157,10 +161,11 @@ public class LicenseDocReportController {
                              @RequestParam(name = "dateFromField", required = false) String dateFromField,
                              @RequestParam(name = "dateToFromField", required = false) String dateToFromField,
                              @RequestParam(name = "reportTypeFromField", required = false) String reportTypeFromField,
-                             @RequestParam(name = "reportingPeriodFromField", required = false) String reportingPeriodFromField,
+                          //   @RequestParam(name = "reportingPeriodFromField", required = false) String reportingPeriodFromField,
                              @RequestParam(name = "have4LSFromField", required = false) String have4LSFromField,
                              @RequestParam(name = "have2TPFromField", required = false) String have2TPFromField,
-                             @RequestParam(name = "have3LSFromField", required = false) String have3LSFromField
+                             @RequestParam(name = "have3LSFromField", required = false) String have3LSFromField,
+                             @RequestParam(name = "quarterRepFromField", required = false) String quarterRepFromField
     ) throws ParseException, IOException {
 
         List<LicenseReportDoc> licenseReportDocs = licenseReportDocService
@@ -175,10 +180,11 @@ public class LicenseDocReportController {
                         dateFromField != null && !dateFromField.isEmpty() ? DateFormatter.getDateFromString(dateFromField) : null,
                         dateToFromField != null && !dateToFromField.isEmpty() ? DateFormatter.getDateFromString(dateToFromField) : null,
                         reportTypeFromField,
-                        reportingPeriodFromField,
+                      //  reportingPeriodFromField,
                         have4LSFromField,
                         have2TPFromField,
-                        have3LSFromField));
+                        have3LSFromField,
+                        quarterRepFromField));
 
 
         // скрываем ссылки ДСП и секретных доков
@@ -244,51 +250,55 @@ public class LicenseDocReportController {
         cell.setCellValue("Номер лицензии");
         cell.setCellStyle(style);
 
-        cell = row.createCell(8, CellType.STRING);
+        cell = row.createCell(7, CellType.STRING);
         cell.setCellValue("Недропользователь");
         cell.setCellStyle(style);
 
-        cell = row.createCell(9, CellType.STRING);
+        cell = row.createCell(8, CellType.STRING);
         cell.setCellValue("Дата отчёта");
         cell.setCellStyle(style);
 
-        cell = row.createCell(10, CellType.STRING);
+        cell = row.createCell(9, CellType.STRING);
         cell.setCellValue("Тип отчёта");
         cell.setCellStyle(style);
 
+//        cell = row.createCell(10, CellType.STRING);
+//        cell.setCellValue("Отчётный период");
+//        cell.setCellStyle(style);
+
+        cell = row.createCell(10, CellType.STRING);
+        cell.setCellValue("4-ЛС");
+        cell.setCellStyle(style);
+
         cell = row.createCell(11, CellType.STRING);
-        cell.setCellValue("Отчётный период");
+        cell.setCellValue("2-ТП");
         cell.setCellStyle(style);
 
         cell = row.createCell(12, CellType.STRING);
-        cell.setCellValue("Наличие 4-ЛС");
+        cell.setCellValue("3-ЛС");
         cell.setCellStyle(style);
 
         cell = row.createCell(13, CellType.STRING);
-        cell.setCellValue("Наличие 2-ТП");
+        cell.setCellValue("Квартальный отчёт");
         cell.setCellStyle(style);
 
         cell = row.createCell(14, CellType.STRING);
-        cell.setCellValue("Наличие 3-ЛС");
-        cell.setCellStyle(style);
-
-        cell = row.createCell(15, CellType.STRING);
         cell.setCellValue("Кол-во страниц");
         cell.setCellStyle(style);
 
-        cell = row.createCell(16, CellType.STRING);
+        cell = row.createCell(15, CellType.STRING);
         cell.setCellValue("Гриф");
         cell.setCellStyle(style);
 
-        cell = row.createCell(17, CellType.STRING);
+        cell = row.createCell(16, CellType.STRING);
         cell.setCellValue("Место хранения");
         cell.setCellStyle(style);
 
-        cell = row.createCell(18, CellType.STRING);
+        cell = row.createCell(17, CellType.STRING);
         cell.setCellValue("Примечания");
         cell.setCellStyle(style);
 
-        cell = row.createCell(19, CellType.STRING);
+        cell = row.createCell(18, CellType.STRING);
         cell.setCellValue("Файлы");
         cell.setCellStyle(style);
 
@@ -334,17 +344,20 @@ public class LicenseDocReportController {
             cell = row.createCell(9, CellType.STRING);
             cell.setCellValue(p.getReportType());
 
-            cell = row.createCell(10, CellType.STRING);
-            cell.setCellValue(p.getReportingPeriod());
+//            cell = row.createCell(10, CellType.STRING);
+//            cell.setCellValue(p.getReportingPeriod());
 
-            cell = row.createCell(11, CellType.STRING);
+            cell = row.createCell(10, CellType.STRING);
             cell.setCellValue(p.getHave4LS());
 
-            cell = row.createCell(12, CellType.STRING);
+            cell = row.createCell(11, CellType.STRING);
             cell.setCellValue(p.getHave2TP());
 
-            cell = row.createCell(13, CellType.STRING);
+            cell = row.createCell(12, CellType.STRING);
             cell.setCellValue(p.getHave3LS());
+
+            cell = row.createCell(13, CellType.STRING);
+            cell.setCellValue(p.getQuarterRep());
 
             cell = row.createCell(14, CellType.STRING);
             cell.setCellValue(p.getPages());
@@ -352,13 +365,13 @@ public class LicenseDocReportController {
             cell = row.createCell(15, CellType.STRING);
             cell.setCellValue(p.getNeckSecrecy());
 
-            cell = row.createCell(17, CellType.STRING);
+            cell = row.createCell(16, CellType.STRING);
             cell.setCellValue(p.getStorage());
 
-            cell = row.createCell(18, CellType.STRING);
+            cell = row.createCell(17, CellType.STRING);
             cell.setCellValue(p.getComments());
 
-            cell = row.createCell(19, CellType.STRING);
+            cell = row.createCell(18, CellType.STRING);
             cell.setCellValue(p.getLink());
         }
 

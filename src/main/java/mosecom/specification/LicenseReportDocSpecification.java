@@ -74,16 +74,21 @@ public class LicenseReportDocSpecification {
 
     public static Specification<LicenseReportDoc> have4LSContains(String have4LS) {
         return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.equal(root.get("have4LS"), have4LS );
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("have4LS")), "%" + have4LS.toLowerCase()  + "%");
     }
 
     public static Specification<LicenseReportDoc> have2TPContains(String have2TP) {
         return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.equal(root.get("have2TP"), have2TP );
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("have2TP")), "%" + have2TP.toLowerCase() + "%");
     }
 
     public static Specification<LicenseReportDoc> have3LSContains(String have3LS) {
         return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.equal(root.get("have3LS"), have3LS );
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("have3LS")), "%" + have3LS.toLowerCase() + "%");
+    }
+
+    public static Specification<LicenseReportDoc> quarterRepContains(String quarterRep) {
+        return (Specification<LicenseReportDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("quarterRep")), "%" + quarterRep.toLowerCase() + "%");
     }
 }
