@@ -112,6 +112,7 @@ public class WellServiceImpl implements WellService {
         well.setWellName(dto.getWellName());
         well.setWellCollar(dto.getWellCollar());
         well.setDrilledDate(dto.getDrilledDate());
+        well.setMoved(dto.getMoved());
 
         // Делаем документ
         switch (docType) {

@@ -59,7 +59,7 @@ f<!DOCTYPE html>
 
                             <td>
                                 <label for="usr3">Уточнение местоположения</label>
-                                <select class="disabled" disabled th:name="${well.moved}">
+                                <select th:field="${well.moved}">
                                     <option th:each="move : ${movedTypes}"
                                             th:value="${move.id}"
                                             th:text="${move.name}"
