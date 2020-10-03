@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -85,8 +86,6 @@ public class LicenseReportServiceImpl {
                 }
             }
         }
-
-
         // все прикрепленные файлы добавляем в документы
         if (files != null) {
             for (MultipartFile file : files) {
@@ -95,10 +94,13 @@ public class LicenseReportServiceImpl {
                     //TODO: переделать это и вообще все типы
                     String folderByType = "LICENSE";
 
-                    java.io.File uploadDir = new java.io.File(uploadPath + "/"
-                            + "/" + folderByType
-                            + "/" + licenseService.findLicenceByLicenseId(reportForSave.getLicenseDocId()).getLicenseNumber()
-                            + "/LicenseReports/" + reportForSave.getDate().toString().split(" ", 2)[0]);
+                    uploadPath = uploadPath + folderByType
+                            + "/" + licenseService.findLicenceByLicenseId(reportForSave.getLicenseDocId()).getLicenseNumber();
+
+                    if (reportForSave.getReportName().getId() != 6) { // отчёты "Прочее"
+                        uploadPath = uploadPath + "/LicenseReports/" + reportForSave.getDate().toString().split(" ", 2)[0];
+                    }
+                    java.io.File uploadDir = new java.io.File(uploadPath);
 
 
                     if (!uploadDir.exists()) {
