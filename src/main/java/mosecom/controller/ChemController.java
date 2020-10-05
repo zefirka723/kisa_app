@@ -57,7 +57,8 @@ public class ChemController {
     @RequestMapping(value = "/chem-submit", method = RequestMethod.POST)
     public String submitTemplate(@ModelAttribute ChemWrapper wrapper,
                                  @RequestParam Integer reportId) {
-        wrapper.setReportDocId(reportId);
+        //wrapper.setReportDocId(reportId);
+        wrapper.setReportId(reportId);
         chemService.save(wrapper);
         return "redirect:report-edit/chem/" + reportId + "/" + wrapper.getWellId();
 

@@ -99,7 +99,7 @@
             <div class="d-flex px-0 ml-auto">
                 <form th:action="'/report-edit/chem/' + ${reportId}" method="get">
                     <input type="hidden" th:name="wellId" th:value="${wellId}">
-                    <!--input type="hidden" th:name="${reportId}" th:value="${reportId}"-->
+                    <input type="hidden" th:name="reportId" th:value="${reportId}">
                     <table>
                         <tr>
                             <td>

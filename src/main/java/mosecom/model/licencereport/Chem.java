@@ -32,10 +32,10 @@ public class Chem implements Serializable {
     private int dataSource;
 
     @Column(name = "Template_ID")
-    private int templateId;
+    private Integer templateId;
 
     @Column(name = "Doc_ID")
-    private int reportDocId;
+    private Integer reportDocId;
 
     @Transient
     private boolean tooLow;

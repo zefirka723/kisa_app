@@ -22,6 +22,7 @@ public class ChemWrapper implements Serializable {
 
     private List<Chem> chems;
 
-    private int reportDocId;
+    //private int reportDocId;
+    private int reportId;
 
 }
