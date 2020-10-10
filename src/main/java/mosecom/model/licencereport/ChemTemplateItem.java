@@ -27,5 +27,5 @@ public class ChemTemplateItem implements Serializable {
     private int parametrId;
 
     @Column (name = "Display_order")
-    private double displayOrder;
+    private Double displayOrder;
 }

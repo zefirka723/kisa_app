@@ -41,7 +41,22 @@ public class TemplateServiceImpl {
 
 
     public void save(ChemTemplateInfo template) {
-        template.getChemItems().stream().forEach(i -> i.setTemplateInfo(template));
+        double lastIndex = 0;
+        for (ChemTemplateItem i: template.getChemItems()) {
+
+            System.out.println(i.getParametrId());
+
+            if (i.getDisplayOrder() != null) {
+                 lastIndex = i.getDisplayOrder();
+            }
+            else {
+                lastIndex = lastIndex + 5;
+                i.setDisplayOrder(lastIndex);
+            }
+            i.setTemplateInfo(template);
+        }
+
+        //template.getChemItems().stream().forEach(i -> i.setTemplateInfo(template));
         templateInfoRepository.save(template);
     }
 

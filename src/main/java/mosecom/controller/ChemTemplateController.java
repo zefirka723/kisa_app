@@ -4,6 +4,8 @@ import mosecom.model.licencereport.dictionary.ChemTemplateInfo;
 import mosecom.service.licensereport.TemplateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,7 +35,7 @@ public class ChemTemplateController {
     }
 
     @RequestMapping(value = "/chem-template-submit", method = RequestMethod.POST)
-    public String submitTemplate(@ModelAttribute ChemTemplateInfo template) {
+    public String submitTemplate(@ModelAttribute ChemTemplateInfo template, BindingResult result, ModelMap model) {
         templateService.save(template);
         return "redirect:/chem-templates";
     }
