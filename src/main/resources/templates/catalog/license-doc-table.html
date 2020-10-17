@@ -104,7 +104,9 @@
                        <td><label>Дата регистрации c:
                         <input class="form-control" th:name="dateProcessingFromField" th:value="${dateProcessingFromField}" type="date"></label></td>
                         <td><label>по:
-                        <input style="width: 205px;" class="form-control" th:name="dateProcessingToFromField" th:value="${dateProcessingToFromField}" type="date"></label></td>
+                        <input class="form-control" th:name="dateProcessingToFromField" th:value="${dateProcessingToFromField}" type="date" style="width:150px;">
+                            </label>
+                        </td>
                    </tr>
 
                    <tr>
@@ -136,9 +138,26 @@
                             </label>
                        </td>
                        <td><label title="Разреш. среднесут. водоотбор (м3/сут)">м3/сут
-                                                   <input class="form-control" th:name="flowRateSummFromField" th:value="${flowRateSummFromField}" type="text" placeholder="м3/сут"></label></td>
+                           <input class="form-control" th:name="flowRateSummFromField" th:value="${flowRateSummFromField}" type="text" placeholder="м3/сут" style="width:150px;">
+                           </label>
+                       </td>
 
                    </tr>
+
+                  <tr>
+
+                       <td colspan="2">
+                            <label title="Примечания при рег./Местоположение участка">Примечания (при регистрации)
+                               <input class="form-control" th:name="commentsDocsFromField" th:value="${commentsDocsFromField}" type="text" style="width:420px;">
+                            </label>
+                       </td>
+
+                      <td colspan="3">
+                          <label title="Дополнительная информация по лицензии/участку недр">Комментарий (к лицензии)
+                               <input class="form-control" th:name="commentsLicenseFromField" th:value="${commentsLicenseFromField}" type="text" style="width:515px;">
+                          </label>
+                      </td>
+                  </tr>
 
                    <tr>
                        <td><label>Регистрация лицензии c:
@@ -150,10 +169,9 @@
                             <td><label>по:
                             <input class="form-control" th:name="dateEndToFromField" th:value="${dateEndToFromField}" type="date"></label></td>
 
-                       <td><label title="Примечания при рег./Местоположение участка">Примечания
-                            <input class="form-control" th:name="commentsDocsFromField" th:value="${commentsDocsFromField}" type="text"></label></td>
-
                    </tr>
+
+
 
                    <tr>
 
@@ -175,7 +193,6 @@
                              <input th:name="itemsByPage" th:value="${itemsByPage}" type="number" style="width: 53px;">
                              <span style="color: #afafaf;" th:text="' из ' + ${licenseDocs.getTotalElements()} + ' документов'"/>
                         </td>
-
                     </tr>
                 </table>
 

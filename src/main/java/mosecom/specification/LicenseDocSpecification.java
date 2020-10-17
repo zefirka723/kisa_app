@@ -95,4 +95,9 @@ public class LicenseDocSpecification {
                 -> criteriaBuilder.like(criteriaBuilder.lower(root.get("commentsDocs")), "%" + commentsDocsFromField.toLowerCase() + "%");
     }
 
+    public static Specification<LicenseDoc> commentsLicenseContains(String commentsLicenseFromField) {
+        return (Specification<LicenseDoc>) (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("commentsLicense")), "%" + commentsLicenseFromField.toLowerCase() + "%");
+    }
+
 }

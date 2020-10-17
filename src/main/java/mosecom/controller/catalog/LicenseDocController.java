@@ -70,6 +70,7 @@ public class LicenseDocController {
                               @RequestParam(name = "dateEndToFromField", required = false) String dateEndToFromField,
                               @RequestParam(name = "flowRateSummFromField", required = false) String flowRateSummFromField,
                               @RequestParam(name = "commentsDocsFromField", required = false) String commentsDocsFromField,
+                              @RequestParam(name = "commentsLicenseFromField", required = false) String commentsLicenseFromField,
 
                               @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
                               @RequestParam(name = "itemsByPage", required = false, defaultValue = "25") Integer itemsByPage) throws ParseException {
@@ -94,9 +95,8 @@ public class LicenseDocController {
                         dateEndFromField != null && !dateEndFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndFromField) : null,
                         dateEndToFromField != null && !dateEndToFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndToFromField) : null,
                         flowRateSummFromField != null && !flowRateSummFromField.isEmpty() ? Float.parseFloat(flowRateSummFromField) : null,
-                        commentsDocsFromField
-
-                        ),
+                        commentsDocsFromField,
+                        commentsLicenseFromField),
                         PageRequest.of(page - 1, itemsByPage, Sort.Direction.ASC, "id"));
 
         // для проверки доступности доков
@@ -153,6 +153,7 @@ public class LicenseDocController {
         model.addAttribute("dateEndToFromField", dateEndToFromField);
         model.addAttribute("flowRateSummFromField", flowRateSummFromField);
         model.addAttribute("commentsDocsFromField", commentsDocsFromField);
+        model.addAttribute("commentsLicenseFromField", commentsLicenseFromField);
 
         // справочники
         model.addAttribute("regStatuses", regStatusRepository.findAll());
@@ -178,7 +179,8 @@ public class LicenseDocController {
                              @RequestParam(name = "dateEndFromField", required = false) String dateEndFromField,
                              @RequestParam(name = "dateEndToFromField", required = false) String dateEndToFromField,
                              @RequestParam(name = "flowRateSummFromField", required = false) String flowRateSummFromField,
-                             @RequestParam(name = "commentsDocsFromField", required = false) String commentsDocsFromField
+                             @RequestParam(name = "commentsDocsFromField", required = false) String commentsDocsFromField,
+                             @RequestParam(name = "commentsLicenseFromField", required = false) String commentsLicenseFromField
     ) throws ParseException, IOException {
 
         List<LicenseDoc> licenseDocs = licenseDocService
@@ -197,7 +199,8 @@ public class LicenseDocController {
                         dateEndFromField != null && !dateEndFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndFromField) : null,
                         dateEndToFromField != null && !dateEndToFromField.isEmpty() ? DateFormatter.getDateFromString(dateEndToFromField) : null,
                         flowRateSummFromField != null && !flowRateSummFromField.isEmpty() ? Float.parseFloat(flowRateSummFromField) : null,
-                        commentsDocsFromField));
+                        commentsDocsFromField,
+                        commentsLicenseFromField));
 
 
         // скрываем ссылки ДСП и секретных доков

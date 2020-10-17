@@ -37,7 +37,8 @@ public class LicenseDocServiceImpl {
                                              Date dateEndFromField,
                                              Date dateEndToFromField,
                                              Float flowRateSummFromField,
-                                             String commentsDocsFromField) {
+                                             String commentsDocsFromField,
+                                             String commentsLicenseFromField) {
 
         Specification<LicenseDoc> spec = Specification.where(null);
         if (idFromField != null) {
@@ -93,6 +94,9 @@ public class LicenseDocServiceImpl {
         }
         if (commentsDocsFromField != null && !commentsDocsFromField.isEmpty()) {
             spec = spec.and(LicenseDocSpecification.commentsDocsContains(commentsDocsFromField));
+        }
+        if (commentsLicenseFromField != null && !commentsLicenseFromField.isEmpty()) {
+            spec = spec.and(LicenseDocSpecification.commentsLicenseContains(commentsLicenseFromField));
         }
         return spec;
     }
