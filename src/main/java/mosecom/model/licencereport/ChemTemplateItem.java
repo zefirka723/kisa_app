@@ -1,13 +1,16 @@
 package mosecom.model.licencereport;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import mosecom.model.licencereport.dictionary.ChemTemplateInfo;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-@Data
+@Getter
+@Setter
 @Entity
 @Table(schema = "kisa", name = "ChemProtTemplate_Content")
 public class ChemTemplateItem implements Serializable {
@@ -24,7 +27,7 @@ public class ChemTemplateItem implements Serializable {
 //    protected ChemTemplateInfo templateInfo;
 
     @Column(name = "Parametr")
-    private int parametrId;
+    private Integer parametrId;
 
     @Column (name = "Display_order")
     private Double displayOrder;

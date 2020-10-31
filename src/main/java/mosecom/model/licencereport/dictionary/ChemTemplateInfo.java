@@ -1,6 +1,8 @@
 package mosecom.model.licencereport.dictionary;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import mosecom.model.licencereport.ChemTemplateItem;
 import org.hibernate.annotations.Cascade;
 
@@ -10,7 +12,8 @@ import java.util.List;
 
 
 @SuppressWarnings("serial")
-@Data
+@Getter
+@Setter
 @Entity
 @Table(schema = "dictionaries", name = "Dictionary_ChemProt_Template")
 public class ChemTemplateInfo implements Serializable {

@@ -11,6 +11,8 @@ import mosecom.model.licencereport.dictionary.Laboratory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -33,7 +35,9 @@ public class TemplateServiceImpl {
         return laboratoryRepository.findAll();
     }
 
-    public List<ChemComponent> findComponentList() { return componentRepository.findAllByOrderByNameAsc(); }
+    public List<ChemComponent> findComponentList() {
+        return componentRepository.findAllByOrderByNameAsc();
+    }
 
     public List<ChemTemplateInfo> findTemplateInfoList() {
         return templateInfoRepository.findAll();
@@ -41,34 +45,48 @@ public class TemplateServiceImpl {
 
 
     public void save(ChemTemplateInfo template) {
-        double lastIndex = 0;
-        for (ChemTemplateItem i: template.getChemItems()) {
+        template.getChemItems().removeIf(item -> item.getParametrId() == null);
 
-            System.out.println(i.getParametrId());
-
-            if (i.getDisplayOrder() != null) {
-                 lastIndex = i.getDisplayOrder();
-            }
-            else {
-                lastIndex = lastIndex + 5;
-                i.setDisplayOrder(lastIndex);
-            }
-            i.setTemplateInfo(template);
+        if (template.getId() != null) {
+            template.setChemItems(updateDbItems(template));
         }
 
-        //template.getChemItems().stream().forEach(i -> i.setTemplateInfo(template));
+        // автонумерация
+        double lastIndex = 0;
+        for (ChemTemplateItem i : template.getChemItems()) {
+                if (i.getDisplayOrder() != null) {
+                    lastIndex = i.getDisplayOrder();
+                } else {
+                    lastIndex = lastIndex + 5;
+                    i.setDisplayOrder(lastIndex);
+                }
+                i.setTemplateInfo(template);
+            }
+
         templateInfoRepository.save(template);
     }
+
+    private List<ChemTemplateItem> updateDbItems (ChemTemplateInfo template) {
+        List<ChemTemplateItem> itemsFromDb = templateInfoRepository.getOne(template.getId()).getChemItems();
+        HashMap<Integer, Integer> componentsFromDb = new HashMap<>();
+
+        for (ChemTemplateItem i: itemsFromDb) {
+            componentsFromDb.put(i.getParametrId(), i.getId());
+        }
+
+        for (ChemTemplateItem i: template.getChemItems()) {
+            if (componentsFromDb.containsKey(i.getParametrId())) {
+                i.setId(componentsFromDb.get(i.getParametrId()));
+            }
+        }
+
+        return template.getChemItems();
+    }
+
 
     public ChemTemplateInfo findTemplateInfoById(int id) {
         return templateInfoRepository.getOne(id);
     }
-
-//    public List<ChemComponent> getComponentsByTemplate(int templateId) {
-//        ChemTemplateInfo template = findTemplateInfoById(templateId);
-//        return template.setChemItems();
-//    }
-
 
 }
 
