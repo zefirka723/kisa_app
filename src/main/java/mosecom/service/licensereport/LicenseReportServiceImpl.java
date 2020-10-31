@@ -45,7 +45,7 @@ public class LicenseReportServiceImpl {
     private LicenseServiceImpl licenseService;
 
     @Value("${upload.path}")
-    private String uploadPath;
+    private String appUploadPath;
 
     public List<LicenseReport> findLicenseReportsList() {
         return licenseReportRepository.findAll();
@@ -88,14 +88,13 @@ public class LicenseReportServiceImpl {
         }
         // все прикрепленные файлы добавляем в документы
         if (files != null) {
+            String uploadPath;
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
                     // Настройка пути под PROD
-                    //TODO: переделать это и вообще все типы
-                    String folderByType = "LICENSE";
 
-                    uploadPath = uploadPath + folderByType
-                            + "/" + licenseService.findLicenceByLicenseId(reportForSave.getLicenseDocId()).getLicenseNumber();
+                    uploadPath = appUploadPath
+                            + "LICENSE/" + licenseService.findLicenceByLicenseId(reportForSave.getLicenseDocId()).getLicenseNumber();
 
                     if (reportForSave.getReportName().getId() != 6) { // отчёты "Прочее"
                         uploadPath = uploadPath + "/LicenseReports/" + reportForSave.getDate().toString().split(" ", 2)[0];
